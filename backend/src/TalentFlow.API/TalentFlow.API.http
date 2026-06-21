@@ -1,0 +1,6 @@
+@TalentFlow.API_HostAddress = http://localhost:5007
+
+GET {{TalentFlow.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
