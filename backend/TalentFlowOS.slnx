@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TalentFlow.API/TalentFlow.API.csproj" />
+    <Project Path="src/TalentFlow.Application/TalentFlow.Application.csproj" />
+    <Project Path="src/TalentFlow.Domain/TalentFlow.Domain.csproj" />
+    <Project Path="src/TalentFlow.Infrastructure/TalentFlow.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/IntegrationTests/IntegrationTests.csproj" />
+    <Project Path="tests/TestUtilities/TestUtilities.csproj" />
+    <Project Path="tests/UnitTests/UnitTests.csproj" />
+  </Folder>
+</Solution>
