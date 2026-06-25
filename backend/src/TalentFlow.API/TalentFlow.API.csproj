@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <ProjectReference Include="..\TalentFlow.Application\TalentFlow.Application.csproj" />
+    <ProjectReference Include="..\TalentFlow.Infrastructure\TalentFlow.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TalentFlow.Application\TalentFlow.Application.csproj" />
-    <ProjectReference Include="..\TalentFlow.Infrastructure\TalentFlow.Infrastructure.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.19" />
   </ItemGroup>
 
 </Project>
