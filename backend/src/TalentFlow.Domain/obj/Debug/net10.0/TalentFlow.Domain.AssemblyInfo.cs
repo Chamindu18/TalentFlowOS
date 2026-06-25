@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TalentFlow.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91d078977a72574f5979a09aeef73ee0be64cf6e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a02e491f6c572ad5f6914c014950531bdab785e3")]
 [assembly: System.Reflection.AssemblyProductAttribute("TalentFlow.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TalentFlow.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
