@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TalentFlow.Domain.Entities;
 
-public class Application
+public class JobApplication
 {
     public Guid Id { get; set; }
 
