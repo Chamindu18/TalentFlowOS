@@ -55,5 +55,5 @@ public class Job
     // Navigation Properties
     public Company Company { get; set; } = null!;
     public Department Department { get; set; } = null!;
-    public ICollection<Application> Applications { get; set; } = new List<Application>();
+    public ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 }
