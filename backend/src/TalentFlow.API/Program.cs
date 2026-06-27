@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using TalentFlow.API.Middleware;
 using TalentFlow.Application.Common.Settings;
 using TalentFlow.Infrastructure;
 
@@ -15,6 +16,7 @@ var jwtSettings = builder.Configuration
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 // Register Infrastructure Services
@@ -45,10 +47,14 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Global Exception Middleware
+app.UseGlobalExceptionHandler();
+
 // Configure HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+
     app.UseSwaggerUI();
 }
 
