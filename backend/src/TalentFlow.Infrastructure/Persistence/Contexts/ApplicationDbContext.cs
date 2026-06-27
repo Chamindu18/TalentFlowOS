@@ -13,6 +13,14 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
 
+
+    public DbSet<Company> Companies => Set<Company>();
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<Job> Jobs => Set<Job>();
+    public DbSet<JobApplication> Applications => Set<JobApplication>();
+
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
