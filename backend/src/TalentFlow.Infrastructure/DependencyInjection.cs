@@ -7,6 +7,8 @@ using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Infrastructure.Persistence.Contexts;
 using TalentFlow.Infrastructure.Repositories.Identity;
 using TalentFlow.Infrastructure.Security;
+using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Application.Services;
 
 namespace TalentFlow.Infrastructure;
 
@@ -28,6 +30,8 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

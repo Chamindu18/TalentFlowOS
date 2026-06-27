@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {}
+    "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {}
   },
   "projects": {
-    "d:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
+    "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
+        "projectUniqueName": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
         "projectName": "TalentFlow.Domain",
-        "projectPath": "d:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
+        "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "d:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\obj\\",
+        "outputPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
