@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\src",
+    "\\backend\\src\\TalentFlow.Domain",
+    "\\backend\\src\\TalentFlow.Infrastructure\\Persistence",
+    "\\backend\\src\\TalentFlow.Infrastructure\\Persistence\\Contexts"
+  ],
+  "PreviewInSolutionExplorer": false
+}
