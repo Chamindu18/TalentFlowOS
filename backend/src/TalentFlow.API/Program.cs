@@ -1,9 +1,12 @@
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TalentFlow.API.Middleware;
 using TalentFlow.Application.Common.Settings;
+using TalentFlow.Application.Validators.Auth;
 using TalentFlow.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,13 @@ var jwtSettings = builder.Configuration
 
 // Add services to the container
 builder.Services.AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<
+    RegisterRequestDtoValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -61,19 +71,21 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
 
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
 
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.Secret))
-        };
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.Secret))
+            };
     });
 
 // Add Authorization
@@ -92,7 +104,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.DocumentTitle = "TalentFlow API Documentation";
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "TalentFlow API v1");
+
+        options.SwaggerEndpoint(
+            "/swagger/v1/swagger.json",
+            "TalentFlow API v1");
     });
 }
 
