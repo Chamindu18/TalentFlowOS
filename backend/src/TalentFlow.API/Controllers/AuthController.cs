@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TalentFlow.Application.DTOs.Auth;
 using TalentFlow.Application.Interfaces.Services;
@@ -31,5 +32,17 @@ public class AuthController : ControllerBase
         var response = await _authService.LoginAsync(request);
 
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            UserId = User.FindFirst("sub")?.Value,
+            Email = User.FindFirst("email")?.Value,
+            Role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+        });
     }
 }
