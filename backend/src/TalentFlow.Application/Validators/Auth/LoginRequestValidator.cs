@@ -3,15 +3,19 @@ using TalentFlow.Application.DTOs.Auth;
 
 namespace TalentFlow.Application.Validators.Auth;
 
-public class LoginRequestValidator : AbstractValidator<LoginRequestDto>
+public class LoginRequestDtoValidator
+    : AbstractValidator<LoginRequestDto>
 {
-    public LoginRequestValidator()
+    public LoginRequestDtoValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()
-            .EmailAddress();
+            .WithMessage("Email is required.")
+            .EmailAddress()
+            .WithMessage("Invalid email format.");
 
         RuleFor(x => x.Password)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("Password is required.");
     }
 }
