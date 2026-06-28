@@ -38,7 +38,7 @@ export default function Navbar() {
           <img
             src={logo}
             alt="TalentFlow OS"
-            className="h-24 w-auto object-contain lg:h-35"
+            className="h-24 w-auto object-contain lg:h-45"
             draggable={false}
           />
         </Link>
