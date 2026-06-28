@@ -3,24 +3,39 @@ using TalentFlow.Application.DTOs.Auth;
 
 namespace TalentFlow.Application.Validators.Auth;
 
-public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
+public class RegisterRequestDtoValidator
+    : AbstractValidator<RegisterRequestDto>
 {
-    public RegisterRequestValidator()
+    public RegisterRequestDtoValidator()
     {
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MaximumLength(100);
+            .WithMessage("First name is required.")
+            .MaximumLength(50)
+            .WithMessage("First name cannot exceed 50 characters.");
 
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .MaximumLength(100);
+            .WithMessage("Last name is required.")
+            .MaximumLength(50)
+            .WithMessage("Last name cannot exceed 50 characters.");
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .EmailAddress();
+            .WithMessage("Email is required.")
+            .EmailAddress()
+            .WithMessage("Invalid email format.");
 
         RuleFor(x => x.Password)
             .NotEmpty()
-            .MinimumLength(8);
+            .WithMessage("Password is required.")
+            .MinimumLength(8)
+            .WithMessage("Password must be at least 8 characters long.")
+            .Matches(@"[A-Z]")
+            .WithMessage("Password must contain at least one uppercase letter.")
+            .Matches(@"[a-z]")
+            .WithMessage("Password must contain at least one lowercase letter.")
+            .Matches(@"\d")
+            .WithMessage("Password must contain at least one number.");
     }
 }
