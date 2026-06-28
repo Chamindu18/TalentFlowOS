@@ -20,4 +20,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TalentFlow.Application\TalentFlow.Application.csproj" />
+    <ProjectReference Include="..\..\src\TalentFlow.Domain\TalentFlow.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
