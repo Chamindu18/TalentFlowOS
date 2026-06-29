@@ -1,4 +1,4 @@
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 type FeatureCardProps = {
   icon: LucideIcon;
@@ -39,14 +39,14 @@ export default function FeatureCard({
         className="
           absolute
           inset-0
+          bg-linear-to-br
+          from-white
+          via-transparent
+          to-[#FFF3EC]
           opacity-0
           transition-opacity
           duration-500
           group-hover:opacity-100
-          bg-gradient-to-br
-          from-white
-          via-transparent
-          to-[#FFF3EC]
         "
       />
 
@@ -77,24 +77,6 @@ export default function FeatureCard({
         <p className="text-lg leading-8 text-slate-500">
           {description}
         </p>
-
-        <div
-          className="
-            mt-8
-            flex
-            items-center
-            gap-2
-            font-semibold
-            text-[#FF8A5B]
-            transition-all
-            duration-300
-            group-hover:translate-x-2
-          "
-        >
-          Learn More
-
-          <ArrowRight className="h-5 w-5" />
-        </div>
       </div>
     </div>
   );
