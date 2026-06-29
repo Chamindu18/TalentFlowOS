@@ -191,3 +191,10 @@
 .animate-marquee {
   animation: marquee 35s linear infinite;
 }
+
+html,
+body,
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}

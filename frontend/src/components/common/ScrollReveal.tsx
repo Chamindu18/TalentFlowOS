@@ -19,39 +19,48 @@ export default function ScrollReveal({
   const getInitialPosition = () => {
     switch (direction) {
       case "left":
-        return { x: -40, opacity: 0 };
+        return {
+          x: -20,
+          opacity: 0,
+        };
 
       case "right":
-        return { x: 40, opacity: 0 };
+        return {
+          x: 20,
+          opacity: 0,
+        };
 
       default:
-        return { y: 40, opacity: 0 };
+        return {
+          y: 20,
+          opacity: 0,
+        };
     }
   };
 
   return (
-    <motion.div
-      className={className}
-      initial={getInitialPosition()}
-      whileInView={{
-        x: 0,
-        y: 0,
-        opacity: 1,
-      }}
-      viewport={{
-        once: true,
-        amount: 0.15,
-      }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      style={{
-        overflow: "hidden",
-      }}
-    >
-      {children}
-    </motion.div>
+    <div className="overflow-hidden">
+      <motion.div
+        className={className}
+        initial={getInitialPosition()}
+        whileInView={{
+          x: 0,
+          y: 0,
+          opacity: 1,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.3,
+          margin: "-100px",
+        }}
+        transition={{
+          duration,
+          delay,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }
