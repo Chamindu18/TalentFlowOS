@@ -6,10 +6,8 @@ import {
   Zap,
 } from "lucide-react";
 
-import dashboardPreview from "@/assets/product-showcase/dashboardPreview.png";
-
+import DashboardPreview from "./DashboardPreview";
 import FeatureItem from "./FeatureItem";
-import ProductStats from "./ProductStats";
 
 const features = [
   {
@@ -158,52 +156,7 @@ export default function ProductShowcaseSection() {
           </div>
 
           {/* Right Side Dashboard */}
-          <div className="relative">
-            {/* Orange Glow */}
-            <div
-              className="
-                absolute
-                -bottom-10
-                -right-10
-                h-72
-                w-72
-                rounded-full
-                bg-[#FF8A5B]/10
-                blur-3xl
-              "
-            />
-
-            {/* Dashboard Card */}
-            <div
-              className="
-                relative
-                overflow-hidden
-                rounded-[40px]
-                border
-                border-[#F5E9DF]
-                bg-white
-                p-4
-                shadow-[0_40px_80px_rgba(15,23,42,0.08)]
-                transition-all
-                duration-500
-                hover:-translate-y-2
-                hover:shadow-[0_50px_100px_rgba(15,23,42,0.12)]
-              "
-            >
-              <img
-                src={dashboardPreview}
-                alt="TalentFlow Dashboard"
-                draggable={false}
-                className="
-                  w-full
-                  rounded-[28px]
-                  object-cover
-                "
-              />
-            </div>
-
-            <ProductStats />
-          </div>
+          <DashboardPreview />
         </div>
       </div>
     </section>

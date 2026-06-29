@@ -228,7 +228,7 @@ export default function HeroSection() {
               <InterviewScheduleCard />
             </div>
 
-            <div className="absolute -bottom-10 right-52 z-20 hidden xl:block">
+            <div className="absolute -bottom-4 right-52 z-20 hidden xl:block">
               <RecruitmentOverviewCard />
             </div>
           </div>
