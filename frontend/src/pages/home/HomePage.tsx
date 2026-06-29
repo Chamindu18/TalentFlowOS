@@ -13,7 +13,7 @@ import Footer from "@/components/marketing/footer/Footer";
 export default function HomePage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FBF4EC]">
-      <CursorGlow />
+       <CursorGlow />
 
       <Navbar />
 
