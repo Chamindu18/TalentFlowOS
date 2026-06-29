@@ -8,6 +8,9 @@ import {
 
 import dashboardPreview from "@/assets/product-showcase/dashboardPreview.png";
 
+import FeatureItem from "./FeatureItem";
+import ProductStats from "./ProductStats";
+
 const features = [
   {
     icon: Sparkles,
@@ -51,31 +54,12 @@ const features = [
   },
 ];
 
-const stats = [
-  {
-    value: "50K+",
-    label: "Candidates",
-  },
-  {
-    value: "1,200+",
-    label: "Companies",
-  },
-  {
-    value: "95%",
-    label: "Hiring Success",
-  },
-  {
-    value: "4.9/5",
-    label: "Customer Rating",
-  },
-];
-
 export default function ProductShowcaseSection() {
   return (
     <section className="bg-[#FCFAF8] py-20 sm:py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-20 text-center">
+        <div className="mb-16 text-center lg:mb-20">
           <div
             className="
               mx-auto
@@ -93,6 +77,9 @@ export default function ProductShowcaseSection() {
               font-semibold
               text-[#FF8A5B]
               shadow-sm
+              transition-all
+              duration-300
+              hover:scale-105
             "
           >
             ✨ Product Showcase
@@ -128,7 +115,6 @@ export default function ProductShowcaseSection() {
               text-lg
               leading-8
               text-slate-500
-              lg:text-xl
             "
           >
             From sourcing the right talent to making confident hiring
@@ -138,8 +124,8 @@ export default function ProductShowcaseSection() {
         </div>
 
         {/* Content */}
-        <div className="grid gap-16 lg:grid-cols-[38%_62%]">
-          {/* Left Features */}
+        <div className="grid items-start gap-16 xl:grid-cols-[40%_60%]">
+          {/* Left Side Features */}
           <div className="relative">
             <div
               className="
@@ -157,95 +143,28 @@ export default function ProductShowcaseSection() {
               "
             />
 
-            <div className="space-y-8">
-              {features.map((feature) => {
-                const Icon = feature.icon;
-
-                return (
-                  <div
-                    key={feature.title}
-                    className="group relative flex gap-6"
-                  >
-                    {/* Timeline Dot */}
-                    <div
-                      className="
-                        relative
-                        z-10
-                        hidden
-                        h-12
-                        w-12
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        border-4
-                        border-[#FCFAF8]
-                        bg-white
-                        shadow-md
-                        lg:flex
-                      "
-                    >
-                      <div className="h-3 w-3 rounded-full bg-[#FF8A5B]" />
-                    </div>
-
-                    {/* Card */}
-                    <div
-                      className="
-                        flex-1
-                        rounded-[28px]
-                        bg-white
-                        p-6
-                        shadow-sm
-                        transition-all
-                        duration-300
-                        hover:-translate-y-1
-                        hover:shadow-xl
-                      "
-                    >
-                      <div className="flex items-start gap-5">
-                        <div
-                          className={`
-                            ${feature.color}
-                            flex
-                            h-16
-                            w-16
-                            items-center
-                            justify-center
-                            rounded-2xl
-                            transition-transform
-                            duration-300
-                            group-hover:scale-110
-                            group-hover:rotate-6
-                          `}
-                        >
-                          <Icon
-                            className={`h-8 w-8 ${feature.iconColor}`}
-                          />
-                        </div>
-
-                        <div>
-                          <h3 className="text-xl font-bold text-[#102541]">
-                            {feature.title}
-                          </h3>
-
-                          <p className="mt-3 text-slate-500 leading-7">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="space-y-6">
+              {features.map((feature) => (
+                <FeatureItem
+                  key={feature.title}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                  color={feature.color}
+                  iconColor={feature.iconColor}
+                />
+              ))}
             </div>
           </div>
 
-          {/* Right Dashboard */}
+          {/* Right Side Dashboard */}
           <div className="relative">
+            {/* Orange Glow */}
             <div
               className="
                 absolute
-                -bottom-12
-                -right-12
+                -bottom-10
+                -right-10
                 h-72
                 w-72
                 rounded-full
@@ -254,6 +173,7 @@ export default function ProductShowcaseSection() {
               "
             />
 
+            {/* Dashboard Card */}
             <div
               className="
                 relative
@@ -267,11 +187,13 @@ export default function ProductShowcaseSection() {
                 transition-all
                 duration-500
                 hover:-translate-y-2
+                hover:shadow-[0_50px_100px_rgba(15,23,42,0.12)]
               "
             >
               <img
                 src={dashboardPreview}
                 alt="TalentFlow Dashboard"
+                draggable={false}
                 className="
                   w-full
                   rounded-[28px]
@@ -280,42 +202,7 @@ export default function ProductShowcaseSection() {
               />
             </div>
 
-            {/* Stats Bar */}
-            <div
-              className="
-                relative
-                z-20
-                mx-auto
-                mt-8
-                grid
-                gap-4
-                rounded-[28px]
-                border
-                border-slate-100
-                bg-white
-                p-6
-                shadow-xl
-                sm:grid-cols-2
-                lg:-mt-10
-                lg:w-[90%]
-                lg:grid-cols-4
-              "
-            >
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="text-center"
-                >
-                  <h3 className="text-3xl font-bold text-[#102541]">
-                    {stat.value}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-slate-500">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ProductStats />
           </div>
         </div>
       </div>
