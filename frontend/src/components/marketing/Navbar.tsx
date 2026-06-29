@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronUp, Menu, X } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronUp,
+  Menu,
+  X,
+} from "lucide-react";
 
 import logo from "@/assets/logo/logo.png";
 import { Button } from "@/components/ui/button";
@@ -8,34 +13,37 @@ import { Button } from "@/components/ui/button";
 const navigationItems = [
   {
     title: "Product",
-    href: "#",
+    href: "#product-showcase",
   },
   {
     title: "Solutions",
-    href: "#",
+    href: "#features",
   },
   {
     title: "Resources",
-    href: "#",
+    href: "#testimonials",
   },
   {
     title: "Company",
-    href: "#",
+    href: "#company",
   },
 ];
 
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] =
+    useState(false);
 
   return (
     <header
       className="
-        sticky
+        fixed
+        left-0
         top-0
         z-50
+        w-full
         border-b
         border-white/40
-        bg-[#FBF4EC]/95
+        bg-[#FBF4EC]/90
         shadow-sm
         backdrop-blur-md
       "
@@ -57,27 +65,42 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center transition-transform duration-300 hover:scale-[1.02]"
+          className="
+            flex
+            items-center
+            transition-transform
+            duration-300
+            hover:scale-[1.02]
+          "
         >
           <img
             src={logo}
             alt="TalentFlow OS"
+            draggable={false}
             className="
               h-16
               w-auto
               object-contain
               sm:h-20
-              lg:h-45
+              lg:h-10
             "
-            draggable={false}
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-8 xl:gap-10 lg:flex">
+        <nav
+          className="
+            hidden
+            items-center
+            gap-8
+            lg:flex
+            xl:gap-10
+          "
+        >
           {navigationItems.map((item) => (
-            <button
+            <a
               key={item.title}
+              href={item.href}
               className="
                 group
                 relative
@@ -94,15 +117,43 @@ export default function Navbar() {
             >
               {item.title}
 
-              <ChevronUp className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
+              <ChevronUp
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  duration-300
+                  group-hover:rotate-180
+                "
+              />
 
-              <span className="absolute -bottom-2 left-0 h-0.5 w-0 bg-[#FF8A5B] transition-all duration-300 group-hover:w-full" />
-            </button>
+              <span
+                className="
+                  absolute
+                  -bottom-2
+                  left-0
+                  h-0.5
+                  w-0
+                  bg-[#FF8A5B]
+                  transition-all
+                  duration-300
+                  group-hover:w-full
+                "
+              />
+            </a>
           ))}
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden items-center gap-4 xl:gap-5 lg:flex">
+        <div
+          className="
+            hidden
+            items-center
+            gap-4
+            lg:flex
+            xl:gap-5
+          "
+        >
           <Link
             to="/login"
             className="
@@ -180,7 +231,15 @@ export default function Navbar() {
             >
               Get Started
 
-              <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight
+                className="
+                  h-5
+                  w-5
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+              />
             </Link>
           </Button>
         </div>
@@ -188,7 +247,10 @@ export default function Navbar() {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          onClick={() => setIsMobileMenuOpen((previous) => !previous)}
+          aria-label="Toggle navigation menu"
+          onClick={() =>
+            setIsMobileMenuOpen((prev) => !prev)
+          }
           className="
             rounded-2xl
             p-2.5
@@ -200,7 +262,6 @@ export default function Navbar() {
             sm:p-3
             lg:hidden
           "
-          aria-label="Toggle navigation menu"
         >
           {isMobileMenuOpen ? (
             <X className="h-6 w-6 sm:h-7 sm:w-7" />
@@ -212,11 +273,34 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="border-t border-[#EAEAEA] bg-[#FBF4EC] shadow-lg lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 sm:px-6">
+        <div
+          className="
+            border-t
+            border-[#EAEAEA]
+            bg-[#FBF4EC]
+            shadow-lg
+            lg:hidden
+          "
+        >
+          <nav
+            className="
+              mx-auto
+              flex
+              max-w-7xl
+              flex-col
+              gap-2
+              px-4
+              py-6
+              sm:px-6
+            "
+          >
             {navigationItems.map((item) => (
-              <button
+              <a
                 key={item.title}
+                href={item.href}
+                onClick={() =>
+                  setIsMobileMenuOpen(false)
+                }
                 className="
                   flex
                   items-center
@@ -237,7 +321,7 @@ export default function Navbar() {
                 <span>{item.title}</span>
 
                 <ChevronUp className="h-5 w-5 rotate-180" />
-              </button>
+              </a>
             ))}
 
             <div className="mt-6 flex flex-col gap-4">
@@ -285,7 +369,15 @@ export default function Navbar() {
                 >
                   Get Started
 
-                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight
+                    className="
+                      h-5
+                      w-5
+                      transition-transform
+                      duration-300
+                      group-hover:translate-x-1
+                    "
+                  />
                 </Link>
               </Button>
             </div>
