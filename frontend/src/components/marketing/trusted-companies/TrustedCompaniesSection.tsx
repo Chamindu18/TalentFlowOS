@@ -14,47 +14,47 @@ const companies = [
   {
     name: "Creative Software",
     logo: creativeSoftware,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "Dialog",
     logo: dialog,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "HCL",
     logo: hcl,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "Ikman",
     logo: ikman,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "John Keells",
     logo: johnkeels,
-    className: "max-h-[100px] max-w-[300px]",
+    className: "max-h-[90px] max-w-[280px] sm:max-h-[100px] sm:max-w-[300px]",
   },
   {
     name: "Mobitel",
     logo: mobitel,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "PickMe",
     logo: pickme,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "Sysco LABS",
     logo: syscolabs,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
   {
     name: "WSO2",
     logo: wso2,
-    className: "max-h-[70px]",
+    className: "max-h-[60px] sm:max-h-[70px]",
   },
 ];
 
@@ -62,22 +62,22 @@ const duplicatedCompanies = [...companies, ...companies];
 
 export default function TrustedCompaniesSection() {
   return (
-    <section className="overflow-hidden bg-white py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="overflow-hidden bg-white py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-14 text-center">
+        <div className="mb-12 text-center sm:mb-14">
           <div
             className="
               mx-auto
-              mb-6
+              mb-5
               inline-flex
               items-center
               gap-2
               rounded-full
               bg-[#FFF3EC]
-              px-5
-              py-2.5
-              text-sm
+              px-4
+              py-2
+              text-xs
               font-semibold
               text-[#FF8A5B]
               transition-all
@@ -85,6 +85,9 @@ export default function TrustedCompaniesSection() {
               hover:scale-105
               hover:shadow-lg
               hover:shadow-[#FF8A5B]/10
+              sm:px-5
+              sm:py-2.5
+              sm:text-sm
             "
           >
             <BadgeCheck className="h-4 w-4" />
@@ -94,10 +97,11 @@ export default function TrustedCompaniesSection() {
 
           <h2
             className="
-              text-4xl
+              text-3xl
               font-bold
               tracking-[-0.03em]
               text-[#102541]
+              sm:text-4xl
               md:text-5xl
             "
           >
@@ -112,11 +116,15 @@ export default function TrustedCompaniesSection() {
           <p
             className="
               mx-auto
-              mt-6
+              mt-5
               max-w-2xl
-              text-lg
-              leading-8
+              px-2
+              text-base
+              leading-7
               text-slate-500
+              sm:mt-6
+              sm:text-lg
+              sm:leading-8
             "
           >
             Empowering recruitment teams across technology,
@@ -132,8 +140,10 @@ export default function TrustedCompaniesSection() {
               flex
               w-max
               items-center
-              gap-20
+              gap-10
               group-hover:[animation-play-state:paused]
+              sm:gap-16
+              lg:gap-20
             "
           >
             {duplicatedCompanies.map((company, index) => (
@@ -142,10 +152,12 @@ export default function TrustedCompaniesSection() {
                 className="
                   group/logo
                   flex
-                  h-[110px]
-                  w-[240px]
+                  h-[90px]
+                  w-[180px]
                   items-center
                   justify-center
+                  sm:h-[110px]
+                  sm:w-[240px]
                 "
               >
                 <img
@@ -179,11 +191,13 @@ export default function TrustedCompaniesSection() {
               left-0
               top-0
               h-full
-              w-32
+              w-12
               bg-gradient-to-r
               from-white
               via-white/80
               to-transparent
+              sm:w-20
+              lg:w-32
             "
           />
 
@@ -195,11 +209,13 @@ export default function TrustedCompaniesSection() {
               right-0
               top-0
               h-full
-              w-32
+              w-12
               bg-gradient-to-l
               from-white
               via-white/80
               to-transparent
+              sm:w-20
+              lg:w-32
             "
           />
         </div>
