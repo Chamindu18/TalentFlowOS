@@ -19,13 +19,13 @@ export default function ScrollReveal({
   const getInitialPosition = () => {
     switch (direction) {
       case "left":
-        return { x: -60, opacity: 0 };
+        return { x: -40, opacity: 0 };
 
       case "right":
-        return { x: 60, opacity: 0 };
+        return { x: 40, opacity: 0 };
 
       default:
-        return { y: 60, opacity: 0 };
+        return { y: 40, opacity: 0 };
     }
   };
 
@@ -40,12 +40,15 @@ export default function ScrollReveal({
       }}
       viewport={{
         once: true,
-        amount: 0.2,
+        amount: 0.15,
       }}
       transition={{
         duration,
         delay,
         ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{
+        overflow: "hidden",
       }}
     >
       {children}
