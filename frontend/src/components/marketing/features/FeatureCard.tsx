@@ -21,17 +21,18 @@ export default function FeatureCard({
         group
         relative
         overflow-hidden
-        rounded-[32px]
+        rounded-[28px]
         border
         border-slate-100
         bg-white
-        p-8
+        p-6
         shadow-sm
         transition-all
         duration-500
-        hover:-translate-y-3
+        hover:-translate-y-2
         hover:shadow-2xl
         hover:shadow-slate-200/60
+        sm:p-8
       "
     >
       {/* Glow Effect */}
@@ -39,7 +40,7 @@ export default function FeatureCard({
         className="
           absolute
           inset-0
-          bg-linear-to-br
+          bg-gradient-to-br
           from-white
           via-transparent
           to-[#FFF3EC]
@@ -53,10 +54,10 @@ export default function FeatureCard({
       <div className="relative z-10">
         <div
           className={`
-            mb-8
+            mb-6
             flex
-            h-20
-            w-20
+            h-16
+            w-16
             items-center
             justify-center
             rounded-3xl
@@ -65,16 +66,37 @@ export default function FeatureCard({
             duration-500
             group-hover:rotate-6
             group-hover:scale-110
+            sm:mb-8
+            sm:h-20
+            sm:w-20
           `}
         >
-          <Icon className={`h-10 w-10 ${iconColor}`} />
+          <Icon className={`h-8 w-8 sm:h-10 sm:w-10 ${iconColor}`} />
         </div>
 
-        <h3 className="mb-4 text-3xl font-bold text-[#102541]">
+        <h3
+          className="
+            mb-3
+            text-2xl
+            font-bold
+            leading-tight
+            text-[#102541]
+            sm:mb-4
+            sm:text-3xl
+          "
+        >
           {title}
         </h3>
 
-        <p className="text-lg leading-8 text-slate-500">
+        <p
+          className="
+            text-base
+            leading-7
+            text-slate-500
+            sm:text-lg
+            sm:leading-8
+          "
+        >
           {description}
         </p>
       </div>

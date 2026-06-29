@@ -62,24 +62,27 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="bg-[#FCFAF8] py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="bg-[#FCFAF8] py-20 sm:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-20 text-center">
+        <div className="mb-14 text-center sm:mb-20">
           <div
             className="
               mx-auto
-              mb-6
+              mb-5
               inline-flex
               items-center
               gap-2
               rounded-full
               bg-[#FFF3EC]
-              px-5
-              py-2.5
-              text-sm
+              px-4
+              py-2
+              text-xs
               font-semibold
               text-[#FF8A5B]
+              sm:px-5
+              sm:py-2.5
+              sm:text-sm
             "
           >
             ✨ Platform Features
@@ -87,11 +90,13 @@ export default function FeaturesSection() {
 
           <h2
             className="
-              text-5xl
+              text-3xl
               font-bold
               tracking-[-0.04em]
               text-[#102541]
-              md:text-6xl
+              sm:text-4xl
+              md:text-5xl
+              lg:text-6xl
             "
           >
             Recruitment,
@@ -106,11 +111,17 @@ export default function FeaturesSection() {
           <p
             className="
               mx-auto
-              mt-8
+              mt-6
               max-w-2xl
-              text-xl
-              leading-9
+              px-2
+              text-base
+              leading-7
               text-slate-500
+              sm:mt-8
+              sm:text-lg
+              sm:leading-8
+              lg:text-xl
+              lg:leading-9
             "
           >
             Everything your organization needs to hire better,
@@ -119,7 +130,7 @@ export default function FeaturesSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
           {features.map((feature) => (
             <FeatureCard
               key={feature.title}
