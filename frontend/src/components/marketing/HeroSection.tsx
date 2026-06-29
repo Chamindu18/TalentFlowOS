@@ -55,7 +55,7 @@ export default function HeroSection() {
                   shadow-[0_10px_30px_rgba(255,138,91,0.25)]
                   transition-all
                   duration-300
-                  hover:-translate-y-[2px]
+                  hover:-translate-y-0.5
                   hover:bg-[#FF7D4A]
                   hover:shadow-[0_18px_40px_rgba(255,138,91,0.35)]
                 "
