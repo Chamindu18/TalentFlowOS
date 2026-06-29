@@ -5,6 +5,7 @@ import FeaturesSection from "@/components/marketing/features/FeaturesSection";
 import HeroSection from "@/components/marketing/HeroSection";
 import Navbar from "@/components/marketing/Navbar";
 import ProductShowcaseSection from "@/components/marketing/product-showcase/ProductShowcaseSection";
+import TestimonialsSection from "@/components/marketing/testimonials/TestimonialsSection";
 import TrustedCompaniesSection from "@/components/marketing/trusted-companies/TrustedCompaniesSection";
 
 export default function HomePage() {
@@ -28,6 +29,10 @@ export default function HomePage() {
 
       <ScrollReveal delay={0.2}>
         <ProductShowcaseSection />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.25}>
+        <TestimonialsSection />
       </ScrollReveal>
     </main>
   );
