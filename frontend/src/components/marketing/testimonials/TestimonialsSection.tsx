@@ -6,7 +6,7 @@ import TestimonialsCarousel from "./TestimonialsCarousel";
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-[#FFFDFB] py-20 sm:py-24 lg:py-32">
+    <section id="testimonials" className="bg-[#FFFDFB] py-20 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center lg:mb-20">

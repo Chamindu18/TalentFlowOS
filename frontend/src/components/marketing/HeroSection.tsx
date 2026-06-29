@@ -14,9 +14,11 @@ export default function HeroSection() {
       className="
         overflow-hidden
         bg-[#FBF4EC]
-        py-10
+        pt-24
+        pb-10
         lg:min-h-[calc(100vh-96px)]
-        lg:py-0
+        lg:pt-23
+        lg:pb-0
       "
     >
       <div

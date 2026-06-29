@@ -14,52 +14,59 @@ const quickLinks = [
   {
     label: "Home",
     href: "/",
+    type: "route",
   },
   {
     label: "Features",
     href: "#features",
+    type: "section",
   },
   {
     label: "Login",
     href: "/login",
+    type: "route",
   },
   {
     label: "Get Started",
     href: "/register",
+    type: "route",
   },
 ];
 
 const socialLinks = [
   {
     icon: FaInstagram,
-    href: "#",
+    href: "https://www.instagram.com",
     label: "Instagram",
   },
   {
     icon: FaFacebookF,
-    href: "#",
+    href: "https://www.facebook.com",
     label: "Facebook",
   },
   {
     icon: FaWhatsapp,
-    href: "#",
+    href: "https://www.whatsapp.com",
     label: "WhatsApp",
   },
   {
     icon: FaLinkedinIn,
-    href: "#",
+    href: "https://www.linkedin.com",
     label: "LinkedIn",
   },
   {
     icon: FaGithub,
-    href: "#",
+    href: "https://github.com",
     label: "GitHub",
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#FBF4EC] px-6 py-12 lg:px-8 lg:py-16">
+    <footer
+      id="company"
+      className="bg-[#FBF4EC] px-6 py-12 lg:px-8 lg:py-16"
+    >
       <div
         className="
           relative
@@ -189,22 +196,39 @@ export default function Footer() {
               pt-10
             "
           >
-            {quickLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="
-                  text-lg
-                  font-medium
-                  text-slate-600
-                  transition-colors
-                  duration-300
-                  hover:text-[#FF8A5B]
-                "
-              >
-                {link.label}
-              </Link>
-            ))}
+            {quickLinks.map((link) =>
+              link.type === "route" ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="
+                    text-lg
+                    font-medium
+                    text-slate-600
+                    transition-colors
+                    duration-300
+                    hover:text-[#FF8A5B]
+                  "
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="
+                    text-lg
+                    font-medium
+                    text-slate-600
+                    transition-colors
+                    duration-300
+                    hover:text-[#FF8A5B]
+                  "
+                >
+                  {link.label}
+                </a>
+              ),
+            )}
           </div>
 
           {/* Copyright */}
