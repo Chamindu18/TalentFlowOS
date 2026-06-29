@@ -28,8 +28,32 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FBF4EC]/95 backdrop-blur-md">
-      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header
+      className="
+        sticky
+        top-0
+        z-50
+        border-b
+        border-white/40
+        bg-[#FBF4EC]/95
+        shadow-sm
+        backdrop-blur-md
+      "
+    >
+      <div
+        className="
+          mx-auto
+          flex
+          h-20
+          max-w-7xl
+          items-center
+          justify-between
+          px-4
+          sm:h-24
+          sm:px-6
+          lg:px-8
+        "
+      >
         {/* Logo */}
         <Link
           to="/"
@@ -38,17 +62,35 @@ export default function Navbar() {
           <img
             src={logo}
             alt="TalentFlow OS"
-            className="h-24 w-auto object-contain lg:h-45"
+            className="
+              h-16
+              w-auto
+              object-contain
+              sm:h-20
+              lg:h-45
+            "
             draggable={false}
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-10 lg:flex">
+        <nav className="hidden items-center gap-8 xl:gap-10 lg:flex">
           {navigationItems.map((item) => (
             <button
               key={item.title}
-              className="group relative flex items-center gap-1.5 text-[17px] font-medium text-[#102541] transition-all duration-300 hover:text-[#FF8A5B]"
+              className="
+                group
+                relative
+                flex
+                items-center
+                gap-1.5
+                text-[16px]
+                font-medium
+                text-[#102541]
+                transition-all
+                duration-300
+                hover:text-[#FF8A5B]
+              "
             >
               {item.title}
 
@@ -60,7 +102,7 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="hidden items-center gap-4 xl:gap-5 lg:flex">
           <Link
             to="/login"
             className="
@@ -70,7 +112,7 @@ export default function Navbar() {
               rounded-full
               px-5
               py-3
-              text-[17px]
+              text-[16px]
               font-medium
               text-[#102541]
               transition-all
@@ -108,12 +150,29 @@ export default function Navbar() {
               "
             />
 
-            <span className="relative z-10">Login</span>
+            <span className="relative z-10">
+              Login
+            </span>
           </Link>
 
           <Button
             asChild
-            className="group h-14 rounded-full bg-[#FF8A5B] px-8 text-base font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ff7843] hover:shadow-xl"
+            className="
+              group
+              h-13
+              rounded-full
+              bg-[#FF8A5B]
+              px-8
+              text-base
+              font-semibold
+              text-white
+              shadow-md
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:bg-[#ff7843]
+              hover:shadow-xl
+            "
           >
             <Link
               to="/register"
@@ -130,13 +189,23 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen((previous) => !previous)}
-          className="rounded-2xl p-3 text-[#102541] transition-all duration-300 hover:bg-white hover:shadow-md lg:hidden"
+          className="
+            rounded-2xl
+            p-2.5
+            text-[#102541]
+            transition-all
+            duration-300
+            hover:bg-white
+            hover:shadow-md
+            sm:p-3
+            lg:hidden
+          "
           aria-label="Toggle navigation menu"
         >
           {isMobileMenuOpen ? (
-            <X className="h-7 w-7" />
+            <X className="h-6 w-6 sm:h-7 sm:w-7" />
           ) : (
-            <Menu className="h-7 w-7" />
+            <Menu className="h-6 w-6 sm:h-7 sm:w-7" />
           )}
         </button>
       </div>
@@ -144,11 +213,26 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="border-t border-[#EAEAEA] bg-[#FBF4EC] shadow-lg lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6">
+          <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 sm:px-6">
             {navigationItems.map((item) => (
               <button
                 key={item.title}
-                className="flex items-center justify-between rounded-2xl px-4 py-4 text-left text-lg font-medium text-[#102541] transition-all duration-300 hover:bg-white hover:shadow-sm"
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  rounded-2xl
+                  px-4
+                  py-4
+                  text-left
+                  text-base
+                  font-medium
+                  text-[#102541]
+                  transition-all
+                  duration-300
+                  hover:bg-white
+                  hover:shadow-sm
+                "
               >
                 <span>{item.title}</span>
 
@@ -160,14 +244,40 @@ export default function Navbar() {
               <Button
                 asChild
                 variant="outline"
-                className="h-14 rounded-full border-[#102541] text-base font-medium text-[#102541] transition-all duration-300 hover:bg-[#102541] hover:text-white"
+                className="
+                  h-13
+                  rounded-full
+                  border-[#102541]
+                  text-base
+                  font-medium
+                  text-[#102541]
+                  transition-all
+                  duration-300
+                  hover:bg-[#102541]
+                  hover:text-white
+                "
               >
-                <Link to="/login">Login</Link>
+                <Link to="/login">
+                  Login
+                </Link>
               </Button>
 
               <Button
                 asChild
-                className="group h-14 rounded-full bg-[#FF8A5B] text-base font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#ff7843] hover:shadow-lg"
+                className="
+                  group
+                  h-13
+                  rounded-full
+                  bg-[#FF8A5B]
+                  text-base
+                  font-semibold
+                  text-white
+                  shadow-md
+                  transition-all
+                  duration-300
+                  hover:bg-[#ff7843]
+                  hover:shadow-lg
+                "
               >
                 <Link
                   to="/register"
