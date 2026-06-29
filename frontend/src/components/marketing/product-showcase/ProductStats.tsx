@@ -26,19 +26,22 @@ export default function ProductStats() {
         relative
         z-20
         mx-auto
-        mt-8
         grid
-        gap-4
-        rounded-[28px]
+        gap-3
+        rounded-[24px]
         border
         border-slate-100
-        bg-white
-        p-6
-        shadow-xl
+        bg-white/95
+        p-4
+        shadow-[0_20px_50px_rgba(15,23,42,0.08)]
+        backdrop-blur-sm
         sm:grid-cols-2
-        lg:-mt-10
+        sm:gap-4
+        sm:p-5
         lg:w-[92%]
         lg:grid-cols-4
+        lg:rounded-[28px]
+        lg:p-6
       "
     >
       {stats.map((stat) => (
