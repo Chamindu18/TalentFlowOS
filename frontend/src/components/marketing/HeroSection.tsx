@@ -10,18 +10,57 @@ import RecruitmentOverviewCard from "./cards/RecruitmentOverviewCard";
 
 export default function HeroSection() {
   return (
-    <section className="h-[calc(100vh-96px)] overflow-hidden bg-[#FBF4EC]">
-      <div className="mx-auto flex h-full max-w-7xl items-center px-6 py-2 lg:px-8">
-        <div className="grid w-full items-center gap-4 lg:grid-cols-[42%_58%]">
+    <section
+      className="
+        overflow-hidden
+        bg-[#FBF4EC]
+        py-10
+        lg:min-h-[calc(100vh-96px)]
+        lg:py-0
+      "
+    >
+      <div
+        className="
+          mx-auto
+          flex
+          max-w-7xl
+          items-center
+          px-4
+          sm:px-6
+          lg:min-h-[calc(100vh-96px)]
+          lg:px-8
+        "
+      >
+        <div
+          className="
+            grid
+            w-full
+            items-center
+            gap-12
+            lg:grid-cols-[42%_58%]
+            lg:gap-4
+          "
+        >
           {/* Left Content */}
-          <div className="flex flex-col justify-center">
+          <div
+            className="
+              order-2
+              flex
+              flex-col
+              justify-center
+              text-center
+              lg:order-1
+              lg:text-left
+            "
+          >
             <h1
               className="
-                text-5xl
+                text-4xl
                 font-bold
-                leading-[0.92]
+                leading-[0.95]
                 tracking-[-0.03em]
                 text-[#102541]
+                sm:text-5xl
                 md:text-6xl
                 xl:text-[76px]
               "
@@ -30,15 +69,38 @@ export default function HeroSection() {
               <br />
               into a competitive
               <br />
-              <span className="text-[#FF8A5B]">advantage.</span>
+              <span className="text-[#FF8A5B]">
+                advantage.
+              </span>
             </h1>
 
-            <p className="mt-6 max-w-lg text-lg leading-8 text-slate-600">
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-lg
+                text-base
+                leading-8
+                text-slate-600
+                sm:text-lg
+                lg:mx-0
+              "
+            >
               Find the right talent, streamline your workflow and make
               confident hiring decisions with intelligent recruitment tools.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div
+              className="
+                mt-8
+                flex
+                flex-col
+                gap-4
+                sm:flex-row
+                sm:justify-center
+                lg:justify-start
+              "
+            >
               {/* Primary Button */}
               <Button
                 className="
@@ -132,7 +194,16 @@ export default function HeroSection() {
           </div>
 
           {/* Right Content */}
-          <div className="relative flex items-center justify-center">
+          <div
+            className="
+              order-1
+              relative
+              flex
+              items-center
+              justify-center
+              lg:order-2
+            "
+          >
             <img
               src={heroImage}
               alt="TalentFlow Recruitment Platform"
@@ -140,22 +211,23 @@ export default function HeroSection() {
                 relative
                 z-10
                 w-full
-                max-w-[780px]
+                max-w-[320px]
                 object-contain
+                sm:max-w-[450px]
+                md:max-w-[600px]
+                lg:max-w-[780px]
               "
             />
 
-            {/* Top Match */}
+            {/* Floating Cards - Desktop Only */}
             <div className="absolute -left-10 top-4 z-20 hidden xl:block">
               <TopMatchCard />
             </div>
 
-            {/* Interview Schedule */}
             <div className="absolute -right-8 top-20 z-20 hidden xl:block">
               <InterviewScheduleCard />
             </div>
 
-            {/* Recruitment Overview */}
             <div className="absolute -bottom-10 right-52 z-20 hidden xl:block">
               <RecruitmentOverviewCard />
             </div>
