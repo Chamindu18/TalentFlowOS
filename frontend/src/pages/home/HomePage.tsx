@@ -7,6 +7,7 @@ import Navbar from "@/components/marketing/Navbar";
 import ProductShowcaseSection from "@/components/marketing/product-showcase/ProductShowcaseSection";
 import TestimonialsSection from "@/components/marketing/testimonials/TestimonialsSection";
 import TrustedCompaniesSection from "@/components/marketing/trusted-companies/TrustedCompaniesSection";
+import FinalCTASection from "@/components/marketing/cta/FinalCTASection";
 
 export default function HomePage() {
   return (
@@ -33,6 +34,10 @@ export default function HomePage() {
 
       <ScrollReveal delay={0.25}>
         <TestimonialsSection />
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.3}>
+        <FinalCTASection />
       </ScrollReveal>
     </main>
   );
