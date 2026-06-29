@@ -1,4 +1,6 @@
+import CursorGlow from "@/components/common/CursorGlow";
 import ScrollReveal from "@/components/common/ScrollReveal";
+
 import FeaturesSection from "@/components/marketing/features/FeaturesSection";
 import HeroSection from "@/components/marketing/HeroSection";
 import Navbar from "@/components/marketing/Navbar";
@@ -7,6 +9,8 @@ import TrustedCompaniesSection from "@/components/marketing/trusted-companies/Tr
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#FBF4EC]">
+      <CursorGlow />
+
       <Navbar />
 
       <ScrollReveal duration={0.9}>
