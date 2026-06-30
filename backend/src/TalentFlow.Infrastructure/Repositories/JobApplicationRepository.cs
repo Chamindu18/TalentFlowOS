@@ -96,4 +96,9 @@ public class JobApplicationRepository : IApplicationRepository
         return await _context.Applications
             .CountAsync(x => x.JobId == jobId && !x.IsDeleted);
     }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 }

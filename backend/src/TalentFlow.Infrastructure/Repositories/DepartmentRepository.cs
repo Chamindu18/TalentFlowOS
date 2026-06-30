@@ -75,4 +75,9 @@ public class DepartmentRepository : IDepartmentRepository
         return await _context.Departments
             .AnyAsync(x => x.CompanyId == companyId && x.Name == name && !x.IsDeleted);
     }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 }
