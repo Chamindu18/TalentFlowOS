@@ -115,4 +115,9 @@ public class JobRepository : IJobRepository
     {
         return await _context.Jobs.AnyAsync(x => x.Id == id && !x.IsDeleted);
     }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 }

@@ -77,4 +77,9 @@ public class CompanyRepository : ICompanyRepository
     {
         return await _context.Companies.AnyAsync(x => x.Name == name && !x.IsDeleted);
     }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 }
