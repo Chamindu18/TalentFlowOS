@@ -76,6 +76,7 @@ export default function LoginPage() {
                 inline-flex
                 w-fit
                 items-center
+                font-semibold
                 rounded-full
                 bg-[#FFF3EC]
                 px-4
@@ -96,7 +97,7 @@ export default function LoginPage() {
                 font-bold
                 leading-tight
                 tracking-[-0.04em]
-                text-[#102541]
+                text-[#21579c]
                 xl:text-5xl
               "
             >
@@ -110,6 +111,7 @@ export default function LoginPage() {
                 max-w-md
                 text-base
                 leading-7
+                font-medium
                 text-slate-600
               "
             >
