@@ -19,6 +19,7 @@ export default function ProtectedRoute({
     user,
   } = useAuthStore();
 
+  // User is not logged in
   if (!isAuthenticated) {
     return (
       <Navigate
@@ -28,44 +29,18 @@ export default function ProtectedRoute({
     );
   }
 
+  // User does not have permission
   if (
     allowedRoles &&
     user &&
     !allowedRoles.includes(user.role)
   ) {
-    switch (user.role) {
-      case "Candidate":
-        return (
-          <Navigate
-            to="/candidate/dashboard"
-            replace
-          />
-        );
-
-      case "Recruiter":
-        return (
-          <Navigate
-            to="/recruiter/dashboard"
-            replace
-          />
-        );
-
-      case "Admin":
-        return (
-          <Navigate
-            to="/admin/dashboard"
-            replace
-          />
-        );
-
-      default:
-        return (
-          <Navigate
-            to="/login"
-            replace
-          />
-        );
-    }
+    return (
+      <Navigate
+        to="/unauthorized"
+        replace
+      />
+    );
   }
 
   return <Outlet />;
