@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   ArrowRight,
   Eye,
   EyeOff,
+  Loader2,
   Lock,
   Mail,
   User,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] =
