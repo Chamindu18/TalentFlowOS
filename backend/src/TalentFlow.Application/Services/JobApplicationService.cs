@@ -58,6 +58,8 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
     }
 
+
+
     public async Task<ApplicationResponseDTO> CreateAsync(CreateApplicationRequestDTO request)
     {
         // Validate Job exists

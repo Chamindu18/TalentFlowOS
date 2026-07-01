@@ -9,6 +9,9 @@ namespace TalentFlow.Application.Interfaces.Services;
 public interface IJobService
 {
     Task<JobResponseDTO> GetByIdAsync(Guid id);
+
+    Task CloseJobAsync(Guid id);
+
     Task<IEnumerable<JobResponseDTO>> GetAllAsync();
     Task<IEnumerable<JobResponseDTO>> GetActiveJobsAsync();
     Task<IEnumerable<JobResponseDTO>> GetJobsByCompanyAsync(Guid companyId);

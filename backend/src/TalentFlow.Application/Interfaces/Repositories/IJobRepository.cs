@@ -18,4 +18,6 @@ public interface IJobRepository
     void Update(Job job);
     void Delete(Job job);
     Task<bool> ExistsAsync(Guid id);
+
+    Task<int> SaveChangesAsync();
 }
