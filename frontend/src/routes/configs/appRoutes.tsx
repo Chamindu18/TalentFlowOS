@@ -22,6 +22,8 @@ import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -33,29 +35,16 @@ export default function AppRoutes() {
         />
       </Route>
 
-      {/* Candidate Routes */}
+      {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
+          {/* Candidate */}
           <Route
             path="/candidate/dashboard"
             element={<CandidateDashboardPage />}
           />
 
-          <Route
-            path="/profile"
-            element={<ProfilePage />}
-          />
-
-          <Route
-            path="/settings"
-            element={<SettingsPage />}
-          />
-        </Route>
-      </Route>
-
-      {/* Recruiter Routes */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<DashboardLayout />}>
+          {/* Recruiter */}
           <Route
             path="/recruiter/dashboard"
             element={<RecruiterDashboardPage />}
@@ -65,12 +54,25 @@ export default function AppRoutes() {
             path="/recruiter/setup-company"
             element={<CompanySetupPage />}
           />
-        </Route>
-      </Route>
 
-      {/* Temporary Legacy Dashboard */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<DashboardLayout />}>
+          {/* Admin */}
+          <Route
+            path="/admin/dashboard"
+            element={<AdminDashboardPage />}
+          />
+
+          {/* Shared */}
+          <Route
+            path="/profile"
+            element={<ProfilePage />}
+          />
+
+          <Route
+            path="/settings"
+            element={<SettingsPage />}
+          />
+
+          {/* Temporary Legacy Dashboard */}
           <Route
             path="/dashboard"
             element={<DashboardPage />}
