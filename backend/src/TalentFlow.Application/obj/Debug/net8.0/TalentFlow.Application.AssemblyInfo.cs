@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TalentFlow.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2af8932d28078c562e2fa0b856fb722db4824c48")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9086f78e46783c6fc558f85f39caefbc1c6197d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("TalentFlow.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TalentFlow.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,389 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  ChevronUp,
+  Menu,
+  X,
+} from "lucide-react";
+
+import logo from "@/assets/logo/logo.png";
+import { Button } from "@/components/ui/button";
+
+const navigationItems = [
+  {
+    title: "Product",
+    href: "#product-showcase",
+  },
+  {
+    title: "Solutions",
+    href: "#features",
+  },
+  {
+    title: "Resources",
+    href: "#testimonials",
+  },
+  {
+    title: "Company",
+    href: "#company",
+  },
+];
+
+export default function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] =
+    useState(false);
+
+  return (
+    <header
+      className="
+        fixed
+        left-0
+        top-0
+        z-50
+        w-full
+        border-b
+        border-white/40
+        bg-[#FBF4EC]/90
+        shadow-sm
+        backdrop-blur-md
+      "
+    >
+      <div
+        className="
+          mx-auto
+          flex
+          h-20
+          max-w-7xl
+          items-center
+          justify-between
+          px-4
+          sm:h-24
+          sm:px-6
+          lg:px-8
+        "
+      >
+        {/* Logo */}
+        <Link
+          to="/"
+          className="
+            flex
+            items-center
+            transition-transform
+            duration-300
+            hover:scale-[1.02]
+          "
+        >
+          <img
+            src={logo}
+            alt="TalentFlow OS"
+            draggable={false}
+            className="
+              h-16
+              w-auto
+              object-contain
+              sm:h-20
+              lg:h-10
+            "
+          />
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav
+          className="
+            hidden
+            items-center
+            gap-8
+            lg:flex
+            xl:gap-10
+          "
+        >
+          {navigationItems.map((item) => (
+            <a
+              key={item.title}
+              href={item.href}
+              className="
+                group
+                relative
+                flex
+                items-center
+                gap-1.5
+                text-[16px]
+                font-medium
+                text-[#102541]
+                transition-all
+                duration-300
+                hover:text-[#FF8A5B]
+              "
+            >
+              {item.title}
+
+              <ChevronUp
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  duration-300
+                  group-hover:rotate-180
+                "
+              />
+
+              <span
+                className="
+                  absolute
+                  -bottom-2
+                  left-0
+                  h-0.5
+                  w-0
+                  bg-[#FF8A5B]
+                  transition-all
+                  duration-300
+                  group-hover:w-full
+                "
+              />
+            </a>
+          ))}
+        </nav>
+
+        {/* Desktop Actions */}
+        <div
+          className="
+            hidden
+            items-center
+            gap-4
+            lg:flex
+            xl:gap-5
+          "
+        >
+          <Link
+            to="/login"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-full
+              px-5
+              py-3
+              text-[16px]
+              font-medium
+              text-[#102541]
+              transition-all
+              duration-300
+              hover:text-[#FF8A5B]
+            "
+          >
+            <span
+              className="
+                absolute
+                inset-0
+                scale-90
+                rounded-full
+                bg-white
+                opacity-0
+                transition-all
+                duration-300
+                group-hover:scale-100
+                group-hover:opacity-100
+              "
+            />
+
+            <span
+              className="
+                absolute
+                bottom-2
+                left-1/2
+                h-0.5
+                w-0
+                -translate-x-1/2
+                bg-[#FF8A5B]
+                transition-all
+                duration-300
+                group-hover:w-4/5
+              "
+            />
+
+            <span className="relative z-10">
+              Login
+            </span>
+          </Link>
+
+          <Button
+            asChild
+            className="
+              group
+              h-13
+              rounded-full
+              bg-[#FF8A5B]
+              px-8
+              text-base
+              font-semibold
+              text-white
+              shadow-md
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:bg-[#ff7843]
+              hover:shadow-xl
+            "
+          >
+            <Link
+              to="/register"
+              className="flex items-center gap-3"
+            >
+              Get Started
+
+              <ArrowRight
+                className="
+                  h-5
+                  w-5
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+              />
+            </Link>
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          type="button"
+          aria-label="Toggle navigation menu"
+          onClick={() =>
+            setIsMobileMenuOpen((prev) => !prev)
+          }
+          className="
+            rounded-2xl
+            p-2.5
+            text-[#102541]
+            transition-all
+            duration-300
+            hover:bg-white
+            hover:shadow-md
+            sm:p-3
+            lg:hidden
+          "
+        >
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6 sm:h-7 sm:w-7" />
+          ) : (
+            <Menu className="h-6 w-6 sm:h-7 sm:w-7" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          className="
+            border-t
+            border-[#EAEAEA]
+            bg-[#FBF4EC]
+            shadow-lg
+            lg:hidden
+          "
+        >
+          <nav
+            className="
+              mx-auto
+              flex
+              max-w-7xl
+              flex-col
+              gap-2
+              px-4
+              py-6
+              sm:px-6
+            "
+          >
+            {navigationItems.map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                onClick={() =>
+                  setIsMobileMenuOpen(false)
+                }
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  rounded-2xl
+                  px-4
+                  py-4
+                  text-left
+                  text-base
+                  font-medium
+                  text-[#102541]
+                  transition-all
+                  duration-300
+                  hover:bg-white
+                  hover:shadow-sm
+                "
+              >
+                <span>{item.title}</span>
+
+                <ChevronUp className="h-5 w-5 rotate-180" />
+              </a>
+            ))}
+
+            <div className="mt-6 flex flex-col gap-4">
+              <Button
+                asChild
+                variant="outline"
+                className="
+                  h-13
+                  rounded-full
+                  border-[#102541]
+                  text-base
+                  font-medium
+                  text-[#102541]
+                  transition-all
+                  duration-300
+                  hover:bg-[#102541]
+                  hover:text-white
+                "
+              >
+                <Link to="/login">
+                  Login
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                className="
+                  group
+                  h-13
+                  rounded-full
+                  bg-[#FF8A5B]
+                  text-base
+                  font-semibold
+                  text-white
+                  shadow-md
+                  transition-all
+                  duration-300
+                  hover:bg-[#ff7843]
+                  hover:shadow-lg
+                "
+              >
+                <Link
+                  to="/register"
+                  className="flex items-center gap-3"
+                >
+                  Get Started
+
+                  <ArrowRight
+                    className="
+                      h-5
+                      w-5
+                      transition-transform
+                      duration-300
+                      group-hover:translate-x-1
+                    "
+                  />
+                </Link>
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}
