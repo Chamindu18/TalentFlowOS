@@ -1,0 +1,16 @@
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net10.0\TalentFlow.Application.deps.json
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net10.0\TalentFlow.Application.dll
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net10.0\TalentFlow.Application.pdb
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net10.0\TalentFlow.Domain.dll
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net10.0\TalentFlow.Domain.pdb
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.csproj.AssemblyReference.cache
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.AssemblyInfoInputs.cache
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.AssemblyInfo.cs
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.csproj.CoreCompileInputs.cache
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.sourcelink.json
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFl.91008B18.Up2Date
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.dll
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\refint\TalentFlow.Application.dll
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\TalentFlow.Application.pdb
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net10.0\ref\TalentFlow.Application.dll

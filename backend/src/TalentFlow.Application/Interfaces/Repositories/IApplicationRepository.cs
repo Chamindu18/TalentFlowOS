@@ -27,4 +27,7 @@ public interface IApplicationRepository
     Task<bool> HasCandidateAppliedAsync(Guid candidateId, Guid jobId);
 
     Task<int> GetApplicationCountForJobAsync(Guid jobId);
+
+    Task<int> SaveChangesAsync();
+
 }
