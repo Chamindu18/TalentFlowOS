@@ -391,7 +391,7 @@ export default function RegisterPage() {
             justify-center
           "
         >
-          <RegisterForm />
+          <RegisterForm role={selectedRole} />
         </section>
       </div>
     </main>
