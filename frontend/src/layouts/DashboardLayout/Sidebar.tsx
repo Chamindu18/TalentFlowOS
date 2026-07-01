@@ -1,13 +1,19 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   BarChart3,
   BriefcaseBusiness,
   LayoutDashboard,
+  LogOut,
   Settings,
   User,
   X,
 } from "lucide-react";
+
+import { useAuthStore } from "@/store/auth.store";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -46,6 +52,18 @@ export default function Sidebar({
   isOpen,
   onClose,
 }: SidebarProps) {
+  const navigate = useNavigate();
+
+  const logout = useAuthStore(
+    (state) => state.logout,
+  );
+
+  const handleLogout = () => {
+    logout();
+
+    navigate("/login");
+  };
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -152,6 +170,38 @@ export default function Sidebar({
             );
           })}
         </nav>
+
+        {/* Logout */}
+        <div
+          className="
+            border-t
+            border-slate-100
+            p-4
+          "
+        >
+          <button
+            onClick={handleLogout}
+            className="
+              flex
+              w-full
+              items-center
+              gap-3
+              rounded-2xl
+              px-4
+              py-3
+              text-sm
+              font-semibold
+              text-red-500
+              transition-all
+              duration-300
+              hover:bg-red-50
+            "
+          >
+            <LogOut className="h-5 w-5" />
+
+            Logout
+          </button>
+        </div>
       </aside>
     </>
   );
