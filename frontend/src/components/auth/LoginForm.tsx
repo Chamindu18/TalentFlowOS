@@ -1,19 +1,97 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   ArrowRight,
   Eye,
   EyeOff,
+  Loader2,
   Lock,
   Mail,
 } from "lucide-react";
 
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+
+  const login = useAuthStore(
+    (state) => state.login,
+  );
+
+  const isLoading = useAuthStore(
+    (state) => state.isLoading,
+  );
+
   const [showPassword, setShowPassword] =
     useState(false);
+
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const handleLogin = async (
+    e: React.FormEvent,
+  ) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      toast.error(
+        "Please enter your email and password.",
+      );
+
+      return;
+    }
+
+    try {
+      await login({
+        email,
+        password,
+      });
+
+      const user =
+        useAuthStore.getState().user;
+
+      toast.success(
+        "Login successful!",
+      );
+
+      switch (user?.role) {
+        case "Candidate":
+          navigate(
+            "/candidate/dashboard",
+          );
+          break;
+
+        case "Recruiter":
+          navigate(
+            "/recruiter/dashboard",
+          );
+          break;
+
+        case "Admin":
+          navigate(
+            "/admin/dashboard",
+          );
+          break;
+
+        default:
+          navigate("/");
+      }
+    } catch (error) {
+      toast.error(
+        "Invalid email or password.",
+      );
+    }
+  };
 
   return (
     <div
@@ -43,7 +121,8 @@ export default function LoginForm() {
         </h1>
 
         <p className="mt-2 text-slate-500">
-          Sign in to continue using TalentFlow OS.
+          Sign in to continue using TalentFlow
+          OS.
         </p>
       </div>
 
@@ -73,13 +152,15 @@ export default function LoginForm() {
             text-slate-500
           "
         >
-          Access your recruitment dashboard and
-          continue hiring smarter.
+          Access your recruitment dashboard
+          and continue hiring smarter.
         </p>
       </div>
 
-      {/* Form */}
-      <form className="mt-6 space-y-4">
+      <form
+        className="mt-6 space-y-4"
+        onSubmit={handleLogin}
+      >
         {/* Email */}
         <div>
           <label
@@ -111,6 +192,12 @@ export default function LoginForm() {
             <input
               id="email"
               type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(
+                  e.target.value,
+                )
+              }
               placeholder="kasun.perera@talentflow.lk"
               className="
                 h-12
@@ -170,6 +257,12 @@ export default function LoginForm() {
                   ? "text"
                   : "password"
               }
+              value={password}
+              onChange={(e) =>
+                setPassword(
+                  e.target.value,
+                )
+              }
               placeholder="••••••••"
               className="
                 h-12
@@ -195,7 +288,9 @@ export default function LoginForm() {
             <button
               type="button"
               onClick={() =>
-                setShowPassword((prev) => !prev)
+                setShowPassword(
+                  (prev) => !prev,
+                )
               }
               className="
                 absolute
@@ -264,6 +359,8 @@ export default function LoginForm() {
 
         {/* Sign In */}
         <Button
+          type="submit"
+          disabled={isLoading}
           className="
             group
             h-12
@@ -282,22 +379,30 @@ export default function LoginForm() {
             hover:scale-[1.02]
             hover:shadow-2xl
             active:scale-[0.98]
+            disabled:opacity-70
           "
         >
-          <span className="flex items-center gap-2">
-            Sign In
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Signing In...
+            </>
+          ) : (
+            <span className="flex items-center gap-2">
+              Sign In
 
-            <ArrowRight
-              className="
-                h-4
-                w-4
-                transition-all
-                duration-300
-                group-hover:translate-x-1
-                group-hover:scale-110
-              "
-            />
-          </span>
+              <ArrowRight
+                className="
+                  h-4
+                  w-4
+                  transition-all
+                  duration-300
+                  group-hover:translate-x-1
+                  group-hover:scale-110
+                "
+              />
+            </span>
+          )}
         </Button>
 
         {/* Register */}
