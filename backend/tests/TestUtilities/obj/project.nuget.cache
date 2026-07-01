@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "y2RJMxxAOUU=",
+  "dgSpecHash": "C74+bAynMb4=",
   "success": true,
-  "projectFilePath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\TUF\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\TUF\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\TUF\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
-  ],
+  "projectFilePath": "D:\\projects\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
