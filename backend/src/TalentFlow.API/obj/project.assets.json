@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net8.0": {
       "AutoMapper/12.0.1": {
@@ -3394,23 +3394,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TUF\\.nuget\\packages\\": {},
+    "C:\\Users\\HP\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.API\\TalentFlow.API.csproj",
+      "projectUniqueName": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.API\\TalentFlow.API.csproj",
       "projectName": "TalentFlow.API",
-      "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.API\\TalentFlow.API.csproj",
-      "packagesPath": "C:\\Users\\TUF\\.nuget\\packages\\",
-      "outputPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.API\\obj\\",
+      "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.API\\TalentFlow.API.csproj",
+      "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+      "outputPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\TUF\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3419,18 +3419,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
-              "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
+            "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
+              "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
             },
-            "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj": {
-              "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj"
+            "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj": {
+              "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj"
             }
           }
         }
@@ -3445,10 +3445,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net8.0": {
+        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": {
@@ -3489,24 +3490,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.26, 8.0.26]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.26, 8.0.26]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.26, 8.0.26]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.26, 8.0.26]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -3515,7 +3498,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
