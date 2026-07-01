@@ -4,7 +4,6 @@ using TalentFlow.Application.Interfaces.Persistence;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
 using TalentFlow.Domain.Entities;
-using TalentFlow.Domain.Enums;
 
 namespace TalentFlow.Application.Services;
 
@@ -27,11 +26,13 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> RegisterAsync(
         RegisterRequestDto request)
     {
-        var userExists = await _userRepository.ExistsAsync(request.Email);
+        var userExists = await _userRepository.ExistsAsync(
+            request.Email);
 
         if (userExists)
         {
-            throw new UserAlreadyExistsException(request.Email);
+            throw new UserAlreadyExistsException(
+                request.Email);
         }
 
         var user = new User
@@ -40,8 +41,12 @@ public class AuthService : IAuthService
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email.Trim().ToLower(),
-            PasswordHash = _passwordHasher.HashPassword(request.Password),
-            Role = UserRole.Candidate,
+            PasswordHash = _passwordHasher.HashPassword(
+                request.Password),
+
+            // Use the role selected during registration
+            Role = request.Role,
+
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -65,16 +70,18 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> LoginAsync(
         LoginRequestDto request)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await _userRepository.GetByEmailAsync(
+            request.Email);
 
         if (user is null)
         {
             throw new InvalidCredentialsException();
         }
 
-        var isValidPassword = _passwordHasher.VerifyPassword(
-            request.Password,
-            user.PasswordHash);
+        var isValidPassword =
+            _passwordHasher.VerifyPassword(
+                request.Password,
+                user.PasswordHash);
 
         if (!isValidPassword)
         {
