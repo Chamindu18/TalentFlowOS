@@ -42,6 +42,12 @@ bin/
 obj/
 
 # =========================
+# ASP.NET Local Configuration
+# =========================
+appsettings.Development.json
+**/appsettings.Development.json
+
+# =========================
 # Rider
 # =========================
 .idea/
@@ -72,4 +78,9 @@ docker-data/
 # Temporary files
 # =========================
 tmp/
+<<<<<<< HEAD
+temp/
+
+=======
 temp/backend/.vs/
+>>>>>>> 8bb371951dfb3250ea80b88d9ea6c8e5bdac2c72
