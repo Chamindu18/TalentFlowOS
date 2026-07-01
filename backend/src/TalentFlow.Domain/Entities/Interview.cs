@@ -20,7 +20,7 @@ namespace TalentFlow.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation Properties
-        public Application? Application { get; set; }
+        public JobApplication? Application { get; set; }
         public ICollection<InterviewSchedule> Schedules { get; set; } = new List<InterviewSchedule>();
         public ICollection<InterviewFeedback> Feedbacks { get; set; } = new List<InterviewFeedback>();
     }
