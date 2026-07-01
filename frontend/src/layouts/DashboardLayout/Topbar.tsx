@@ -4,6 +4,8 @@ import {
   Search,
 } from "lucide-react";
 
+import { useAuthStore } from "@/store/auth.store";
+
 interface TopbarProps {
   onMenuClick: () => void;
 }
@@ -11,6 +13,23 @@ interface TopbarProps {
 export default function Topbar({
   onMenuClick,
 }: TopbarProps) {
+  const user = useAuthStore(
+    (state) => state.user,
+  );
+
+  const firstName =
+    user?.firstName ?? "User";
+
+  const lastName =
+    user?.lastName ?? "";
+
+  const fullName =
+    `${firstName} ${lastName}`.trim();
+
+  const initials = `${firstName[0] ?? ""}${
+    lastName[0] ?? ""
+  }`.toUpperCase();
+
   return (
     <header
       className="
@@ -122,7 +141,7 @@ export default function Topbar({
               text-white
             "
           >
-            CH
+            {initials}
           </div>
 
           <div className="hidden sm:block">
@@ -133,16 +152,17 @@ export default function Topbar({
                 text-[#102541]
               "
             >
-              Chamindu
+              {fullName}
             </p>
 
             <p
               className="
                 text-xs
+                capitalize
                 text-slate-500
               "
             >
-              Administrator
+              {user?.role ?? "User"}
             </p>
           </div>
         </div>
