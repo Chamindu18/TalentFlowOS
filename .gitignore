@@ -42,6 +42,12 @@ bin/
 obj/
 
 # =========================
+# ASP.NET Local Configuration
+# =========================
+appsettings.Development.json
+**/appsettings.Development.json
+
+# =========================
 # Rider
 # =========================
 .idea/
@@ -73,3 +79,4 @@ docker-data/
 # =========================
 tmp/
 temp/
+

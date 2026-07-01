@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using Microsoft.EntityFrameworkCore;
 
 using TalentFlow.Application.Common.Settings;
@@ -22,7 +24,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 // =====================================
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 
 // =====================================
 // Swagger
