@@ -10,7 +10,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    initializeAuth();
+    void initializeAuth();
   }, [initializeAuth]);
 
   return (
