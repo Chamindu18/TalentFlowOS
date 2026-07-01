@@ -1,10 +1,4 @@
-using System.Text;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Services;
 using TalentFlow.Application.Mappings;
@@ -19,10 +13,7 @@ builder.Services.AddControllers();
 
 // Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TalentFlow API", Version = "v1" });
-});
+builder.Services.AddSwaggerGen();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(JobProfile).Assembly);
@@ -33,10 +24,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
-// ==================================================
-// REGISTER YOUR SERVICES AND REPOSITORIES HERE
-// ==================================================
 
 // Services
 builder.Services.AddScoped<IJobService, JobService>();
@@ -49,10 +36,6 @@ builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IApplicationRepository, JobApplicationRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
-// ==================================================
-// END OF SERVICE REGISTRATIONS
-// ==================================================
 
 var app = builder.Build();
 
