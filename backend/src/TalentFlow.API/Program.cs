@@ -34,6 +34,23 @@ builder.Services
     });
 
 // =====================================
+// CORS (Development Only)
+// =====================================
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "Frontend",
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+// =====================================
 // Swagger
 // =====================================
 
@@ -158,7 +175,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// =====================================
+// Middleware
+// =====================================
+
+// TEMPORARILY DISABLED FOR LOCAL DEV
+// app.UseHttpsRedirection();
+
+app.UseCors("Frontend");
 
 app.MapControllers();
 
