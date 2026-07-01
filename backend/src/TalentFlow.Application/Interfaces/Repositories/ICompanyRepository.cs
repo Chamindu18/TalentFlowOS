@@ -16,4 +16,6 @@ public interface ICompanyRepository
     void Delete(Company company);
     Task<bool> ExistsAsync(Guid id);
     Task<bool> NameExistsAsync(string name);
+
+    Task<int> SaveChangesAsync();
 }

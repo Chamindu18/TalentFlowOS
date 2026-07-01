@@ -16,4 +16,6 @@ public interface IDepartmentRepository
     void Delete(Department department);
     Task<bool> ExistsAsync(Guid id);
     Task<bool> NameExistsInCompanyAsync(Guid companyId, string name);
+
+    Task<int> SaveChangesAsync();
 }
