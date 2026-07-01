@@ -1,9 +1,16 @@
 import {
   Bell,
+  Menu,
   Search,
 } from "lucide-react";
 
-export default function Topbar() {
+interface TopbarProps {
+  onMenuClick: () => void;
+}
+
+export default function Topbar({
+  onMenuClick,
+}: TopbarProps) {
   return (
     <header
       className="
@@ -14,48 +21,72 @@ export default function Topbar() {
         border-b
         border-slate-200
         bg-white
-        px-6
+        px-4
+        lg:px-6
       "
     >
-      <div className="relative w-full max-w-md">
-        <Search
+      {/* Left */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
           className="
-            absolute
-            left-4
-            top-1/2
-            h-4
-            w-4
-            -translate-y-1/2
-            text-slate-400
+            rounded-xl
+            p-2
+            hover:bg-slate-100
+            lg:hidden
           "
-        />
+        >
+          <Menu className="h-6 w-6" />
+        </button>
 
-        <input
-          placeholder="Search..."
+        <div
           className="
-            h-12
-            w-full
-            rounded-2xl
-            border
-            border-slate-200
-            bg-slate-50
-            pl-11
-            pr-4
-            text-sm
-            outline-none
-            transition-all
-            focus:border-[#FF8A5B]
-            focus:bg-white
+            relative
+            hidden
+            w-80
+            md:block
           "
-        />
+        >
+          <Search
+            className="
+              absolute
+              left-4
+              top-1/2
+              h-4
+              w-4
+              -translate-y-1/2
+              text-slate-400
+            "
+          />
+
+          <input
+            placeholder="Search..."
+            className="
+              h-12
+              w-full
+              rounded-2xl
+              border
+              border-slate-200
+              bg-slate-50
+              pl-11
+              pr-4
+              text-sm
+              outline-none
+              transition-all
+              focus:border-[#FF8A5B]
+              focus:bg-white
+            "
+          />
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Right */}
+      <div className="flex items-center gap-3">
         <button
           className="
             flex
-            h-12
-            w-12
+            h-11
+            w-11
             items-center
             justify-center
             rounded-2xl
@@ -74,7 +105,7 @@ export default function Topbar() {
             gap-3
             rounded-2xl
             bg-slate-100
-            px-4
+            px-3
             py-2
           "
         >
@@ -94,12 +125,23 @@ export default function Topbar() {
             CH
           </div>
 
-          <div>
-            <p className="text-sm font-semibold text-[#102541]">
+          <div className="hidden sm:block">
+            <p
+              className="
+                text-sm
+                font-semibold
+                text-[#102541]
+              "
+            >
               Chamindu
             </p>
 
-            <p className="text-xs text-slate-500">
+            <p
+              className="
+                text-xs
+                text-slate-500
+              "
+            >
               Administrator
             </p>
           </div>
