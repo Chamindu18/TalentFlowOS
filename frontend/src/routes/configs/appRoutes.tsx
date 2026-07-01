@@ -24,6 +24,8 @@ import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
+import NotFoundPage from "@/pages/errors/NotFoundPage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -55,9 +57,7 @@ export default function AppRoutes() {
       <Route
         element={
           <ProtectedRoute
-            allowedRoles={[
-              "Recruiter",
-            ]}
+            allowedRoles={["Recruiter"]}
           />
         }
       >
@@ -130,6 +130,12 @@ export default function AppRoutes() {
           />
         </Route>
       </Route>
+
+      {/* 404 Page */}
+      <Route
+        path="*"
+        element={<NotFoundPage />}
+      />
     </Routes>
   );
 }
