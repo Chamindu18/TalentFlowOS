@@ -25,6 +25,7 @@ import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
 import NotFoundPage from "@/pages/errors/NotFoundPage";
+import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 
 export default function AppRoutes() {
   return (
@@ -130,6 +131,12 @@ export default function AppRoutes() {
           />
         </Route>
       </Route>
+
+      {/* Unauthorized Page */}
+      <Route
+        path="/unauthorized"
+        element={<UnauthorizedPage />}
+      />
 
       {/* 404 Page */}
       <Route
