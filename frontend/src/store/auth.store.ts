@@ -24,7 +24,7 @@ interface AuthState {
 
   logout: () => void;
 
-  initializeAuth: () => void;
+  initializeAuth: () => Promise<void>;
 }
 
 export const useAuthStore =
@@ -102,7 +102,7 @@ export const useAuthStore =
       });
     },
 
-    initializeAuth: () => {
+    initializeAuth: async () => {
       const token =
         localStorage.getItem(
           "accessToken",
@@ -112,9 +112,32 @@ export const useAuthStore =
         return;
       }
 
-      set({
-        token,
-        isAuthenticated: true,
-      });
+      try {
+        const currentUser =
+          await authService.getCurrentUser();
+
+        set({
+          token,
+          user: {
+            token,
+            userId: currentUser.userId,
+            email: currentUser.email,
+            firstName: "",
+            lastName: "",
+            role: currentUser.role,
+          },
+          isAuthenticated: true,
+        });
+      } catch {
+        localStorage.removeItem(
+          "accessToken",
+        );
+
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        });
+      }
     },
   }));
