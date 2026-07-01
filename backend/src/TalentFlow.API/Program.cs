@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using TalentFlow.Application.Common.Settings;
 using TalentFlow.Application.Interfaces.Persistence;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
@@ -17,20 +18,42 @@ using TalentFlow.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// =====================================
 // Controllers
+// =====================================
+
 builder.Services.AddControllers();
 
+// =====================================
 // Swagger
+// =====================================
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// =====================================
 // AutoMapper
+// =====================================
+
 builder.Services.AddAutoMapper(
     typeof(Program).Assembly,
     typeof(JobProfile).Assembly
 );
 
+// =====================================
+// JWT Settings
+// =====================================
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection(
+        JwtSettings.SectionName
+    )
+);
+
+// =====================================
 // Database
+// =====================================
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
@@ -116,7 +139,10 @@ builder.Services.AddScoped<
 
 var app = builder.Build();
 
+// =====================================
 // Development
+// =====================================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
