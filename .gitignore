@@ -72,4 +72,4 @@ docker-data/
 # Temporary files
 # =========================
 tmp/
-temp/backend/.vs/
+temp/
