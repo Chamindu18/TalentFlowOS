@@ -139,3 +139,4 @@ D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backen
 D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.pdb
 D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.genruntimeconfig.cache
 D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\ref\TalentFlow.API.dll
+D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.MvcApplicationPartsAssemblyInfo.cs
