@@ -24,6 +24,11 @@ import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
+
+import { JobsPage } from "@/pages/recruiter/JobsPage";
+import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
+import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
+
 import NotFoundPage from "@/pages/errors/NotFoundPage";
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 
@@ -75,6 +80,24 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+          
+          <Route
+          path="/recruiter/jobs"
+          element={<JobsPage />}
+          />
+
+          <Route
+          path="/recruiter/jobs/create"
+          element={<CreateJobPage />}
+          />
+
+          <Route
+          path="/recruiter/applications"
+          element={<ApplicationsPage />}
+          />
+          
+
+          {/* Admin */}
       {/* Admin Routes */}
       <Route
         element={
