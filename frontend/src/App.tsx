@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 
 import AppRoutes from "@/routes/configs/appRoutes";
+
+import AppLoader from "@/components/common/AppLoader";
+
 import { useAuthStore } from "@/store/auth.store";
 
 export default function App() {
@@ -10,9 +13,25 @@ export default function App() {
     (state) => state.initializeAuth,
   );
 
+  const [isInitializing, setIsInitializing] =
+    useState(true);
+
   useEffect(() => {
-    void initializeAuth();
+    const init = async () => {
+      initializeAuth();
+
+      // Small delay for smoother UX
+      setTimeout(() => {
+        setIsInitializing(false);
+      }, 500);
+    };
+
+    init();
   }, [initializeAuth]);
+
+  if (isInitializing) {
+    return <AppLoader />;
+  }
 
   return (
     <BrowserRouter>
