@@ -2849,24 +2849,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TUF\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj",
       "projectName": "TalentFlow.Infrastructure",
-      "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\TUF\\.nuget\\packages\\",
-      "outputPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\TalentFlow.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\TUF\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2874,18 +2869,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
-              "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
+            "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
             },
-            "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
-              "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj"
+            "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj"
             }
           }
         }

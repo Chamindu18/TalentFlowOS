@@ -8,24 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\TUF\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
       "projectName": "TestUtilities",
-      "projectPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
-      "packagesPath": "C:\\Users\\TUF\\.nuget\\packages\\",
-      "outputPath": "D:\\NSBM\\Second Year\\Second Sem\\architecture\\SA Group Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\obj\\",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\TUF\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -33,12 +28,10 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {}
         }
@@ -57,7 +50,6 @@
     },
     "frameworks": {
       "net8.0": {
-        "framework": "net8.0",
         "targetAlias": "net8.0",
         "imports": [
           "net461",
