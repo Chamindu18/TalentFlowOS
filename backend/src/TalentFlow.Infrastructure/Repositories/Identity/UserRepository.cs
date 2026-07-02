@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TalentFlow.Application.Interfaces.Persistence;
+using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Domain.Entities;
 using TalentFlow.Infrastructure.Persistence.Contexts;
 
