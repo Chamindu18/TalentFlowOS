@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { jobService } from '../../services/jobService';
-import { Job } from '../../types/job';
-import toast from 'react-hot-toast';
+import React, {
+  useState,
+  useEffect,
+} from "react";
+
+import { Link } from "react-router-dom";
+
+import { jobService } from "../../services/jobService";
+
+import type { Job } from "../../types/job";
+
+import toast from "react-hot-toast";
 
 export const JobsPage: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);

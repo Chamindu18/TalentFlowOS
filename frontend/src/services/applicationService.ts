@@ -1,5 +1,10 @@
-import axios from 'axios';
-import { Application, CreateApplicationRequest, UpdateApplicationStatusRequest } from '../types/job';
+import axios from "axios";
+
+import type {
+  Application,
+  CreateApplicationRequest,
+  UpdateApplicationStatusRequest,
+} from "../types/job";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5007/api';
 
