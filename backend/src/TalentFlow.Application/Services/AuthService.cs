@@ -1,6 +1,6 @@
 using TalentFlow.Application.DTOs.Auth;
 using TalentFlow.Application.Exceptions.Auth;
-using TalentFlow.Application.Interfaces.Persistence;
+using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
 using TalentFlow.Domain.Entities;
