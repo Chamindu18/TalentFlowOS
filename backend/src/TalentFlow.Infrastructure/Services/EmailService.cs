@@ -30,12 +30,18 @@ public class EmailService : IEmailService
             _settings.Port
         );
 
-        client.Credentials = new NetworkCredential(
-            _settings.Username,
-            _settings.Password
-        );
-
         client.EnableSsl = true;
+
+        client.UseDefaultCredentials = false;
+
+        client.DeliveryMethod =
+            SmtpDeliveryMethod.Network;
+
+        client.Credentials =
+            new NetworkCredential(
+                _settings.Username,
+                _settings.Password
+            );
 
         using var message = new MailMessage
         {
