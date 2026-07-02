@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(JobProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(CandidateMappingProfile).Assembly);
 
 // Add Database Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -30,6 +30,9 @@ builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IApplicationService, JobApplicationService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IResumeService, ResumeService>();
 
 // Repositories
 builder.Services.AddScoped<IJobRepository, JobRepository>();
