@@ -1,12 +1,14 @@
 using TalentFlow.Domain.Entities;
 
-namespace TalentFlow.Application.Interfaces.Persistence;
+namespace TalentFlow.Application.Interfaces.Repositories;
 
 public interface IUserRepository
 {
     Task<User?> GetByEmailAsync(string email);
 
     Task<User?> GetByIdAsync(Guid id);
+
+    Task<User?> GetByResetTokenAsync(string token);
 
     Task AddAsync(User user);
 
