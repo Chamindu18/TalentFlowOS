@@ -16,6 +16,14 @@ public class User
 
     public UserRole Role { get; set; }
 
+    // =====================================
+    // Password Reset
+    // =====================================
+
+    public string? ResetPasswordToken { get; set; }
+
+    public DateTime? ResetPasswordTokenExpiresAt { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }

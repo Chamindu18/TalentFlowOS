@@ -8,6 +8,8 @@ public interface IUserRepository
 
     Task<User?> GetByIdAsync(Guid id);
 
+    Task<User?> GetByResetTokenAsync(string token);
+
     Task AddAsync(User user);
 
     Task<bool> ExistsAsync(string email);

@@ -69,10 +69,6 @@ public class AuthService : IAuthService
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
 
-        // =====================================
-        // Send Welcome Email
-        // =====================================
-
         try
         {
             string subject;
@@ -193,5 +189,88 @@ public class AuthService : IAuthService
 
             Role = user.Role.ToString()
         };
+    }
+
+    public async Task ForgotPasswordAsync(
+        ForgotPasswordRequestDto request)
+    {
+        var user =
+            await _userRepository.GetByEmailAsync(
+                request.Email
+                    .Trim()
+                    .ToLower()
+            );
+
+        // Prevent email enumeration attacks
+        if (user is null)
+        {
+            return;
+        }
+
+        var token = Guid.NewGuid().ToString();
+
+        user.ResetPasswordToken = token;
+
+        user.ResetPasswordTokenExpiresAt =
+            DateTime.UtcNow.AddMinutes(15);
+
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.SaveChangesAsync();
+
+        var resetLink =
+            $"http://localhost:5173/reset-password?token={token}";
+
+        var body =
+            EmailTemplates.ResetPassword(
+                user.FirstName,
+                resetLink
+            );
+
+        await _emailService.SendEmailAsync(
+            user.Email,
+            "Reset Your TalentFlow Password 🔒",
+            body
+        );
+    }
+
+    public async Task ResetPasswordAsync(
+        ResetPasswordRequestDto request)
+    {
+        var user =
+            await _userRepository.GetByResetTokenAsync(
+                request.Token
+            );
+
+        if (user is null)
+        {
+            throw new Exception(
+                "Invalid reset token."
+            );
+        }
+
+        if (
+            user.ResetPasswordTokenExpiresAt is null ||
+            user.ResetPasswordTokenExpiresAt <
+            DateTime.UtcNow
+        )
+        {
+            throw new Exception(
+                "Reset token has expired."
+            );
+        }
+
+        user.PasswordHash =
+            _passwordHasher.HashPassword(
+                request.NewPassword
+            );
+
+        user.ResetPasswordToken = null;
+
+        user.ResetPasswordTokenExpiresAt = null;
+
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.SaveChangesAsync();
     }
 }
