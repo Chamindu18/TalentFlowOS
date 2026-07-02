@@ -19,18 +19,16 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 
-import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
-
-import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
-
-
+import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
 
-import NotFoundPage from "@/pages/errors/NotFoundPage";
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
+import NotFoundPage from "@/pages/errors/NotFoundPage";
 
 export default function AppRoutes() {
   return (
@@ -77,27 +75,24 @@ export default function AppRoutes() {
             path="/recruiter/setup-company"
             element={<CompanySetupPage />}
           />
+
+          <Route
+            path="/recruiter/jobs"
+            element={<JobsPage />}
+          />
+
+          <Route
+            path="/recruiter/jobs/create"
+            element={<CreateJobPage />}
+          />
+
+          <Route
+            path="/recruiter/applications"
+            element={<ApplicationsPage />}
+          />
         </Route>
       </Route>
 
-          
-          <Route
-          path="/recruiter/jobs"
-          element={<JobsPage />}
-          />
-
-          <Route
-          path="/recruiter/jobs/create"
-          element={<CreateJobPage />}
-          />
-
-          <Route
-          path="/recruiter/applications"
-          element={<ApplicationsPage />}
-          />
-          
-
-          {/* Admin */}
       {/* Admin Routes */}
       <Route
         element={
