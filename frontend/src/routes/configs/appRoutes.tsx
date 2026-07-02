@@ -24,16 +24,13 @@ import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
-<<<<<<< HEAD
 
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
 
-=======
 import NotFoundPage from "@/pages/errors/NotFoundPage";
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
->>>>>>> affa81248fa5174942230baa6d1cd89cd1992bb3
 
 export default function AppRoutes() {
   return (
@@ -83,7 +80,6 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
-<<<<<<< HEAD
           
           <Route
           path="/recruiter/jobs"
@@ -102,7 +98,6 @@ export default function AppRoutes() {
           
 
           {/* Admin */}
-=======
       {/* Admin Routes */}
       <Route
         element={
@@ -112,7 +107,6 @@ export default function AppRoutes() {
         }
       >
         <Route element={<DashboardLayout />}>
->>>>>>> affa81248fa5174942230baa6d1cd89cd1992bb3
           <Route
             path="/admin/dashboard"
             element={<AdminDashboardPage />}
