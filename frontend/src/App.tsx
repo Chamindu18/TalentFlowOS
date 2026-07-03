@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 import AppRoutes from "@/routes/configs/appRoutes";
 
@@ -18,12 +18,11 @@ export default function App() {
 
   useEffect(() => {
     const init = async () => {
-      initializeAuth();
-
-      // Small delay for smoother UX
-      setTimeout(() => {
+      try {
+        await initializeAuth();
+      } finally {
         setIsInitializing(false);
-      }, 500);
+      }
     };
 
     init();
@@ -36,6 +35,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" />
+
       <AppRoutes />
     </BrowserRouter>
   );
