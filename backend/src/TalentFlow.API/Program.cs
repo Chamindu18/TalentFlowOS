@@ -58,9 +58,14 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+<<<<<<< HEAD
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(CandidateMappingProfile).Assembly);
+=======
 // =====================================
 // AutoMapper
 // =====================================
+>>>>>>> origin/develop
 
 builder.Services.AddAutoMapper(
     typeof(Program).Assembly,
@@ -71,6 +76,11 @@ builder.Services.AddAutoMapper(
 // JWT Settings
 // =====================================
 
+<<<<<<< HEAD
+builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IResumeService, ResumeService>();
+
+=======
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection(
         JwtSettings.SectionName
@@ -137,6 +147,7 @@ builder.Services.AddScoped<
 >();
 
 // =====================================
+>>>>>>> origin/develop
 // Repositories
 // =====================================
 

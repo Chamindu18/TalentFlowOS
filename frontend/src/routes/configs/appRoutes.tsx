@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
+
+import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
+
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
@@ -54,6 +57,10 @@ export default function AppRoutes() {
           <Route
             path="/candidate/dashboard"
             element={<CandidateDashboardPage />}
+          />
+           <Route
+            path="/candidate/profile"
+            element={<CandidateProfilePage />}
           />
         </Route>
       </Route>
