@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TalentFlow.Application.Common.Settings;
-using TalentFlow.Application.Interfaces.Persistence;
+using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Infrastructure.Persistence.Contexts;
 using TalentFlow.Infrastructure.Repositories.Identity;

@@ -15,6 +15,7 @@ import HomePage from "@/pages/home/HomePage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
@@ -22,10 +23,16 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 
-import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
+import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
+import { JobsPage } from "@/pages/recruiter/JobsPage";
+import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
+import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+
+import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
+import NotFoundPage from "@/pages/errors/NotFoundPage";
 
 export default function AppRoutes() {
   return (
@@ -38,10 +45,15 @@ export default function AppRoutes() {
         />
       </Route>
 
-      {/* Protected Routes */}
-      <Route element={<ProtectedRoute />}>
+      {/* Candidate Routes */}
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["Candidate"]}
+          />
+        }
+      >
         <Route element={<DashboardLayout />}>
-          {/* Candidate */}
           <Route
             path="/candidate/dashboard"
             element={<CandidateDashboardPage />}
@@ -50,8 +62,18 @@ export default function AppRoutes() {
             path="/candidate/profile"
             element={<CandidateProfilePage />}
           />
+        </Route>
+      </Route>
 
-          {/* Recruiter */}
+      {/* Recruiter Routes */}
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["Recruiter"]}
+          />
+        }
+      >
+        <Route element={<DashboardLayout />}>
           <Route
             path="/recruiter/dashboard"
             element={<RecruiterDashboardPage />}
@@ -62,13 +84,42 @@ export default function AppRoutes() {
             element={<CompanySetupPage />}
           />
 
-          {/* Admin */}
+          <Route
+            path="/recruiter/jobs"
+            element={<JobsPage />}
+          />
+
+          <Route
+            path="/recruiter/jobs/create"
+            element={<CreateJobPage />}
+          />
+
+          <Route
+            path="/recruiter/applications"
+            element={<ApplicationsPage />}
+          />
+        </Route>
+      </Route>
+
+      {/* Admin Routes */}
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["Admin"]}
+          />
+        }
+      >
+        <Route element={<DashboardLayout />}>
           <Route
             path="/admin/dashboard"
             element={<AdminDashboardPage />}
           />
+        </Route>
+      </Route>
 
-          {/* Shared */}
+      {/* Shared Authenticated Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
           <Route
             path="/profile"
             element={<ProfilePage />}
@@ -104,8 +155,25 @@ export default function AppRoutes() {
             path="/forgot-password"
             element={<ForgotPasswordPage />}
           />
+
+          <Route
+            path="/reset-password"
+            element={<ResetPasswordPage />}
+          />
         </Route>
       </Route>
+
+      {/* Unauthorized Page */}
+      <Route
+        path="/unauthorized"
+        element={<UnauthorizedPage />}
+      />
+
+      {/* 404 Page */}
+      <Route
+        path="*"
+        element={<NotFoundPage />}
+      />
     </Routes>
   );
 }
