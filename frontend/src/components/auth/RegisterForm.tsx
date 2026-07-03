@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   Link,
   useNavigate,
@@ -14,11 +15,30 @@ import {
   User,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth.store";
 
-export default function RegisterForm() {
+import type { UserRole } from "@/types/auth";
+
+interface RegisterFormProps {
+  role: "Candidate" | "Recruiter";
+}
+
+export default function RegisterForm({
+  role,
+}: RegisterFormProps) {
+  const navigate = useNavigate();
+
+  const register = useAuthStore(
+    (state) => state.register,
+  );
+
+  const isLoading = useAuthStore(
+    (state) => state.isLoading,
+  );
+
   const [showPassword, setShowPassword] =
     useState(false);
 
@@ -26,6 +46,90 @@ export default function RegisterForm() {
     showConfirmPassword,
     setShowConfirmPassword,
   ] = useState(false);
+
+  const [firstName, setFirstName] =
+    useState("");
+
+  const [lastName, setLastName] =
+    useState("");
+
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const [
+    confirmPassword,
+    setConfirmPassword,
+  ] = useState("");
+
+  const [acceptedTerms, setAcceptedTerms] =
+    useState(false);
+
+  const handleRegister = async (
+    e: React.FormEvent,
+  ) => {
+    e.preventDefault();
+
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !confirmPassword
+    ) {
+      toast.error(
+        "Please fill in all fields.",
+      );
+
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error(
+        "Passwords do not match.",
+      );
+
+      return;
+    }
+
+    if (!acceptedTerms) {
+      toast.error(
+        "Please accept the Terms and Privacy Policy.",
+      );
+
+      return;
+    }
+
+    try {
+      await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        role: role as UserRole,
+      });
+
+      toast.success(
+        "Account created successfully!",
+      );
+
+      if (role === "Candidate") {
+        navigate(
+          "/candidate/dashboard",
+        );
+      } else {
+        navigate(
+          "/recruiter/setup-company",
+        );
+      }
+    } catch {
+      toast.error(
+        "Registration failed. Please try again.",
+      );
+    }
+  };
 
   return (
     <div
@@ -66,7 +170,10 @@ export default function RegisterForm() {
         </p>
       </div>
 
-      <form className="mt-7 space-y-4">
+      <form
+        className="mt-7 space-y-4"
+        onSubmit={handleRegister}
+      >
         {/* First & Last Name */}
         <div className="grid gap-3 md:grid-cols-2">
           <div>
@@ -97,6 +204,12 @@ export default function RegisterForm() {
 
               <input
                 type="text"
+                value={firstName}
+                onChange={(e) =>
+                  setFirstName(
+                    e.target.value,
+                  )
+                }
                 placeholder="Kasun"
                 className="
                   h-12
@@ -149,6 +262,12 @@ export default function RegisterForm() {
 
               <input
                 type="text"
+                value={lastName}
+                onChange={(e) =>
+                  setLastName(
+                    e.target.value,
+                  )
+                }
                 placeholder="Perera"
                 className="
                   h-12
@@ -203,6 +322,12 @@ export default function RegisterForm() {
 
             <input
               type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(
+                  e.target.value,
+                )
+              }
               placeholder="kasun.perera@gmail.com"
               className="
                 h-12
@@ -260,6 +385,12 @@ export default function RegisterForm() {
                   ? "text"
                   : "password"
               }
+              value={password}
+              onChange={(e) =>
+                setPassword(
+                  e.target.value,
+                )
+              }
               placeholder="Enter your password"
               className="
                 h-12
@@ -285,7 +416,9 @@ export default function RegisterForm() {
             <button
               type="button"
               onClick={() =>
-                setShowPassword((prev) => !prev)
+                setShowPassword(
+                  (prev) => !prev,
+                )
               }
               className="
                 absolute
@@ -304,18 +437,6 @@ export default function RegisterForm() {
               )}
             </button>
           </div>
-
-          <p
-            className="
-              mt-2
-              text-xs
-              font-medium
-              text-slate-500
-            "
-          >
-            Minimum 8 characters with uppercase,
-            lowercase and number.
-          </p>
         </div>
 
         {/* Confirm Password */}
@@ -350,6 +471,12 @@ export default function RegisterForm() {
                 showConfirmPassword
                   ? "text"
                   : "password"
+              }
+              value={confirmPassword}
+              onChange={(e) =>
+                setConfirmPassword(
+                  e.target.value,
+                )
               }
               placeholder="Confirm your password"
               className="
@@ -412,6 +539,12 @@ export default function RegisterForm() {
         >
           <input
             type="checkbox"
+            checked={acceptedTerms}
+            onChange={(e) =>
+              setAcceptedTerms(
+                e.target.checked,
+              )
+            }
             className="
               mt-0.5
               h-4
@@ -448,6 +581,8 @@ export default function RegisterForm() {
 
         {/* Create Account */}
         <Button
+          type="submit"
+          disabled={isLoading}
           className="
             group
             h-12
@@ -464,20 +599,30 @@ export default function RegisterForm() {
             duration-300
             hover:-translate-y-1
             hover:shadow-2xl
+            disabled:opacity-70
           "
         >
-          Create Account
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creating Account...
+            </>
+          ) : (
+            <>
+              Create Account
 
-          <ArrowRight
-            className="
-              ml-2
-              h-4
-              w-4
-              transition-transform
-              duration-300
-              group-hover:translate-x-1
-            "
-          />
+              <ArrowRight
+                className="
+                  ml-2
+                  h-4
+                  w-4
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+              />
+            </>
+          )}
         </Button>
 
         {/* Login */}
