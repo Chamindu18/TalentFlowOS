@@ -75,3 +75,5 @@ tmp/
 temp/**/bin/
 **/obj/
 **/.vs/
+**/.msCoverageSourceRootsMapping_*
+**/CoverletSourceRootsMapping_*
