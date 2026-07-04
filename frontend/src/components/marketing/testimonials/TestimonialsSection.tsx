@@ -1,4 +1,5 @@
 import { Heart, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
@@ -6,7 +7,10 @@ import TestimonialsCarousel from "./TestimonialsCarousel";
 
 export default function TestimonialsSection() {
   return (
-    <section id="testimonials" className="bg-[#FFFDFB] py-20 sm:py-24 lg:py-32">
+    <section
+      id="testimonials"
+      className="bg-[#FFFDFB] py-20 sm:py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center lg:mb-20">
@@ -65,9 +69,11 @@ export default function TestimonialsSection() {
               text-slate-500
             "
           >
-            See how leading organizations are transforming
-            their hiring process and building high-performing
-            teams with TalentFlow OS.
+            See how leading organizations
+            are transforming their hiring
+            process and building
+            high-performing teams with
+            TalentFlow OS.
           </p>
         </div>
 
@@ -121,16 +127,19 @@ export default function TestimonialsSection() {
                   text-[#102541]
                 "
               >
-                Join 500+ organizations already hiring better
+                Join 500+ organizations
+                already hiring better
               </h3>
 
               <p className="mt-2 text-slate-500">
-                Transform your recruitment process today.
+                Transform your recruitment
+                process today.
               </p>
             </div>
           </div>
 
           <Button
+            asChild
             className="
               h-14
               rounded-full
@@ -146,7 +155,9 @@ export default function TestimonialsSection() {
               hover:bg-[#FF7A45]
             "
           >
-            Get Started Free
+            <Link to="/register">
+              Get Started Free
+            </Link>
           </Button>
         </div>
       </div>
