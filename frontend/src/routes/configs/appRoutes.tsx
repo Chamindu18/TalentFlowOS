@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
+
+import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
+
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
@@ -12,6 +15,7 @@ import HomePage from "@/pages/home/HomePage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
@@ -53,6 +57,10 @@ export default function AppRoutes() {
           <Route
             path="/candidate/dashboard"
             element={<CandidateDashboardPage />}
+          />
+           <Route
+            path="/candidate/profile"
+            element={<CandidateProfilePage />}
           />
         </Route>
       </Route>
@@ -146,6 +154,11 @@ export default function AppRoutes() {
           <Route
             path="/forgot-password"
             element={<ForgotPasswordPage />}
+          />
+
+          <Route
+            path="/reset-password"
+            element={<ResetPasswordPage />}
           />
         </Route>
       </Route>

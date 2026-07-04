@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TalentFlow.Infrastructure.Persistence.Contexts;
@@ -11,9 +12,11 @@ using TalentFlow.Infrastructure.Persistence.Contexts;
 namespace TalentFlow.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260702142255_AddPasswordResetFields")]
+    partial class AddPasswordResetFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,124 +118,6 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Departments", (string)null);
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.Interview", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("InterviewType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<int>("RoundNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("Interviews");
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.InterviewFeedback", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("InterviewId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InterviewerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("PassedRecommendation")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterviewId");
-
-                    b.HasIndex("InterviewerId");
-
-                    b.ToTable("InterviewFeedbacks");
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.InterviewSchedule", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DurationMinutes")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("InterviewId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InterviewerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("LocationOrLink")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime>("ScheduledTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterviewId");
-
-                    b.HasIndex("InterviewerId");
-
-                    b.ToTable("InterviewSchedules");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Job", b =>
@@ -428,55 +313,6 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("TalentFlow.Domain.Entities.Interview", b =>
-                {
-                    b.HasOne("TalentFlow.Domain.Entities.JobApplication", "Application")
-                        .WithMany("Interviews")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.InterviewFeedback", b =>
-                {
-                    b.HasOne("TalentFlow.Domain.Entities.Interview", "Interview")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TalentFlow.Domain.Entities.User", "Interviewer")
-                        .WithMany()
-                        .HasForeignKey("InterviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-
-                    b.Navigation("Interviewer");
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.InterviewSchedule", b =>
-                {
-                    b.HasOne("TalentFlow.Domain.Entities.Interview", "Interview")
-                        .WithMany("Schedules")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TalentFlow.Domain.Entities.User", "Interviewer")
-                        .WithMany()
-                        .HasForeignKey("InterviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-
-                    b.Navigation("Interviewer");
-                });
-
             modelBuilder.Entity("TalentFlow.Domain.Entities.Job", b =>
                 {
                     b.HasOne("TalentFlow.Domain.Entities.Company", "Company")
@@ -519,21 +355,9 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.Navigation("Jobs");
                 });
 
-            modelBuilder.Entity("TalentFlow.Domain.Entities.Interview", b =>
-                {
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("Schedules");
-                });
-
             modelBuilder.Entity("TalentFlow.Domain.Entities.Job", b =>
                 {
                     b.Navigation("JobApplications");
-                });
-
-            modelBuilder.Entity("TalentFlow.Domain.Entities.JobApplication", b =>
-                {
-                    b.Navigation("Interviews");
                 });
 #pragma warning restore 612, 618
         }

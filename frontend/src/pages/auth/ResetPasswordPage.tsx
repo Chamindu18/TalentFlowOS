@@ -1,15 +1,15 @@
 import {
+  KeyRound,
   Lock,
-  Mail,
   ShieldCheck,
 } from "lucide-react";
 
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
 import logo from "@/assets/logo/logo.png";
-import forgotPasswordIllustration from "@/assets/auth/forgot-password-illustration.png";
+import resetPasswordIllustration from "@/assets/auth/reset-password-illustration.png";
 
-export default function ForgotPasswordPage() {
+export default function ResetPasswordPage() {
   return (
     <div
       className="
@@ -68,8 +68,8 @@ export default function ForgotPasswordPage() {
               text-[#FF8A5B]
             "
           >
-            <Lock className="h-4 w-4" />
-            Secure Account Recovery
+            <KeyRound className="h-4 w-4" />
+            Secure Password Reset
           </div>
 
           {/* Heading */}
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
               xl:text-5xl
             "
           >
-            Forgot Your Password?
+            Create A New Password
           </h1>
 
           {/* Description */}
@@ -98,9 +98,10 @@ export default function ForgotPasswordPage() {
               text-slate-600
             "
           >
-            No worries. Enter your registered
-            email address and we'll send you
-            a secure password reset link.
+            Choose a strong password to
+            secure your TalentFlow OS
+            account and continue your
+            journey with confidence.
           </p>
 
           {/* Features */}
@@ -111,17 +112,17 @@ export default function ForgotPasswordPage() {
               />
 
               <span className="text-slate-700">
-                Password Reset Protection
+                Strong Password Protection
               </span>
             </div>
 
             <div className="flex items-center gap-3">
-              <Mail
+              <Lock
                 className="h-5 w-5 text-[#FF8A5B]"
               />
 
               <span className="text-slate-700">
-                15-Minute Secure Reset Links
+                Secure Account Recovery
               </span>
             </div>
 
@@ -139,8 +140,8 @@ export default function ForgotPasswordPage() {
           {/* Illustration */}
           <div className="group mt-6 flex justify-center">
             <img
-              src={forgotPasswordIllustration}
-              alt="Forgot Password Illustration"
+              src={resetPasswordIllustration}
+              alt="Reset Password Illustration"
               className="
                 max-h-[240px]
                 w-auto
@@ -164,7 +165,7 @@ export default function ForgotPasswordPage() {
             lg:-mt-10
           "
         >
-          <ForgotPasswordForm />
+          <ResetPasswordForm />
         </div>
       </div>
     </div>
