@@ -1,19 +1,12 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "iufvtzhZh3c=",
+  "dgSpecHash": "xGyqPoAXYoQ=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
+  "projectFilePath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
   ],
-=======
-  "dgSpecHash": "C74+bAynMb4=",
-  "success": true,
-  "projectFilePath": "D:\\projects\\TalentFlowOS\\backend\\tests\\TestUtilities\\TestUtilities.csproj",
-  "expectedPackageFiles": [],
->>>>>>> origin/develop
   "logs": []
 }

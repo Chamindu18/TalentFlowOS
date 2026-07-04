@@ -1,32 +1,16 @@
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.AssemblyReference.cache
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.GeneratedMSBuildEditorConfig.editorconfig
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfoInputs.cache
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfo.cs
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.CoreCompileInputs.cache
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.sourcelink.json
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.deps.json
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.dll
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.pdb
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.dll
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.pdb
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFl.91008B18.Up2Date
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.dll
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\refint\TalentFlow.Application.dll
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.pdb
-D:\NSBM\Second Year\Second Sem\architecture\SA Group Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\ref\TalentFlow.Application.dll
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.AssemblyReference.cache
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfoInputs.cache
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfo.cs
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.CoreCompileInputs.cache
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.sourcelink.json
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.dll
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\refint\TalentFlow.Application.dll
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.pdb
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.deps.json
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.dll
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.pdb
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.dll
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.pdb
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFl.91008B18.Up2Date
-C:\Users\ASUS\Desktop\FullStack P\SA Grp Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\ref\TalentFlow.Application.dll
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.deps.json
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.dll
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Application.pdb
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.dll
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\bin\Debug\net8.0\TalentFlow.Domain.pdb
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.AssemblyReference.cache
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfoInputs.cache
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.AssemblyInfo.cs
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.sourcelink.json
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFl.91008B18.Up2Date
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.dll
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\refint\TalentFlow.Application.dll
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\TalentFlow.Application.pdb
+C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.Application\obj\Debug\net8.0\ref\TalentFlow.Application.dll
