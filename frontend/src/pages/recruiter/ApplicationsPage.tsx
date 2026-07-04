@@ -89,7 +89,6 @@ export const ApplicationsPage: React.FC = () => {
                 </button>
             </div>
 
-            {/* Filter */}
             <div className="flex flex-wrap gap-4 mb-6">
                 <select
                     value={filterStatus}
@@ -105,7 +104,6 @@ export const ApplicationsPage: React.FC = () => {
                 </select>
             </div>
 
-            {/* Applications Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <table className="w-full">
                     <thead className="bg-gray-50">
@@ -132,12 +130,13 @@ export const ApplicationsPage: React.FC = () => {
                                     <td className="px-6 py-4 text-gray-700">{app.jobTitle}</td>
                                     <td className="px-6 py-4 text-gray-700">{app.companyName}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${app.status === 'Applied' ? 'bg-blue-100 text-blue-800' :
-                                                app.status === 'Shortlisted' ? 'bg-green-100 text-green-800' :
-                                                    app.status === 'Interview' ? 'bg-purple-100 text-purple-800' :
-                                                        app.status === 'Offer' ? 'bg-yellow-100 text-yellow-800' :
-                                                            'bg-red-100 text-red-800'
-                                            }`}>
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                            app.status === 'Applied' ? 'bg-blue-100 text-blue-800' :
+                                            app.status === 'Shortlisted' ? 'bg-green-100 text-green-800' :
+                                            app.status === 'Interview' ? 'bg-purple-100 text-purple-800' :
+                                            app.status === 'Offer' ? 'bg-yellow-100 text-yellow-800' :
+                                            'bg-red-100 text-red-800'
+                                        }`}>
                                             {app.status}
                                         </span>
                                     </td>

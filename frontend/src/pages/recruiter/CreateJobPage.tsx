@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { jobService } from '../../services/jobService';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface JobFormData {
     title: string;
