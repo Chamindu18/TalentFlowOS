@@ -1,9 +1,0 @@
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.csproj.AssemblyReference.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.AssemblyInfoInputs.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.AssemblyInfo.cs
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.csproj.CoreCompileInputs.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\src\TalentFlow.API\obj\Debug\net8.0\TalentFlow.API.sourcelink.json

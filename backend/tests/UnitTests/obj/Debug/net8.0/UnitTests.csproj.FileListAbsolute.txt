@@ -1,8 +1,0 @@
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\bin\Debug\net8.0\.msCoverageSourceRootsMapping_UnitTests
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\bin\Debug\net8.0\CoverletSourceRootsMapping_UnitTests
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.csproj.AssemblyReference.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.AssemblyInfoInputs.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.AssemblyInfo.cs
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.csproj.CoreCompileInputs.cache
-C:\Users\user\Documents\CV_Project\TalentFlowOS\backend\tests\UnitTests\obj\Debug\net8.0\UnitTests.sourcelink.json
