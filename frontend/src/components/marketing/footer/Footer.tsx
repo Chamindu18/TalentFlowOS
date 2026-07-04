@@ -124,9 +124,10 @@ export default function Footer() {
               text-slate-600
             "
           >
-            Intelligent recruitment platform that helps
-            organizations attract, engage and hire the
-            best talent with confidence.
+            Intelligent recruitment platform
+            that helps organizations attract,
+            engage and hire the best talent
+            with confidence.
           </p>
 
           {/* Social Icons */}
@@ -234,7 +235,8 @@ export default function Footer() {
           {/* Copyright */}
           <div className="mt-10 text-center">
             <p className="text-base text-slate-500">
-              © 2026 TalentFlow OS. All rights reserved.
+              © 2026 TalentFlow OS. All rights
+              reserved.
             </p>
           </div>
         </div>
