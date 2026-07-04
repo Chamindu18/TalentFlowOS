@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { applicationService } from '../../services/applicationService';
-import { Application } from '../../types/job';
-import { toast } from 'sonner';
+import React, {
+    useState,
+    useEffect,
+} from "react";
+
+import toast from "react-hot-toast";
+
+import { applicationService } from "../../services/applicationService";
+import type { Application } from "../../types/job";
 
 export const ApplicationsPage: React.FC = () => {
     const [applications, setApplications] = useState<Application[]>([]);
