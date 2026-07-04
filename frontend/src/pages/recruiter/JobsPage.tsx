@@ -9,7 +9,7 @@ import { jobService } from "../../services/jobService";
 
 import type { Job } from "../../types/job";
 
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export const JobsPage: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);
