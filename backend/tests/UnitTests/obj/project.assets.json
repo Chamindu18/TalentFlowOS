@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net8.0": {
       "AutoMapper/12.0.1": {
@@ -1644,37 +1644,24 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
-=======
-    "C:\\Users\\HP\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
->>>>>>> origin/develop
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
       "projectName": "UnitTests",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\tests\\UnitTests\\obj\\",
-=======
-      "projectUniqueName": "D:\\projects\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
-      "projectName": "UnitTests",
-      "projectPath": "D:\\projects\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
-      "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\TalentFlowOS\\backend\\tests\\UnitTests\\obj\\",
->>>>>>> origin/develop
+      "projectPath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\tests\\UnitTests\\UnitTests.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\tests\\UnitTests\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-<<<<<<< HEAD
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
->>>>>>> origin/develop
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1682,25 +1669,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-<<<<<<< HEAD
-            "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
-              "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
+            "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
+              "projectPath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
             },
-            "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
-              "projectPath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj"
-=======
-            "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj": {
-              "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Application\\TalentFlow.Application.csproj"
-            },
-            "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
-              "projectPath": "D:\\projects\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj"
->>>>>>> origin/develop
+            "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj": {
+              "projectPath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj"
             }
           }
         }
@@ -1715,7 +1695,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -1757,12 +1737,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.26, 8.0.26]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.26, 8.0.26]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.26, 8.0.26]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

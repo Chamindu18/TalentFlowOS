@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "GYTHPujEijg=",
+  "dgSpecHash": "hZTlyabFJJo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ASUS\\Desktop\\FullStack P\\SA Grp Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
+  "projectFilePath": "C:\\Users\\user\\Documents\\CV_Project\\TalentFlowOS\\backend\\src\\TalentFlow.Domain\\TalentFlow.Domain.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
   ],
   "logs": []
 }
