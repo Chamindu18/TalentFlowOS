@@ -23,6 +23,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<InterviewSchedule> InterviewSchedules => Set<InterviewSchedule>();
     public DbSet<InterviewFeedback> InterviewFeedbacks => Set<InterviewFeedback>();
 
+    public DbSet<Evaluation> Evaluations => Set<Evaluation>();
+    public DbSet<HiringDecision> HiringDecisions => Set<HiringDecision>();
+
+
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -80,5 +85,22 @@ modelBuilder.Entity<InterviewFeedback>(entity =>
           .HasForeignKey(ifb => ifb.InterviewerId)
           .OnDelete(DeleteBehavior.Restrict);
 });
+
+// 4. Evaluation Model Configuration
+        modelBuilder.Entity<Evaluation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Notes).HasMaxLength(2000);
+        });
+
+        // 5. HiringDecision Model Configuration
+        modelBuilder.Entity<HiringDecision>(entity =>
+        {
+            entity.HasKey(hd => hd.Id);
+            entity.Property(hd => hd.Decision).IsRequired().HasMaxLength(50);
+            entity.Property(hd => hd.Justification).HasMaxLength(2000);
+        });
+
+
     }
 }
