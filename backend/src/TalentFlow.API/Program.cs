@@ -1,21 +1,20 @@
+using System.Text;
 using System.Text.Json.Serialization;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 using TalentFlow.Application.Common.Settings;
-
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
-
 using TalentFlow.Application.Mappings;
 using TalentFlow.Application.Services;
 
 using TalentFlow.Infrastructure.Persistence.Contexts;
-
 using TalentFlow.Infrastructure.Repositories;
 using TalentFlow.Infrastructure.Repositories.Identity;
-
 using TalentFlow.Infrastructure.Security;
 using TalentFlow.Infrastructure.Services;
 
@@ -58,14 +57,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-<<<<<<< HEAD
-// Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(CandidateMappingProfile).Assembly);
-=======
 // =====================================
 // AutoMapper
 // =====================================
->>>>>>> origin/develop
 
 builder.Services.AddAutoMapper(
     typeof(Program).Assembly,
@@ -76,16 +70,51 @@ builder.Services.AddAutoMapper(
 // JWT Settings
 // =====================================
 
-<<<<<<< HEAD
-builder.Services.AddScoped<ICandidateService, CandidateService>();
-builder.Services.AddScoped<IResumeService, ResumeService>();
+var jwtSettings =
+    builder.Configuration
+        .GetSection(JwtSettings.SectionName)
+        .Get<JwtSettings>()!;
 
-=======
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection(
         JwtSettings.SectionName
     )
 );
+
+// =====================================
+// JWT Authentication
+// =====================================
+
+builder.Services
+    .AddAuthentication(
+        JwtBearerDefaults.AuthenticationScheme
+    )
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+
+                ValidIssuer =
+                    jwtSettings.Issuer,
+
+                ValidAudience =
+                    jwtSettings.Audience,
+
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            jwtSettings.Secret
+                        )
+                    )
+            };
+    });
+
+builder.Services.AddAuthorization();
 
 // =====================================
 // Email Settings
@@ -147,7 +176,6 @@ builder.Services.AddScoped<
 >();
 
 // =====================================
->>>>>>> origin/develop
 // Repositories
 // =====================================
 
@@ -205,10 +233,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // =====================================
-// CORS
+// Middleware
 // =====================================
 
 app.UseCors("Frontend");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
