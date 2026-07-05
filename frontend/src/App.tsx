@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "sonner";
 
 import AppRoutes from "@/routes/configs/appRoutes";
 
@@ -35,8 +35,9 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Toaster position="top-right" />
-      <AppRoutes />
+       <Toaster position="top-right" richColors closeButton duration={3000} />      <AppRoutes />
     </BrowserRouter>
   );
 }
+
+

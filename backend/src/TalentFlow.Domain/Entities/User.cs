@@ -17,6 +17,16 @@ public class User
     public UserRole Role { get; set; }
 
     // =====================================
+    // Email Verification
+    // =====================================
+
+    public bool IsEmailVerified { get; set; }
+
+    public string? EmailVerificationToken { get; set; }
+
+    public DateTime? EmailVerificationTokenExpiresAt { get; set; }
+
+    // =====================================
     // Password Reset
     // =====================================
 
