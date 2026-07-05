@@ -6,6 +6,8 @@ import App from "./App";
 
 import "./index.css";
 
+console.log("main.tsx is running!");
+
 createRoot(
   document.getElementById("root")!,
 ).render(

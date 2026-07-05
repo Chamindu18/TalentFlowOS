@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import heroImage from "@/assets/hero/heroImage.png";
 
@@ -88,8 +89,11 @@ export default function HeroSection() {
                 lg:mx-0
               "
             >
-              Find the right talent, streamline your workflow and make
-              confident hiring decisions with intelligent recruitment tools.
+              Find the right talent,
+              streamline your workflow and
+              make confident hiring
+              decisions with intelligent
+              recruitment tools.
             </p>
 
             <div
@@ -105,6 +109,7 @@ export default function HeroSection() {
             >
               {/* Primary Button */}
               <Button
+                asChild
                 className="
                   group
                   relative
@@ -124,33 +129,48 @@ export default function HeroSection() {
                   hover:shadow-[0_18px_40px_rgba(255,138,91,0.35)]
                 "
               >
-                <span
-                  className="
-                    absolute
-                    left-[-120%]
-                    top-0
-                    h-full
-                    w-[60%]
-                    -skew-x-12
-                    bg-gradient-to-r
-                    from-transparent
-                    via-white/25
-                    to-transparent
-                    transition-all
-                    duration-700
-                    group-hover:left-[140%]
-                  "
-                />
+                <Link
+                  to="/register"
+                  className="relative z-10 flex items-center"
+                >
+                  <span
+                    className="
+                      absolute
+                      left-[-120%]
+                      top-0
+                      h-full
+                      w-[60%]
+                      -skew-x-12
+                      bg-gradient-to-r
+                      from-transparent
+                      via-white/25
+                      to-transparent
+                      transition-all
+                      duration-700
+                      group-hover:left-[140%]
+                    "
+                  />
 
-                <span className="relative z-10 flex items-center">
-                  Get Started
+                  <span className="relative z-10 flex items-center">
+                    Get Started
 
-                  <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                </span>
+                    <ArrowRight
+                      className="
+                        ml-3
+                        h-5
+                        w-5
+                        transition-transform
+                        duration-300
+                        group-hover:translate-x-1.5
+                      "
+                    />
+                  </span>
+                </Link>
               </Button>
 
               {/* Secondary Button */}
               <Button
+                asChild
                 variant="outline"
                 className="
                   group
@@ -167,30 +187,54 @@ export default function HeroSection() {
                   text-[#102541]
                   transition-all
                   duration-300
-                  hover:-translate-y-[2px]
+                  hover:-translate-y-0.5
                   hover:shadow-lg
                 "
               >
-                <span
-                  className="
-                    absolute
-                    inset-y-0
-                    left-0
-                    w-0
-                    rounded-full
-                    bg-[#102541]
-                    transition-all
-                    duration-300
-                    ease-out
-                    group-hover:w-full
-                  "
-                />
+                <a
+                  href="#features"
+                  className="relative z-10 flex items-center"
+                >
+                  <span
+                    className="
+                      absolute
+                      inset-y-0
+                      left-0
+                      w-0
+                      rounded-full
+                      bg-[#102541]
+                      transition-all
+                      duration-300
+                      ease-out
+                      group-hover:w-full
+                    "
+                  />
 
-                <span className="relative z-10 flex items-center transition-colors duration-300 group-hover:text-white">
-                  Explore Features
+                  <span
+                    className="
+                      relative
+                      z-10
+                      flex
+                      items-center
+                      transition-colors
+                      duration-300
+                      group-hover:text-white
+                    "
+                  >
+                    Explore Features
 
-                  <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                </span>
+                    <ArrowRight
+                      className="
+                        ml-3
+                        h-5
+                        w-5
+                        transition-transform
+                        duration-300
+                        group-hover:translate-x-1.5
+                      "
+                    />
+                  </span>
+                </a>
               </Button>
             </div>
           </div>
