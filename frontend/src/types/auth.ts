@@ -1,7 +1,8 @@
 export type UserRole =
   | "Candidate"
   | "Recruiter"
-  | "Admin";
+  | "Admin"
+  | "HiringManager";
 
 export interface LoginRequest {
   email: string;
