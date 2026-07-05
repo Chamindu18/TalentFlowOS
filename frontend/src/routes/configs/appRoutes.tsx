@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 
-
 import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
 
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
@@ -30,6 +29,13 @@ import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+
+// Hiring Manager Page Imports
+import HiringDashboardPage from "@/pages/hiring/HiringDashboard";
+import InterviewSchedulingPage from "@/pages/hiring/InterviewScheduling";
+import CandidateEvaluationsPage from "@/pages/hiring/CandidateEvaluations";
+import InterviewFeedbackPage from "@/pages/hiring/InterviewFeedback";
+import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
 
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
@@ -113,6 +119,38 @@ export default function AppRoutes() {
           <Route
             path="/admin/dashboard"
             element={<AdminDashboardPage />}
+          />
+        </Route>
+      </Route>
+
+      {/* Hiring Manager Routes */}
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["HiringManager"]}
+          />
+        }
+      >
+        <Route element={<DashboardLayout />}>
+          <Route
+            path="/hiring/dashboard"
+            element={<HiringDashboardPage />}
+          />
+          <Route
+            path="/hiring/interviews"
+            element={<InterviewSchedulingPage />}
+          />
+          <Route
+            path="/hiring/evaluations"
+            element={<CandidateEvaluationsPage />}
+          />
+          <Route
+            path="/hiring/feedback"
+            element={<InterviewFeedbackPage />}
+          />
+          <Route
+            path="/hiring/decisions"
+            element={<HiringDecisionsPage />}
           />
         </Route>
       </Route>
