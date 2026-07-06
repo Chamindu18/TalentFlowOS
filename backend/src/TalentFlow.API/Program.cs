@@ -174,6 +174,10 @@ builder.Services.AddScoped<
     IEmailService,
     EmailService
 >();
+builder.Services.AddScoped<
+    IAdminService,
+    AdminService
+>();
 
 // =====================================
 // Repositories
