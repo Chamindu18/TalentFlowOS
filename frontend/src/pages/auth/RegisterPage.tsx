@@ -1,43 +1,22 @@
 import { useState } from "react";
 
-import RegisterForm from "@/components/auth/RegisterForm";
-
-import logo from "@/assets/logo/logo.png";
-
 import {
   BarChart3,
-  BriefcaseBusiness,
   ShieldCheck,
   Sparkles,
   User,
 } from "lucide-react";
 
-const features = [
-  {
-    icon: Sparkles,
-    title: "Smart Candidate Matching",
-    description:
-      "AI-powered recommendations to find the right talent faster.",
-  },
-  {
-    icon: BarChart3,
-    title: "Data-Driven Hiring",
-    description:
-      "Analytics and insights for smarter recruitment decisions.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Secure & Reliable",
-    description:
-      "Your data is protected with enterprise-grade security.",
-  },
-];
+import logo from "@/assets/logo/logo.png";
+
+import RegisterForm from "@/components/auth/RegisterForm";
+import RegisterRoleSelector from "@/components/auth/RegisterRoleSelector";
+
+import type { UserRole } from "@/types/auth";
 
 export default function RegisterPage() {
   const [selectedRole, setSelectedRole] =
-    useState<"Candidate" | "Recruiter">(
-      "Candidate",
-    );
+    useState<UserRole>("Candidate");
 
   return (
     <main className="min-h-screen bg-[#FBF4EC]">
@@ -47,30 +26,34 @@ export default function RegisterPage() {
           grid
           min-h-screen
           max-w-7xl
-          gap-10
+          gap-12
           px-6
-          py-4
-          lg:grid-cols-[45%_55%]
+          py-8
+          lg:grid-cols-[46%_54%]
           lg:px-8
         "
       >
-        {/* Left Side */}
+        {/* Left Panel */}
+
         <section
           className="
-            hidden
+            order-2
+            flex
             flex-col
             justify-center
-            lg:flex
+            lg:order-1
           "
         >
-          <div>
+          <div className="mx-auto w-full max-w-xl lg:max-w-none">
+
             {/* Logo */}
+
             <img
               src={logo}
               alt="TalentFlow OS"
               draggable={false}
               className="
-                h-9
+                h-10
                 w-auto
                 transition-transform
                 duration-300
@@ -79,321 +62,102 @@ export default function RegisterPage() {
             />
 
             {/* Badge */}
+
             <div
               className="
-                mt-8
+                mt-3
                 inline-flex
                 items-center
                 gap-2
                 rounded-full
-                font-semibold
-                bg-[#FFF3EC]
+                bg-[#fadbc8]
                 px-4
                 py-2
                 text-sm
-                font-medium
+                font-bold
                 text-[#FF8A5B]
               "
             >
               <User className="h-4 w-4" />
+
               Create Account
             </div>
 
             {/* Heading */}
+
             <h1
               className="
-                mt-5
-                text-3xl
+                mt-3
+                text-4xl
                 font-bold
-                leading-none
+                leading-tight
                 tracking-[-0.04em]
-                text-[#1b5096]
+                text-[#102541]
               "
             >
-              Create Your Account
+              Create Your
+              <br />
+
+              TalentFlow Account
             </h1>
 
             <p
               className="
-                mt-4
-                max-w-lg
-                font-medium
+                mt-5
+                max-w-xl
                 text-base
-                leading-7
+                font-medium
+                leading-8
                 text-slate-600
               "
             >
               Join
-              <span className="text-[#FF8A5B]">
+              <span className="font-bold text-[#FF8A5B]">
                 {" "}
                 TalentFlow OS
               </span>{" "}
-              and start your journey to build
-              better teams and smarter hiring.
+              and streamline hiring with an
+              intelligent recruitment platform
+              built for candidates,
+              recruiters and hiring managers.
             </p>
 
-            {/* Role Selection */}
+            {/* Role Selector */}
+
             <div className="mt-5">
-              <h3
-                className="
-                  mb-4
-                  text-lg
-                  font-bold
-                  text-[#1b703f]
-                "
-              >
-                Choose your account type
-              </h3>
-
-              <div className="space-y-3">
-                {/* Candidate */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSelectedRole(
-                      "Candidate",
-                    )
-                  }
-                  className={`
-                    flex
-                    w-full
-                    items-center
-                    justify-between
-                    rounded-3xl
-                    border
-                    p-4
-                    text-left
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    ${
-                      selectedRole ===
-                      "Candidate"
-                        ? "border-[#FF8A5B] bg-[#FFF8F4] shadow-md"
-                        : "border-slate-200 bg-white hover:border-[#FFD3BF]"
-                    }
-                  `}
-                >
-                  <div className="flex gap-4">
-                    <div
-                      className="
-                        flex
-                        h-12
-                        w-12
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-[#FFF3EC]
-                        text-[#FF8A5B]
-                      "
-                    >
-                      <User className="h-6 w-6" />
-                    </div>
-
-                    <div>
-                      <h4
-                        className="
-                          text-xl
-                          font-bold
-                          text-[#102541]
-                        "
-                      >
-                        I am a Candidate
-                      </h4>
-
-                      <p
-                        className="
-                          mt-1
-                          text-base
-                          font-medium
-                          leading-6
-                          text-slate-600
-                        "
-                      >
-                        Find jobs, apply to
-                        opportunities and build
-                        your career.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`
-                      h-7
-                      w-7
-                      rounded-full
-                      border-2
-                      transition-all
-                      ${
-                        selectedRole ===
-                        "Candidate"
-                          ? "border-[#FF8A5B] bg-[#FF8A5B]"
-                          : "border-slate-300"
-                      }
-                    `}
-                  />
-                </button>
-
-                {/* Recruiter */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSelectedRole(
-                      "Recruiter",
-                    )
-                  }
-                  className={`
-                    flex
-                    w-full
-                    items-center
-                    justify-between
-                    rounded-3xl
-                    border
-                    p-4
-                    text-left
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    ${
-                      selectedRole ===
-                      "Recruiter"
-                        ? "border-[#FF8A5B] bg-[#FFF8F4] shadow-md"
-                        : "border-slate-200 bg-white hover:border-[#FFD3BF]"
-                    }
-                  `}
-                >
-                  <div className="flex gap-4">
-                    <div
-                      className="
-                        flex
-                        h-12
-                        w-12
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-[#FFF3EC]
-                        text-[#FF8A5B]
-                      "
-                    >
-                      <BriefcaseBusiness className="h-6 w-6" />
-                    </div>
-
-                    <div>
-                      <h4
-                        className="
-                          text-xl
-                          font-bold
-                          text-[#102541]
-                        "
-                      >
-                        I am a Recruiter
-                      </h4>
-
-                      <p
-                        className="
-                          mt-1
-                          text-base
-                          font-medium
-                          leading-6
-                          text-slate-600
-                        "
-                      >
-                        Post jobs, find candidates
-                        and hire the best talent.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`
-                      h-7
-                      w-7
-                      rounded-full
-                      border-2
-                      transition-all
-                      ${
-                        selectedRole ===
-                        "Recruiter"
-                          ? "border-[#FF8A5B] bg-[#FF8A5B]"
-                          : "border-slate-300"
-                      }
-                    `}
-                  />
-                </button>
-              </div>
+              <RegisterRoleSelector
+                selectedRole={selectedRole}
+                onRoleChange={setSelectedRole}
+              />
             </div>
 
-            {/* Features */}
-            <div className="mt-8 space-y-4">
-              {features.map((feature) => {
-                const Icon = feature.icon;
+               
 
-                return (
-                  <div
-                    key={feature.title}
-                    className="
-                      flex
-                      gap-4
-                      transition-all
-                      duration-300
-                      hover:translate-x-2
-                    "
-                  >
-                    <div
-                      className="
-                        flex
-                        h-12
-                        w-12
-                        shrink-0
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-[#FFF3EC]
-                        text-[#FF8A5B]
-                      "
-                    >
-                      <Icon className="h-6 w-6" />
-                    </div>
-
-                    <div>
-                      <h3
-                        className="
-                          text-lg
-                          font-bold
-                          text-[#102541]
-                        "
-                      >
-                        {feature.title}
-                      </h3>
-
-                      <p
-                        className="
-                          mt-1
-                          text-sm
-                          text-slate-500
-                        "
-                      >
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </section>
 
-        {/* Right Side */}
+        {/* Right Panel */}
+
         <section
           className="
+            order-1
             flex
             items-center
             justify-center
+            lg:order-2
           "
         >
-          <RegisterForm role={selectedRole} />
+          <div className="w-full max-w-xl">
+                        <RegisterForm
+              role={selectedRole}
+            />
+
+            
+
+          </div>
         </section>
+                 {/* End Right Panel */}
       </div>
     </main>
   );
-}
+} 
