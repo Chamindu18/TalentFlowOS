@@ -23,7 +23,7 @@ import { useAuthStore } from "@/store/auth.store";
 import type { UserRole } from "@/types/auth";
 
 interface RegisterFormProps {
-  role: "Candidate" | "Recruiter";
+  role: UserRole;
 }
 
 export default function RegisterForm({
@@ -115,14 +115,21 @@ export default function RegisterForm({
         "Account created successfully!",
       );
 
-      if (role === "Candidate") {
-        navigate(
-          "/candidate/dashboard",
-        );
-      } else {
-        navigate(
-          "/recruiter/setup-company",
-        );
+      switch (role) {
+        case "Candidate":
+          navigate("/candidate/dashboard");
+          break;
+
+        case "Recruiter":
+          navigate("/recruiter/setup-company");
+          break;
+
+        case "HiringManager":
+          navigate("/hiring/dashboard");
+          break;
+
+        default:
+          navigate("/");
       }
     } catch {
       toast.error(
