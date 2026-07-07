@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TalentFlow.Application\TalentFlow.Application.csproj" />
     <ProjectReference Include="..\..\src\TalentFlow.Domain\TalentFlow.Domain.csproj" />
+    <ProjectReference Include="..\..\src\TalentFlow.Infrastructure\TalentFlow.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
