@@ -77,6 +77,10 @@ export default function LoginForm() {
           );
           break;
 
+        case "HiringManager":
+          navigate("/hiring/dashboard");
+          break;
+
         case "Admin":
           navigate(
             "/admin/dashboard",
