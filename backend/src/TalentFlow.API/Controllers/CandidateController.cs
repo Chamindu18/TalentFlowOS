@@ -19,12 +19,10 @@ namespace TalentFlow.API.Controllers
         {
             _candidateService = candidateService;
         }
-
        
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
             if (string.IsNullOrEmpty(userId))
@@ -37,7 +35,6 @@ namespace TalentFlow.API.Controllers
 
             return Ok(profile);
         }
-
         
         [HttpPost("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateCandidateProfileDto dto)
@@ -52,6 +49,25 @@ namespace TalentFlow.API.Controllers
 
             var updatedProfile = await _candidateService.UpdateProfileAsync(userId, dto);
             return Ok(updatedProfile);
+        }
+
+        [HttpPost("education")]
+        public async Task<IActionResult> AddEducation([FromBody] EducationDto educationDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+           
+            var result = await _candidateService.AddEducationAsync(userId, educationDto);
+            
+            if (!result)
+                return BadRequest("Could not add education details.");
+
+            return Ok(new { message = "Education added successfully!" });
         }
     }
 }
