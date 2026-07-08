@@ -8,5 +8,9 @@ namespace TalentFlow.Application.Interfaces.Services
         Task<CandidateProfileDto?> GetProfileByUserIdAsync(string userId);
         Task<CandidateProfileDto> UpdateProfileAsync(string userId, UpdateCandidateProfileDto dto);
         Task<bool> AddEducationAsync(string userId, EducationDto educationDto);
+
+        Task<bool> AddExperienceAsync(string userId, ExperienceDto experienceDto);
+        Task<bool> AddSkillAsync(string userId, SkillDto skillDto);
+        Task<bool> AddCertificateAsync(string userId, CertificateDto certificateDto);
     }
 }
