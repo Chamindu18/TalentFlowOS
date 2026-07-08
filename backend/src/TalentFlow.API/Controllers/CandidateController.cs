@@ -24,14 +24,10 @@ namespace TalentFlow.API.Controllers
         public async Task<IActionResult> GetProfile()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
             var profile = await _candidateService.GetProfileByUserIdAsync(userId);
-            
-            if (profile == null)
-                return NotFound(new { message = "Candidate profile not found." });
+            if (profile == null) return NotFound(new { message = "Candidate profile not found." });
 
             return Ok(profile);
         }
@@ -39,13 +35,10 @@ namespace TalentFlow.API.Controllers
         [HttpPost("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateCandidateProfileDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
             var updatedProfile = await _candidateService.UpdateProfileAsync(userId, dto);
             return Ok(updatedProfile);
@@ -54,20 +47,52 @@ namespace TalentFlow.API.Controllers
         [HttpPost("education")]
         public async Task<IActionResult> AddEducation([FromBody] EducationDto educationDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
            
             var result = await _candidateService.AddEducationAsync(userId, educationDto);
-            
-            if (!result)
-                return BadRequest("Could not add education details.");
-
-            return Ok(new { message = "Education added successfully!" });
+            return result ? Ok(new { message = "Education added successfully!" }) : BadRequest("Could not add education details.");
         }
-    }
-}
+
+        // --- Experience Endpoints ---
+        [HttpPost("experience")]
+        public async Task<IActionResult> AddExperience([FromBody] ExperienceDto experienceDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            var result = await _candidateService.AddExperienceAsync(userId, experienceDto);
+            return result ? Ok(new { message = "Experience added successfully!" }) : BadRequest("Could not add experience.");
+        }
+
+        // --- Skills Endpoints ---
+        [HttpPost("skills")]
+        public async Task<IActionResult> AddSkill([FromBody] SkillDto skillDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            var result = await _candidateService.AddSkillAsync(userId, skillDto);
+            return result ? Ok(new { message = "Skill added successfully!" }) : BadRequest("Could not add skill.");
+        }
+
+        // --- Certificates Endpoints ---
+        [HttpPost("certificates")]
+        public async Task<IActionResult> AddCertificate([FromBody] CertificateDto certificateDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            var result = await _candidateService.AddCertificateAsync(userId, certificateDto);
+            return result ? Ok(new { message = "Certificate added successfully!" }) : BadRequest("Could not add certificate.");
+        }
+    } 
+} 
