@@ -49,6 +49,16 @@ public class UserRepository : IUserRepository
             );
     }
 
+    public async Task<User?> GetByEmailVerificationTokenAsync(
+        string token
+    )
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(
+                x => x.EmailVerificationToken == token
+            );
+    }
+
     public async Task AddAsync(
         User user
     )
