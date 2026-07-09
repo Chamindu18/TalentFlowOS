@@ -72,6 +72,40 @@ public class AuthController : ControllerBase
         });
     }
 
+    [HttpGet("verify-email")]
+    public async Task<IActionResult> VerifyEmail(
+        [FromQuery] string token
+    )
+    {
+        await _authService.VerifyEmailAsync(
+            token
+        );
+
+        return Ok(new
+        {
+            Message =
+                "Email verified successfully."
+        });
+    }
+
+    [HttpPost("resend-verification")]
+    public async Task<IActionResult> ResendVerification(
+        [FromBody]
+        ResendVerificationRequestDto request
+    )
+    {
+        await _authService
+            .ResendVerificationEmailAsync(
+                request.Email
+            );
+
+        return Ok(new
+        {
+            Message =
+                "Verification email sent successfully."
+        });
+    }
+
     [Authorize]
     [HttpGet("me")]
     public IActionResult Me()
