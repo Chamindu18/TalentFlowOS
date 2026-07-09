@@ -155,4 +155,72 @@ public static class EmailTemplates
         </html>
         """;
     }
+
+    public static string EmailVerification(
+        string firstName,
+        string verificationLink
+    )
+    {
+        return $$"""
+        <!DOCTYPE html>
+        <html>
+        <body style="
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        ">
+
+            <h2>Verify Your Email Address ✉️</h2>
+
+            <p>Hi {{firstName}},</p>
+
+            <p>
+                Thank you for registering with
+                <strong>TalentFlow OS</strong>.
+            </p>
+
+            <p>
+                Before you can start using your account,
+                please verify your email address by
+                clicking the button below.
+            </p>
+
+            <p>
+                <a
+                    href="{{verificationLink}}"
+                    style="
+                        display: inline-block;
+                        padding: 12px 24px;
+                        background-color: #16a34a;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        font-weight: bold;
+                    "
+                >
+                    Verify Email
+                </a>
+            </p>
+
+            <p>
+                This verification link will expire in
+                <strong>24 hours</strong>.
+            </p>
+
+            <p>
+                If you did not create a TalentFlow OS
+                account, you can safely ignore this email.
+            </p>
+
+            <br>
+
+            <p>
+                Regards,<br>
+                <strong>TalentFlow OS Team</strong>
+            </p>
+
+        </body>
+        </html>
+        """;
+    }
 }
