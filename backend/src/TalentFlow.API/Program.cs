@@ -127,6 +127,16 @@ builder.Services.Configure<EmailSettings>(
 );
 
 // =====================================
+// Frontend Settings
+// =====================================
+
+builder.Services.Configure<FrontendSettings>(
+    builder.Configuration.GetSection(
+        FrontendSettings.SectionName
+    )
+);
+
+// =====================================
 // Database
 // =====================================
 
