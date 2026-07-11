@@ -1,10 +1,12 @@
 import api from "@/lib/axios";
 
 import type {
+  ApiMessageResponse,
   AuthResponse,
   CurrentUser,
   LoginRequest,
   RegisterRequest,
+  ResendVerificationRequest,
 } from "@/types/auth";
 
 class AuthService {
@@ -54,6 +56,34 @@ class AuthService {
         newPassword,
       },
     );
+  }
+
+  async verifyEmail(
+    token: string,
+  ): Promise<ApiMessageResponse> {
+    const response =
+      await api.get<ApiMessageResponse>(
+        "/auth/verify-email",
+        {
+          params: {
+            token,
+          },
+        },
+      );
+
+    return response.data;
+  }
+
+  async resendVerification(
+    data: ResendVerificationRequest,
+  ): Promise<ApiMessageResponse> {
+    const response =
+      await api.post<ApiMessageResponse>(
+        "/auth/resend-verification",
+        data,
+      );
+
+    return response.data;
   }
 
   async getCurrentUser(): Promise<CurrentUser> {
