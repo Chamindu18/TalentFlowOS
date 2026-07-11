@@ -1,11 +1,13 @@
+using Microsoft.Extensions.Options;
+using TalentFlow.Application.Common.Settings;
 using TalentFlow.Application.Common.Templates;
 using TalentFlow.Application.DTOs.Auth;
 using TalentFlow.Application.Exceptions.Auth;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
-
 using TalentFlow.Domain.Entities;
+using TalentFlow.Domain.Enums;
 
 namespace TalentFlow.Application.Services;
 
@@ -15,30 +17,37 @@ public class AuthService : IAuthService
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
+    private readonly FrontendSettings _frontendSettings;
 
     public AuthService(
         IUserRepository userRepository,
         IPasswordHasher passwordHasher,
         IJwtTokenGenerator jwtTokenGenerator,
-        IEmailService emailService)
+        IEmailService emailService,
+        IOptions<FrontendSettings> frontendSettings)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
         _emailService = emailService;
+        _frontendSettings = frontendSettings.Value;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(
         RegisterRequestDto request)
     {
+        var email = request.Email
+            .Trim()
+            .ToLower();
+
         var userExists = await _userRepository.ExistsAsync(
-            request.Email
+            email
         );
 
         if (userExists)
         {
             throw new UserAlreadyExistsException(
-                request.Email
+                email
             );
         }
 
@@ -50,9 +59,7 @@ public class AuthService : IAuthService
 
             LastName = request.LastName,
 
-            Email = request.Email
-                .Trim()
-                .ToLower(),
+            Email = email,
 
             PasswordHash =
                 _passwordHasher.HashPassword(
@@ -63,76 +70,24 @@ public class AuthService : IAuthService
 
             CreatedAt = DateTime.UtcNow,
 
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+
+            IsEmailVerified = false,
+
+            EmailVerificationToken = GenerateVerificationToken(),
+
+            EmailVerificationTokenExpiresAt =
+                DateTime.UtcNow.AddHours(24)
         };
 
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
 
-        try
-        {
-            string subject;
-            string body;
-
-            switch (user.Role.ToString())
-            {
-                case "Candidate":
-                    subject =
-                        "Welcome to TalentFlow OS 🚀";
-
-                    body =
-                        EmailTemplates.CandidateWelcome(
-                            user.FirstName
-                        );
-
-                    break;
-
-                case "Recruiter":
-                    subject =
-                        "Welcome to TalentFlow OS 🎯";
-
-                    body =
-                        EmailTemplates.RecruiterWelcome(
-                            user.FirstName
-                        );
-
-                    break;
-
-                default:
-                    subject =
-                        "Welcome to TalentFlow OS";
-
-                    body =
-                        $"""
-                        <h2>
-                            Welcome, {user.FirstName}!
-                        </h2>
-                        """;
-
-                    break;
-            }
-
-            await _emailService.SendEmailAsync(
-                user.Email,
-                subject,
-                body
-            );
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(
-                $"Failed to send welcome email: {ex.Message}"
-            );
-        }
-
-        var token =
-            _jwtTokenGenerator.GenerateToken(
-                user
-            );
+        await SendVerificationEmailAsync(user);
 
         return new AuthResponseDto
         {
-            Token = token,
+            Token = string.Empty,
 
             UserId = user.Id,
 
@@ -149,9 +104,13 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> LoginAsync(
         LoginRequestDto request)
     {
+        var normalizedEmail = request.Email
+            .Trim()
+            .ToLower();
+
         var user =
             await _userRepository.GetByEmailAsync(
-                request.Email
+                normalizedEmail
             );
 
         if (user is null)
@@ -168,6 +127,11 @@ public class AuthService : IAuthService
         if (!isValidPassword)
         {
             throw new InvalidCredentialsException();
+        }
+
+        if (!user.IsEmailVerified)
+        {
+            throw new EmailNotVerifiedException();
         }
 
         var token =
@@ -219,7 +183,7 @@ public class AuthService : IAuthService
         await _userRepository.SaveChangesAsync();
 
         var resetLink =
-            $"http://localhost:5173/reset-password?token={token}";
+            $"{_frontendSettings.BaseUrl}/reset-password?token={token}";
 
         var body =
             EmailTemplates.ResetPassword(
@@ -244,9 +208,7 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            throw new Exception(
-                "Invalid reset token."
-            );
+            throw new InvalidResetPasswordTokenException();
         }
 
         if (
@@ -255,9 +217,7 @@ public class AuthService : IAuthService
             DateTime.UtcNow
         )
         {
-            throw new Exception(
-                "Reset token has expired."
-            );
+            throw new ExpiredResetPasswordTokenException();
         }
 
         user.PasswordHash =
@@ -272,5 +232,189 @@ public class AuthService : IAuthService
         user.UpdatedAt = DateTime.UtcNow;
 
         await _userRepository.SaveChangesAsync();
+    }
+
+    public async Task VerifyEmailAsync(string token)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            throw new InvalidVerificationTokenException();
+        }
+
+        var user =
+            await _userRepository.GetByEmailVerificationTokenAsync(
+                token
+            );
+
+        if (user is null)
+        {
+            throw new InvalidVerificationTokenException();
+        }
+
+        if (
+            user.EmailVerificationTokenExpiresAt is null ||
+            user.EmailVerificationTokenExpiresAt <
+            DateTime.UtcNow
+        )
+        {
+            throw new ExpiredVerificationTokenException();
+        }
+
+        if (user.IsEmailVerified)
+        {
+            return;
+        }
+
+        user.IsEmailVerified = true;
+
+        user.EmailVerificationToken = null;
+
+        user.EmailVerificationTokenExpiresAt = null;
+
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.SaveChangesAsync();
+
+        await SendWelcomeEmailAsync(user);
+    }
+
+    public async Task ResendVerificationEmailAsync(string email)
+    {
+        var user =
+            await _userRepository.GetByEmailAsync(
+                email.Trim().ToLower()
+            );
+
+        if (user is null)
+        {
+            return;
+        }
+
+        if (user.IsEmailVerified)
+        {
+            return;
+        }
+
+        user.EmailVerificationToken = GenerateVerificationToken();
+
+        user.EmailVerificationTokenExpiresAt =
+            DateTime.UtcNow.AddHours(24);
+
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.SaveChangesAsync();
+
+        await SendVerificationEmailAsync(user);
+    }
+
+    private async Task SendVerificationEmailAsync(User user)
+    {
+        try
+        {
+            var verificationLink =
+                $"{_frontendSettings.BaseUrl}/email-verification?token={user.EmailVerificationToken}";
+
+            var body =
+                EmailTemplates.EmailVerification(
+                    user.FirstName,
+                    verificationLink
+                );
+
+            await _emailService.SendEmailAsync(
+                user.Email,
+                "Verify Your Email Address - TalentFlow ✅",
+                body
+            );
+        }
+        catch
+        {
+            // Email sending should not
+            // prevent registration.
+        }
+            }
+
+    private async Task SendWelcomeEmailAsync(User user)
+    {
+        try
+        {
+            string subject;
+            string body;
+
+            switch (user.Role)
+            {
+                case UserRole.Candidate:
+                    subject =
+                        "Welcome to TalentFlow OS 🚀";
+
+                    body =
+                        EmailTemplates.CandidateWelcome(
+                            user.FirstName
+                        );
+
+                    break;
+
+                case UserRole.Recruiter:
+                    subject =
+                        "Welcome to TalentFlow OS 🎯";
+
+                    body =
+                        EmailTemplates.RecruiterWelcome(
+                            user.FirstName
+                        );
+
+                    break;
+
+                case UserRole.HiringManager:
+                    subject =
+                        "Welcome to TalentFlow OS 🏢";
+
+                    body =
+                        EmailTemplates.HiringManagerWelcome(
+                            user.FirstName
+                        );
+
+                    break;
+
+                case UserRole.Admin:
+                    subject =
+                        "Welcome to TalentFlow OS ⚙️";
+
+                    body =
+                        EmailTemplates.AdminWelcome(
+                            user.FirstName
+                        );
+
+                    break;
+
+                default:
+                    subject =
+                        "Welcome to TalentFlow OS";
+
+                    body =
+                        $"""
+                        <h2>
+                            Welcome, {user.FirstName}!
+                        </h2>
+                        """;
+
+                    break;
+            }
+
+            await _emailService.SendEmailAsync(
+                user.Email,
+                subject,
+                body
+            );
+        }
+        catch
+        {
+            // Email sending should not
+            // prevent authentication flow.
+        }
+    }
+
+    private string GenerateVerificationToken()
+    {
+        return Guid.NewGuid().ToString();
     }
 }

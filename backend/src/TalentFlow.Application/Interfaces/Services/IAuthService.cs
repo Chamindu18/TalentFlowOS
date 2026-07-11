@@ -19,4 +19,12 @@ public interface IAuthService
     Task ResetPasswordAsync(
         ResetPasswordRequestDto request
     );
+
+    Task VerifyEmailAsync(
+        string token
+    );
+
+    Task ResendVerificationEmailAsync(
+        string email
+    );
 }

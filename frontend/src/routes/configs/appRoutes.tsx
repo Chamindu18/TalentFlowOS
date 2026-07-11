@@ -15,6 +15,7 @@ import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+import EmailVerificationPage from "@/pages/auth/EmailVerificationPage";
 
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
@@ -197,6 +198,11 @@ export default function AppRoutes() {
           <Route
             path="/reset-password"
             element={<ResetPasswordPage />}
+          />
+          
+          <Route
+            path="/email-verification"
+            element={<EmailVerificationPage />}
           />
         </Route>
       </Route>
