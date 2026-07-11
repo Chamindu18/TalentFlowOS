@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using TalentFlow.API.Middleware;
 
 using TalentFlow.Application.Common.Settings;
 using TalentFlow.Application.Interfaces.Repositories;
@@ -127,6 +128,16 @@ builder.Services.Configure<EmailSettings>(
 );
 
 // =====================================
+// Frontend Settings
+// =====================================
+
+builder.Services.Configure<FrontendSettings>(
+    builder.Configuration.GetSection(
+        FrontendSettings.SectionName
+    )
+);
+
+// =====================================
 // Database
 // =====================================
 
@@ -236,9 +247,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 // =====================================
 // Middleware
 // =====================================
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("Frontend");
 
