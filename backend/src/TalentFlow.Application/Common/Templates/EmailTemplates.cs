@@ -223,4 +223,92 @@ public static class EmailTemplates
         </html>
         """;
     }
+
+        public static string HiringManagerWelcome(
+        string firstName
+    )
+    {
+        return $$"""
+        <!DOCTYPE html>
+        <html>
+        <body style="font-family: Arial, sans-serif;">
+
+            <h2>Welcome to TalentFlow OS! 🏢</h2>
+
+            <p>Hi {{firstName}},</p>
+
+            <p>
+                Your Hiring Manager account has been verified successfully.
+            </p>
+
+            <p>
+                You can now:
+            </p>
+
+            <ul>
+                <li>Schedule interviews</li>
+                <li>Evaluate candidates</li>
+                <li>Provide interview feedback</li>
+                <li>Make hiring decisions</li>
+            </ul>
+
+            <p>
+                Thank you for joining TalentFlow OS.
+            </p>
+
+            <br>
+
+            <p>
+                Regards,<br>
+                <strong>TalentFlow OS Team</strong>
+            </p>
+
+        </body>
+        </html>
+        """;
+    }
+
+    public static string AdminWelcome(
+        string firstName
+    )
+    {
+        return $$"""
+        <!DOCTYPE html>
+        <html>
+        <body style="font-family: Arial, sans-serif;">
+
+            <h2>Welcome to TalentFlow OS! ⚙️</h2>
+
+            <p>Hi {{firstName}},</p>
+
+            <p>
+                Your administrator account has been verified successfully.
+            </p>
+
+            <p>
+                You can now:
+            </p>
+
+            <ul>
+                <li>Manage users</li>
+                <li>Monitor platform activity</li>
+                <li>Manage companies and jobs</li>
+                <li>Access the administration dashboard</li>
+            </ul>
+
+            <p>
+                Thank you for helping manage TalentFlow OS.
+            </p>
+
+            <br>
+
+            <p>
+                Regards,<br>
+                <strong>TalentFlow OS Team</strong>
+            </p>
+
+        </body>
+        </html>
+        """;
+    }
 }
