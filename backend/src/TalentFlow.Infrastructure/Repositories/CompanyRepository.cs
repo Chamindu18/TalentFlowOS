@@ -20,13 +20,21 @@ public class CompanyRepository : ICompanyRepository
         _context = context;
     }
 
-    public async Task<Company?> GetByIdAsync(Guid id)
-    {
-        return await _context.Companies
-            .Include(x => x.Departments)
-            .Include(x => x.Jobs)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
-    }
+    public async Task<Company?> GetByNameAsync(string name)
+{
+    return await _context.Companies
+        .FirstOrDefaultAsync(x => x.Name.ToLower() == name.ToLower() && !x.IsDeleted);
+}
+
+
+public async Task<Company?> GetByIdAsync(Guid id)
+{
+    return await _context.Companies
+        .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+}
+
+
+
 
     public async Task<IEnumerable<Company>> GetAllAsync()
     {
