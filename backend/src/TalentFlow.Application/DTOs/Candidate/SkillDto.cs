@@ -1,7 +1,8 @@
-namespace TalentFlow.Application.DTOs.Candidate;
-
-public class SkillDto
+namespace TalentFlow.Application.DTOs.Candidate
 {
-    public string Name { get; set; } = string.Empty;
-    public string ProficiencyLevel { get; set; } = string.Empty;
+    public class SkillDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string ProficiencyLevel { get; set; } = string.Empty;
+    }
 }

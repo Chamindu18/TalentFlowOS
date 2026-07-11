@@ -12,12 +12,21 @@ public class ApplicationDbContext : DbContext
     public DbSet<Experience> Experiences => Set<Experience>();
     public DbSet<Skill> Skills => Set<Skill>();
     public DbSet<Certificate> Certificates => Set<Certificate>();
+    public DbSet<Company> Companies => Set<Company>();
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<Job> Jobs => Set<Job>();
+    public DbSet<JobApplication> JobApplications => Set<JobApplication>(); 
+    public DbSet<User> Users => Set<User>();
+    
+public DbSet<Evaluation> Evaluations => Set<Evaluation>();
+public DbSet<InterviewFeedback> InterviewFeedbacks => Set<InterviewFeedback>();
+public DbSet<HiringDecision> HiringDecisions => Set<HiringDecision>();
+public DbSet<Interview> Interviews => Set<Interview>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         
-        // Candidate Relationship Mapping
         modelBuilder.Entity<Candidate>(entity =>
         {
             entity.HasMany(c => c.Educations).WithOne(e => e.Candidate).HasForeignKey(e => e.CandidateId);

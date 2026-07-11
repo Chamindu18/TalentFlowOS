@@ -5,7 +5,7 @@ namespace TalentFlow.Application.Interfaces.Repositories
 {
     public interface ICandidateRepository
     {
-        Task<Candidate> GetCandidateByUserIdAsync(string userId);
+        Task<Candidate?> GetCandidateByUserIdAsync(string userId);
         Task<bool> SaveChangesAsync();
     }
 }

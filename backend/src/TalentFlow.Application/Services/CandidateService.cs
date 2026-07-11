@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using TalentFlow.Application.DTOs.Candidate;
-using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Application.Interfaces.Services; 
 using TalentFlow.Application.Interfaces.Repositories;
+using TalentFlow.Application.DTOs.Candidate; 
 using TalentFlow.Domain.Entities;
 
 namespace TalentFlow.Application.Services
@@ -26,9 +27,18 @@ namespace TalentFlow.Application.Services
             _certificateRepository = certificateRepository;
         }
 
-        public async Task<CandidateProfileDto?> GetProfileByUserIdAsync(string userId) => null;
+        public async Task<CandidateProfileDto?> GetProfileByUserIdAsync(string userId)
+        {
+            var candidate = await _repository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return null;
 
-        public async Task<CandidateProfileDto> UpdateProfileAsync(string userId, UpdateCandidateProfileDto dto) => new CandidateProfileDto();
+            return new CandidateProfileDto(); 
+        }
+
+        public async Task<CandidateProfileDto> UpdateProfileAsync(string userId, UpdateCandidateProfileDto dto)
+        {
+            return new CandidateProfileDto(); 
+        }
 
         public async Task<bool> AddEducationAsync(string userId, EducationDto educationDto)
         {
@@ -37,15 +47,14 @@ namespace TalentFlow.Application.Services
 
             var education = new Education
             {
-                Institution = educationDto.Institution,
+                CandidateId = candidate.Id,
+                InstitutionName = educationDto.Institution, 
                 Degree = educationDto.Degree,
-                FieldOfStudy = educationDto.FieldOfStudy,
                 StartDate = educationDto.StartDate,
-                EndDate = educationDto.EndDate,
-                Gpa = educationDto.Gpa,
-                CandidateId = candidate.Id
+                EndDate = educationDto.EndDate
             };
 
+            if (candidate.Educations == null) candidate.Educations = new List<Education>();
             candidate.Educations.Add(education); 
             return await _repository.SaveChangesAsync();
         }
@@ -94,8 +103,8 @@ namespace TalentFlow.Application.Services
             {
                 CandidateId = candidate.Id,
                 Name = certificateDto.Name,
-                IssuingOrganization = certificateDto.IssuingOrganization,
-                IssueDate = certificateDto.IssueDate
+                IssueDate = certificateDto.IssueDate,
+                IssuedBy = certificateDto.IssuingOrganization 
             };
 
             await _certificateRepository.AddAsync(certificate);
