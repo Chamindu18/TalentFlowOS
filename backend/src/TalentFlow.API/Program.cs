@@ -193,8 +193,9 @@ builder.Services.AddScoped<
     JobRepository
 >();
 
+// මෙතන තිබ්බ පරණ IApplicationRepository එක IJobApplicationRepository විදිහට නිවැරදි කළා:
 builder.Services.AddScoped<
-    IApplicationRepository,
+    IJobApplicationRepository,
     JobApplicationRepository
 >();
 

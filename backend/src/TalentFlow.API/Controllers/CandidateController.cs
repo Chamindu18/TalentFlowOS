@@ -3,8 +3,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TalentFlow.Application.Interfaces.Services; 
 using TalentFlow.Application.DTOs.Candidate;
-using TalentFlow.Application.Interfaces.Services;
 
 namespace TalentFlow.API.Controllers
 {
@@ -56,7 +56,6 @@ namespace TalentFlow.API.Controllers
             return result ? Ok(new { message = "Education added successfully!" }) : BadRequest("Could not add education details.");
         }
 
-        // --- Experience Endpoints ---
         [HttpPost("experience")]
         public async Task<IActionResult> AddExperience([FromBody] ExperienceDto experienceDto)
         {
@@ -69,7 +68,6 @@ namespace TalentFlow.API.Controllers
             return result ? Ok(new { message = "Experience added successfully!" }) : BadRequest("Could not add experience.");
         }
 
-        // --- Skills Endpoints ---
         [HttpPost("skills")]
         public async Task<IActionResult> AddSkill([FromBody] SkillDto skillDto)
         {
@@ -82,7 +80,6 @@ namespace TalentFlow.API.Controllers
             return result ? Ok(new { message = "Skill added successfully!" }) : BadRequest("Could not add skill.");
         }
 
-        // --- Certificates Endpoints ---
         [HttpPost("certificates")]
         public async Task<IActionResult> AddCertificate([FromBody] CertificateDto certificateDto)
         {
@@ -95,4 +92,4 @@ namespace TalentFlow.API.Controllers
             return result ? Ok(new { message = "Certificate added successfully!" }) : BadRequest("Could not add certificate.");
         }
     } 
-} 
+}
