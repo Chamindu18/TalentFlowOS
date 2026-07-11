@@ -4,15 +4,29 @@ namespace TalentFlow.Application.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByEmailAsync(
+        string email
+    );
 
-    Task<User?> GetByIdAsync(Guid id);
+    Task<User?> GetByIdAsync(
+        Guid id
+    );
 
-    Task<User?> GetByResetTokenAsync(string token);
+    Task<User?> GetByResetTokenAsync(
+        string token
+    );
 
-    Task AddAsync(User user);
+    Task<User?> GetByEmailVerificationTokenAsync(
+        string token
+    );
 
-    Task<bool> ExistsAsync(string email);
+    Task AddAsync(
+        User user
+    );
+
+    Task<bool> ExistsAsync(
+        string email
+    );
 
     Task SaveChangesAsync();
 }
