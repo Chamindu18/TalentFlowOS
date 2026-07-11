@@ -1,15 +1,12 @@
+
+
 export interface Company {
     id: string;
     name: string;
     description?: string;
     industry?: string;
-    websiteUrl?: string;
-    logoUrl?: string;
     city?: string;
     country?: string;
-    employeeCount?: number;
-    createdAt: string;
-    updatedAt: string;
 }
 
 export interface Department {
@@ -17,9 +14,6 @@ export interface Department {
     companyId: string;
     name: string;
     description?: string;
-    companyName?: string;
-    createdAt: string;
-    updatedAt: string;
 }
 
 export interface Job {
@@ -47,8 +41,8 @@ export interface Job {
 }
 
 export interface CreateJobRequest {
-    companyId: string;
-    departmentId: string;
+    companyName: string;      
+    departmentName: string;
     title: string;
     description?: string;
     responsibilities?: string;

@@ -9,6 +9,8 @@ namespace TalentFlow.Application.Interfaces.Repositories;
 public interface IDepartmentRepository
 {
     Task<Department?> GetByIdAsync(Guid id);
+    Task<Department?> GetByNameAndCompanyAsync(string name, Guid companyId);
+
     Task<IEnumerable<Department>> GetByCompanyIdAsync(Guid companyId);
     Task<IEnumerable<Department>> GetAllAsync();
     Task AddAsync(Department department);
