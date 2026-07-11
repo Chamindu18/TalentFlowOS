@@ -11,7 +11,7 @@ console.log("main.tsx is running!");
 createRoot(
   document.getElementById("root")!,
 ).render(
-  <StrictMode>
+  <>
     <App />
 
     <Toaster
@@ -20,5 +20,5 @@ createRoot(
       closeButton
       duration={3000}
     />
-  </StrictMode>,
+  </>,
 );

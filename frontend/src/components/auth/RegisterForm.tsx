@@ -112,29 +112,16 @@ export default function RegisterForm({
       });
 
       toast.success(
-        "Account created successfully!",
+        "Registration successful! Please check your email to verify your account.",
       );
 
-      switch (role) {
-        case "Candidate":
-          navigate("/candidate/dashboard");
-          break;
+      navigate("/login");
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ??
+        "Registration failed. Please try again.";
 
-        case "Recruiter":
-          navigate("/recruiter/setup-company");
-          break;
-
-        case "HiringManager":
-          navigate("/hiring/dashboard");
-          break;
-
-        default:
-          navigate("/");
-      }
-    } catch {
-      toast.error(
-        "Registration failed. Please try again.",
-      );
+      toast.error(message);
     }
   };
 
