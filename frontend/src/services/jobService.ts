@@ -6,6 +6,11 @@ import type {
   UpdateJobRequest,
 } from "../types/job";
 
+
+
+
+
+
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5007/api";
@@ -51,6 +56,13 @@ export const jobService = {
 
     return response.data.data;
   },
+
+
+  
+
+
+
+
 
   // Get job by ID
   getById: async (
@@ -104,17 +116,24 @@ export const jobService = {
   },
 
   // Create job
-  create: async (
-    data: CreateJobRequest,
-  ): Promise<Job> => {
-    const response =
-      await api.post(
-        "/Jobs",
-        data,
-      );
-
+create: async (data: {
+    companyName: string;
+    departmentName: string;
+    title: string;
+    description?: string;
+    responsibilities?: string;
+    requirements?: string;
+    employmentType?: string;
+    experienceLevel?: string;
+    salaryMin?: number;
+    salaryMax?: number;
+    location?: string;
+    isRemote: boolean;
+    applicationDeadline?: string;
+}): Promise<Job> => {
+    const response = await api.post('/Jobs', data);
     return response.data.data;
-  },
+},
 
   // Update job
   update: async (
