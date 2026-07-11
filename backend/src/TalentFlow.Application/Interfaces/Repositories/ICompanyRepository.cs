@@ -9,6 +9,7 @@ namespace TalentFlow.Application.Interfaces.Repositories;
 public interface ICompanyRepository
 {
     Task<Company?> GetByIdAsync(Guid id);
+    Task<Company?> GetByNameAsync(string name);
     Task<IEnumerable<Company>> GetAllAsync();
     Task<IEnumerable<Company>> SearchCompaniesAsync(string? searchTerm);
     Task AddAsync(Company company);

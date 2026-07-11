@@ -17,6 +17,7 @@ using TalentFlow.Infrastructure.Repositories;
 using TalentFlow.Infrastructure.Repositories.Identity;
 using TalentFlow.Infrastructure.Security;
 using TalentFlow.Infrastructure.Services;
+using TalentFlow.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -219,6 +220,13 @@ builder.Services.AddScoped<
 >();
 
 var app = builder.Build();
+
+// Seed default data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await SeedData.SeedAsync(dbContext);
+}
 
 // =====================================
 // Development
