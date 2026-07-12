@@ -13,7 +13,7 @@ public class CreateJobRequestDTO
 
 
     [MaxLength(255)]
-    public string CompanyName { get; set; } = null!;      // ← Changed
+    public string CompanyName { get; set; } = null!;      
     public string DepartmentName { get; set; } = null!;
     public string Title { get; set; } = null!;
 
