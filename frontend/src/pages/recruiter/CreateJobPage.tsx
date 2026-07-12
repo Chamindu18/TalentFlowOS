@@ -30,20 +30,23 @@ export const CreateJobPage: React.FC = () => {
 
             // HARDCODE COMPANY AND DEPARTMENT
             const payload = {
-                companyName: "Tech Corp",
-                departmentName: "Engineering",
-                title: data.title,
-                description: data.description,
-                responsibilities: data.responsibilities,
-                requirements: data.requirements,
-                employmentType: data.employmentType,
-                experienceLevel: data.experienceLevel,
-                salaryMin: data.salaryMin,
-                salaryMax: data.salaryMax,
-                location: data.location,
-                isRemote: data.isRemote,
-                applicationDeadline: data.applicationDeadline,
-            };
+            companyName: "Tech Corp",
+            departmentName: "Engineering",
+            title: data.title,
+            description: data.description,
+            responsibilities: data.responsibilities,
+            requirements: data.requirements,
+            employmentType: data.employmentType,
+            experienceLevel: data.experienceLevel,
+            salaryMin: data.salaryMin,
+            salaryMax: data.salaryMax,
+            location: data.location,
+            isRemote: data.isRemote,
+
+            applicationDeadline: data.applicationDeadline
+                ? new Date(data.applicationDeadline + "T00:00:00Z").toISOString()
+                : undefined,
+        };
 
             console.log('PAYLOAD BEING SENT:', JSON.stringify(payload, null, 2));
 
