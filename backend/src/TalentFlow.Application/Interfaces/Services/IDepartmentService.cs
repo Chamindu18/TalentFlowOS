@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 using TalentFlow.Application.DTOs.Departments;
 
+using TalentFlow.Domain.Entities;
+
 namespace TalentFlow.Application.Interfaces.Services;
 
 public interface IDepartmentService
 {
+    Task<Department> GetDefaultDepartmentAsync(Guid companyId);
     Task<DepartmentResponseDTO> GetByIdAsync(Guid id);
     Task<IEnumerable<DepartmentResponseDTO>> GetByCompanyIdAsync(Guid companyId);
     Task<IEnumerable<DepartmentResponseDTO>> GetAllAsync();

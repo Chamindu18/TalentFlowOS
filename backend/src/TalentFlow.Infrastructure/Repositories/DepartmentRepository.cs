@@ -20,13 +20,19 @@ public class DepartmentRepository : IDepartmentRepository
         _context = context;
     }
 
-    public async Task<Department?> GetByIdAsync(Guid id)
-    {
-        return await _context.Departments
-            .Include(x => x.Company)
-            .Include(x => x.Jobs)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
-    }
+    public async Task<Department?> GetByNameAndCompanyAsync(string name, Guid companyId)
+{
+    return await _context.Departments
+        .FirstOrDefaultAsync(x => x.Name.ToLower() == name.ToLower() 
+            && x.CompanyId == companyId 
+            && !x.IsDeleted);
+}
+
+public async Task<Department?> GetByIdAsync(Guid id)
+{
+    return await _context.Departments
+        .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+}
 
     public async Task<IEnumerable<Department>> GetByCompanyIdAsync(Guid companyId)
     {

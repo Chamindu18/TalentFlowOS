@@ -86,15 +86,25 @@ public class JobService : IJobService
 
     public async Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request)
     {
-        // Validate Company exists
-        var companyExists = await _companyRepository.ExistsAsync(request.CompanyId);
-        if (!companyExists)
-            throw new NotFoundException($"Company with ID {request.CompanyId} not found");
 
-        // Validate Department exists
-        var departmentExists = await _departmentRepository.ExistsAsync(request.DepartmentId);
-        if (!departmentExists)
-            throw new NotFoundException($"Department with ID {request.DepartmentId} not found");
+        // Log the request
+    Console.WriteLine($"CompanyName: {request.CompanyName}");
+    Console.WriteLine($"DepartmentName: {request.DepartmentName}");
+
+
+        // Find company by name
+        var company = await _companyRepository.GetByNameAsync(request.CompanyName);
+        if (company == null)
+        {
+            throw new NotFoundException($"Company '{request.CompanyName}' not found. Please create the company first.");
+        }
+
+        // Find department by name within the company
+        var department = await _departmentRepository.GetByNameAndCompanyAsync(request.DepartmentName, company.Id);
+        if (department == null)
+        {
+            throw new NotFoundException($"Department '{request.DepartmentName}' not found in company '{request.CompanyName}'. Please create the department first.");
+        }
 
         // Validate Salary Range
         if (request.SalaryMin.HasValue && request.SalaryMax.HasValue)
@@ -105,6 +115,8 @@ public class JobService : IJobService
 
         // Map DTO to Entity
         var job = _mapper.Map<Job>(request);
+        job.CompanyId = company.Id;
+        job.DepartmentId = department.Id;
         job.Status = JobStatus.Open.ToString();
         job.IsActive = true;
 
