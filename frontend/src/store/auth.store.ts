@@ -69,22 +69,15 @@ export const useAuthStore =
       set({ isLoading: true });
 
       try {
-        const response =
-          await authService.register(data);
-
-        localStorage.setItem(
-          "accessToken",
-          response.token,
-        );
+        await authService.register(data);
 
         set({
-          user: response,
-          token: response.token,
-          isAuthenticated: true,
           isLoading: false,
         });
       } catch (error) {
-        set({ isLoading: false });
+        set({
+          isLoading: false,
+        });
 
         throw error;
       }

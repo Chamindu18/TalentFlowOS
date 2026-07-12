@@ -2,7 +2,6 @@ import axios from "axios";
 
 import type {
   Job,
-  CreateJobRequest,
   UpdateJobRequest,
 } from "../types/job";
 
@@ -17,74 +16,61 @@ const api = axios.create({
   },
 });
 
-// Add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token =
-      localStorage.getItem(
-        "accessToken",
-      );
+// Attach JWT token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-    return config;
-  },
-);
+  return config;
+});
+
+export interface CreateJobPayload {
+  companyName: string;
+  departmentName: string;
+  title: string;
+  description?: string;
+  responsibilities?: string;
+  requirements?: string;
+  employmentType?: string;
+  experienceLevel?: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  location?: string;
+  isRemote: boolean;
+  applicationDeadline?: string;
+}
 
 export const jobService = {
   // Get all jobs
   getAll: async (): Promise<Job[]> => {
-    const response =
-      await api.get("/Jobs");
-
+    const response = await api.get("/Jobs");
     return response.data.data;
   },
 
   // Get active jobs
   getActive: async (): Promise<Job[]> => {
-    const response =
-      await api.get(
-        "/Jobs/active",
-      );
-
+    const response = await api.get("/Jobs/active");
     return response.data.data;
   },
 
   // Get job by ID
-  getById: async (
-    id: string,
-  ): Promise<Job> => {
-    const response =
-      await api.get(
-        `/Jobs/${id}`,
-      );
-
+  getById: async (id: string): Promise<Job> => {
+    const response = await api.get(`/Jobs/${id}`);
     return response.data.data;
   },
 
   // Get jobs by company
-  getByCompany: async (
-    companyId: string,
-  ): Promise<Job[]> => {
-    const response =
-      await api.get(
-        `/Jobs/company/${companyId}`,
-      );
-
+  getByCompany: async (companyId: string): Promise<Job[]> => {
+    const response = await api.get(`/Jobs/company/${companyId}`);
     return response.data.data;
   },
 
   // Get jobs by department
-  getByDepartment: async (
-    departmentId: string,
-  ): Promise<Job[]> => {
-    const response =
-      await api.get(
-        `/Jobs/department/${departmentId}`,
-      );
-
+  getByDepartment: async (departmentId: string): Promise<Job[]> => {
+    const response = await api.get(`/Jobs/department/${departmentId}`);
     return response.data.data;
   },
 
@@ -94,57 +80,32 @@ export const jobService = {
     location?: string;
     employmentType?: string;
   }): Promise<Job[]> => {
-    const response =
-      await api.get(
-        "/Jobs/search",
-        { params },
-      );
-
+    const response = await api.get("/Jobs/search", { params });
     return response.data.data;
   },
 
   // Create job
-  create: async (
-    data: CreateJobRequest,
-  ): Promise<Job> => {
-    const response =
-      await api.post(
-        "/Jobs",
-        data,
-      );
-
+  create: async (data: CreateJobPayload): Promise<Job> => {
+    const response = await api.post("/Jobs", data);
     return response.data.data;
   },
 
   // Update job
   update: async (
     id: string,
-    data: UpdateJobRequest,
+    data: UpdateJobRequest
   ): Promise<Job> => {
-    const response =
-      await api.put(
-        `/Jobs/${id}`,
-        data,
-      );
-
+    const response = await api.put(`/Jobs/${id}`, data);
     return response.data.data;
   },
 
   // Delete job
-  delete: async (
-    id: string,
-  ): Promise<void> => {
-    await api.delete(
-      `/Jobs/${id}`,
-    );
+  delete: async (id: string): Promise<void> => {
+    await api.delete(`/Jobs/${id}`);
   },
 
   // Close job
-  close: async (
-    id: string,
-  ): Promise<void> => {
-    await api.patch(
-      `/Jobs/${id}/close`,
-    );
+  close: async (id: string): Promise<void> => {
+    await api.patch(`/Jobs/${id}/close`);
   },
 };

@@ -77,6 +77,10 @@ export default function LoginForm() {
           );
           break;
 
+        case "HiringManager":
+          navigate("/hiring/dashboard");
+          break;
+
         case "Admin":
           navigate(
             "/admin/dashboard",
@@ -86,11 +90,26 @@ export default function LoginForm() {
         default:
           navigate("/");
       }
-    } catch (error) {
-      toast.error(
-        "Invalid email or password.",
-      );
-    }
+    } catch (error: any) {
+        const message =
+          error?.response?.data?.message ??
+          error?.response?.data?.Message ??
+          "Login failed.";
+
+        if (
+          message
+            .toLowerCase()
+            .includes("verify")
+        ) {
+          toast.error(
+            "Please verify your email before signing in. Check your inbox for the verification email.",
+          );
+
+          return;
+        }
+
+        toast.error(message);
+      }
   };
 
   return (

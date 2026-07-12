@@ -31,3 +31,11 @@ export interface CurrentUser {
   email: string;
   role: UserRole;
 }
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+export interface ApiMessageResponse {
+  message: string;
+}

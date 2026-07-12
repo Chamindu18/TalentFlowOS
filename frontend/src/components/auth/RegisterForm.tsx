@@ -23,7 +23,7 @@ import { useAuthStore } from "@/store/auth.store";
 import type { UserRole } from "@/types/auth";
 
 interface RegisterFormProps {
-  role: "Candidate" | "Recruiter";
+  role: UserRole;
 }
 
 export default function RegisterForm({
@@ -112,22 +112,16 @@ export default function RegisterForm({
       });
 
       toast.success(
-        "Account created successfully!",
+        "Registration successful! Please check your email to verify your account.",
       );
 
-      if (role === "Candidate") {
-        navigate(
-          "/candidate/dashboard",
-        );
-      } else {
-        navigate(
-          "/recruiter/setup-company",
-        );
-      }
-    } catch {
-      toast.error(
-        "Registration failed. Please try again.",
-      );
+      navigate("/login");
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ??
+        "Registration failed. Please try again.";
+
+      toast.error(message);
     }
   };
 

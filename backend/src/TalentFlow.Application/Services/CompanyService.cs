@@ -24,6 +24,14 @@ public class CompanyService : ICompanyService
         _mapper = mapper;
     }
 
+
+    public async Task<Company> GetDefaultCompanyAsync()
+{
+    var company = await _companyRepository.GetAllAsync();
+    return company.FirstOrDefault() ?? throw new NotFoundException("No company found");
+}
+
+
     public async Task<CompanyResponseDTO> GetByIdAsync(Guid id)
     {
         var company = await _companyRepository.GetByIdAsync(id);

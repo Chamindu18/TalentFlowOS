@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Microsoft.EntityFrameworkCore;
-using TalentFlow.Application.Interfaces.Repositories;
+
+using TalentFlow.Application.Interfaces.Repositories; 
 using TalentFlow.Domain.Entities;
 using TalentFlow.Infrastructure.Persistence.Contexts;
 
 namespace TalentFlow.Infrastructure.Repositories;
 
-public class JobApplicationRepository : IApplicationRepository
+public class JobApplicationRepository : IJobApplicationRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -22,79 +19,23 @@ public class JobApplicationRepository : IApplicationRepository
 
     public async Task<JobApplication?> GetByIdAsync(Guid id)
     {
-        return await _context.Applications
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Company)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+        return await _context.JobApplications
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<JobApplication>> GetByCandidateIdAsync(Guid candidateId)
+    public async Task AddAsync(JobApplication jobApplication)
     {
-        return await _context.Applications
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Company)
-            .Where(x => x.CandidateId == candidateId && !x.IsDeleted)
-            .ToListAsync();
+        await _context.JobApplications.AddAsync(jobApplication);
     }
 
-    public async Task<IEnumerable<JobApplication>> GetByJobIdAsync(Guid jobId)
+    public void Update(JobApplication jobApplication)
     {
-        return await _context.Applications
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Company)
-            .Where(x => x.JobId == jobId && !x.IsDeleted)
-            .ToListAsync();
+        _context.JobApplications.Update(jobApplication);
     }
 
-    public async Task<IEnumerable<JobApplication>> GetByStatusAsync(string status)
+    public void Delete(JobApplication jobApplication)
     {
-        return await _context.Applications
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Company)
-            .Where(x => x.Status == status && !x.IsDeleted)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<JobApplication>> GetApplicationsWithDetailsAsync()
-    {
-        return await _context.Applications
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Company)
-            .Where(x => !x.IsDeleted)
-            .ToListAsync();
-    }
-
-    public async Task AddAsync(JobApplication application)
-    {
-        application.CreatedAt = DateTime.UtcNow;
-        application.UpdatedAt = DateTime.UtcNow;
-        application.IsDeleted = false;
-        await _context.Applications.AddAsync(application);
-    }
-
-    public void Update(JobApplication application)
-    {
-        application.UpdatedAt = DateTime.UtcNow;
-        _context.Applications.Update(application);
-    }
-
-    public void Delete(JobApplication application)
-    {
-        application.IsDeleted = true;
-        application.UpdatedAt = DateTime.UtcNow;
-        _context.Applications.Update(application);
-    }
-
-    public async Task<bool> HasCandidateAppliedAsync(Guid candidateId, Guid jobId)
-    {
-        return await _context.Applications
-            .AnyAsync(x => x.CandidateId == candidateId && x.JobId == jobId && !x.IsDeleted);
-    }
-
-    public async Task<int> GetApplicationCountForJobAsync(Guid jobId)
-    {
-        return await _context.Applications
-            .CountAsync(x => x.JobId == jobId && !x.IsDeleted);
+        _context.JobApplications.Remove(jobApplication);
     }
 
     public async Task<int> SaveChangesAsync()
