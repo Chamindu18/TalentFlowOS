@@ -36,6 +36,9 @@ import InterviewSchedulingPage from "@/pages/hiring/InterviewScheduling";
 import CandidateEvaluationsPage from "@/pages/hiring/CandidateEvaluations";
 import InterviewFeedbackPage from "@/pages/hiring/InterviewFeedback";
 import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
+// 🎯 Added specialized profile and settings imports here
+import HiringProfilePage from "@/pages/hiring/HiringProfilePage";
+import HiringSettingsPage from "@/pages/hiring/HiringSettingsPage";
 
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
@@ -151,6 +154,15 @@ export default function AppRoutes() {
           <Route
             path="/hiring/decisions"
             element={<HiringDecisionsPage />}
+          />
+          {/* 🎯 Added unique hiring manager specific workspaces down below */}
+          <Route
+            path="/hiring/profile"
+            element={<HiringProfilePage />}
+          />
+          <Route
+            path="/hiring/settings"
+            element={<HiringSettingsPage />}
           />
         </Route>
       </Route>
