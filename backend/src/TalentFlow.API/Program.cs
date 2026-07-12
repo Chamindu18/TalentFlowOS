@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using TalentFlow.API.Middleware;
 
 using TalentFlow.Application.Common.Settings;
 using TalentFlow.Application.Interfaces.Repositories;
@@ -17,6 +18,7 @@ using TalentFlow.Infrastructure.Repositories;
 using TalentFlow.Infrastructure.Repositories.Identity;
 using TalentFlow.Infrastructure.Security;
 using TalentFlow.Infrastructure.Services;
+using TalentFlow.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,6 +129,16 @@ builder.Services.Configure<EmailSettings>(
 );
 
 // =====================================
+// Frontend Settings
+// =====================================
+
+builder.Services.Configure<FrontendSettings>(
+    builder.Configuration.GetSection(
+        FrontendSettings.SectionName
+    )
+);
+
+// =====================================
 // Database
 // =====================================
 
@@ -195,7 +207,7 @@ builder.Services.AddScoped<
 
 builder.Services.AddScoped<
     IApplicationRepository,
-    JobApplicationRepository
+    ApplicationRepository
 >();
 
 builder.Services.AddScoped<
@@ -224,6 +236,13 @@ builder.Services.AddScoped<
 
 var app = builder.Build();
 
+// Seed default data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await SeedData.SeedAsync(dbContext);
+}
+
 // =====================================
 // Development
 // =====================================
@@ -236,9 +255,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 // =====================================
 // Middleware
 // =====================================
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("Frontend");
 

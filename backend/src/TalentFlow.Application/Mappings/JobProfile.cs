@@ -21,7 +21,19 @@ public class JobProfile : Profile
             .ForMember(dest => dest.ApplicationCount, opt => opt.MapFrom(src => src.JobApplications != null ? src.JobApplications.Count : 0));
 
         // DTO to Entity
-        CreateMap<CreateJobRequestDTO, Job>();
-        CreateMap<UpdateJobRequestDTO, Job>();
+        CreateMap<CreateJobRequestDTO, Job>()
+
+            .ForMember(dest => dest.CompanyId, opt => opt.Ignore())
+            .ForMember(dest => dest.DepartmentId, opt => opt.Ignore())
+            .ForMember(dest => dest.Company, opt => opt.Ignore())
+            .ForMember(dest => dest.Department, opt => opt.Ignore());
+
+
+
+        // Update DTO to Entity
+        CreateMap<UpdateJobRequestDTO, Job>()
+
+            .ForMember(dest => dest.CompanyId, opt => opt.Ignore())
+            .ForMember(dest => dest.DepartmentId, opt => opt.Ignore());
     }
 }

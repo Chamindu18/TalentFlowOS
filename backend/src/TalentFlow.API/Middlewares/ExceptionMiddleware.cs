@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+
 using TalentFlow.Application.Exceptions.Auth;
 
 namespace TalentFlow.API.Middleware;
@@ -8,12 +9,14 @@ public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public ExceptionMiddleware(RequestDelegate next)
+    public ExceptionMiddleware(
+        RequestDelegate next)
     {
         _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(
+        HttpContext context)
     {
         try
         {
@@ -21,7 +24,10 @@ public class ExceptionMiddleware
         }
         catch (Exception exception)
         {
-            await HandleExceptionAsync(context, exception);
+            await HandleExceptionAsync(
+                context,
+                exception
+            );
         }
     }
 
@@ -29,26 +35,50 @@ public class ExceptionMiddleware
         HttpContext context,
         Exception exception)
     {
-        context.Response.ContentType = "application/json";
+        context.Response.ContentType =
+            "application/json";
+
+        context.Response.StatusCode =
+            exception switch
+            {
+                UserAlreadyExistsException =>
+                    (int)HttpStatusCode.Conflict,
+
+                InvalidCredentialsException =>
+                    (int)HttpStatusCode.Unauthorized,
+
+                EmailNotVerifiedException =>
+                    (int)HttpStatusCode.Forbidden,
+
+                UserNotFoundException =>
+                    (int)HttpStatusCode.NotFound,
+
+                InvalidVerificationTokenException =>
+                    (int)HttpStatusCode.BadRequest,
+
+                ExpiredVerificationTokenException =>
+                    (int)HttpStatusCode.BadRequest,
+
+                InvalidResetPasswordTokenException =>
+                    (int)HttpStatusCode.BadRequest,
+
+                ExpiredResetPasswordTokenException =>
+                    (int)HttpStatusCode.BadRequest,
+
+                _ =>
+                    (int)HttpStatusCode.InternalServerError
+            };
 
         var response = new
         {
-            Message = exception.Message
+            message = exception.Message
         };
 
-        context.Response.StatusCode = exception switch
-        {
-            UserAlreadyExistsException => (int)HttpStatusCode.Conflict,
+        var json =
+            JsonSerializer.Serialize(response);
 
-            InvalidCredentialsException => (int)HttpStatusCode.Unauthorized,
-
-            UserNotFoundException => (int)HttpStatusCode.NotFound,
-
-            _ => (int)HttpStatusCode.InternalServerError
-        };
-
-        var json = JsonSerializer.Serialize(response);
-
-        await context.Response.WriteAsync(json);
+        await context.Response.WriteAsync(
+            json
+        );
     }
 }

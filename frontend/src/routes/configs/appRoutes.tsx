@@ -15,6 +15,7 @@ import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+import EmailVerificationPage from "@/pages/auth/EmailVerificationPage";
 
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
@@ -22,7 +23,7 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 
-import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
+import {RecruiterDashboardPage } from "@/pages/recruiter/RecruiterDashboardPage";
 import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
@@ -36,6 +37,9 @@ import InterviewSchedulingPage from "@/pages/hiring/InterviewScheduling";
 import CandidateEvaluationsPage from "@/pages/hiring/CandidateEvaluations";
 import InterviewFeedbackPage from "@/pages/hiring/InterviewFeedback";
 import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
+// 🎯 Added specialized profile and settings imports here
+import HiringProfilePage from "@/pages/hiring/HiringProfilePage";
+import HiringSettingsPage from "@/pages/hiring/HiringSettingsPage";
 
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
@@ -152,6 +156,15 @@ export default function AppRoutes() {
             path="/hiring/decisions"
             element={<HiringDecisionsPage />}
           />
+          {/* 🎯 Added unique hiring manager specific workspaces down below */}
+          <Route
+            path="/hiring/profile"
+            element={<HiringProfilePage />}
+          />
+          <Route
+            path="/hiring/settings"
+            element={<HiringSettingsPage />}
+          />
         </Route>
       </Route>
 
@@ -197,6 +210,11 @@ export default function AppRoutes() {
           <Route
             path="/reset-password"
             element={<ResetPasswordPage />}
+          />
+          
+          <Route
+            path="/email-verification"
+            element={<EmailVerificationPage />}
           />
         </Route>
       </Route>

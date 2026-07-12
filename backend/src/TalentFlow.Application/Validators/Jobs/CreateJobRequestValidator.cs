@@ -13,12 +13,6 @@ public class CreateJobRequestValidator : AbstractValidator<CreateJobRequestDTO>
 {
     public CreateJobRequestValidator()
     {
-        RuleFor(x => x.CompanyId)
-            .NotEmpty().WithMessage("Company ID is required");
-
-        RuleFor(x => x.DepartmentId)
-            .NotEmpty().WithMessage("Department ID is required");
-
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Job title is required")
             .MaximumLength(255).WithMessage("Job title must not exceed 255 characters");
