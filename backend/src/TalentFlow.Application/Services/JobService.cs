@@ -120,6 +120,9 @@ public class JobService : IJobService
         job.Status = JobStatus.Open.ToString();
         job.IsActive = true;
 
+         job.CreatedAt = DateTime.UtcNow;
+         job.UpdatedAt = DateTime.UtcNow;
+
         await _jobRepository.AddAsync(job);
         await _jobRepository.SaveChangesAsync();
 
