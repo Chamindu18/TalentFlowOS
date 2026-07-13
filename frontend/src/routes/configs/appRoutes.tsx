@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes , Navigate  } from "react-router-dom";
 
 import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
 
@@ -39,6 +39,8 @@ import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
 import HiringProfilePage from "@/pages/hiring/HiringProfilePage";
 import HiringSettingsPage from "@/pages/hiring/HiringSettingsPage";
 
+
+
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
 
@@ -66,12 +68,34 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+
+
+      {/* Redirects */}
+      <Route
+       path="/"
+       element={<Navigate to="/recruiter/dashboard" replace />}
+       />
+      <Route
+       path="/dashboard"
+      element={<Navigate to="/recruiter/dashboard" replace />}
+      />  
+
+
+
+
+
+
       {/* Recruiter Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Recruiter"]} />}>
         <Route element={<DashboardLayout />}>
           <Route
             path="/recruiter/dashboard"
             element={<RecruiterDashboardPage />}
+          />
+
+          <Route
+          path="/recruiter/profile"
+          element={<RecruiterProfilePage />}
           />
 
           <Route
@@ -159,6 +183,9 @@ export default function AppRoutes() {
 
       {/* Unauthorized Page */}
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+
+
 
       {/* 404 Page */}
       <Route path="*" element={<NotFoundPage />} />
