@@ -1,12 +1,14 @@
 using FluentAssertions;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Options;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services; 
 using TalentFlow.Application.DTOs.Auth;
 using TalentFlow.Application.Exceptions.Auth;
 using TalentFlow.Application.Services;
+using TalentFlow.Application.Common.Settings;
 using TalentFlow.Domain.Entities;
 using TalentFlow.Domain.Enums;
 
@@ -18,6 +20,7 @@ namespace UnitTests.Services
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<IJwtTokenGenerator> _jwtTokenGeneratorMock;
         private readonly Mock<IEmailService> _emailServiceMock; 
+        private readonly Mock<IOptions<FrontendSettings>> _frontendSettingsMock;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
@@ -26,12 +29,19 @@ namespace UnitTests.Services
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _jwtTokenGeneratorMock = new Mock<IJwtTokenGenerator>();
             _emailServiceMock = new Mock<IEmailService>(); 
+            _frontendSettingsMock = new Mock<IOptions<FrontendSettings>>(); 
+
+           
+            
+            
+_frontendSettingsMock.Setup(x => x.Value).Returns(new FrontendSettings());
 
             _authService = new AuthService(
                 _userRepositoryMock.Object,
                 _passwordHasherMock.Object,
                 _jwtTokenGeneratorMock.Object,
-                _emailServiceMock.Object); 
+                _emailServiceMock.Object,
+                _frontendSettingsMock.Object); 
         }
 
         [Fact]

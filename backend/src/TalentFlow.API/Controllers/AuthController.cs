@@ -106,23 +106,17 @@ public class AuthController : ControllerBase
         });
     }
 
-    [Authorize]
-    [HttpGet("me")]
-    public IActionResult Me()
-    {
-        return Ok(new
-        {
-            UserId =
-                User.FindFirst("sub")?.Value,
-
-            Email =
-                User.FindFirst("email")?.Value,
-
-            Role =
-                User.FindFirst(
-                    System.Security.Claims
-                        .ClaimTypes.Role
-                )?.Value
-        });
-    }
+[Authorize]
+[HttpGet("me")]
+public IActionResult Me()
+{
+    var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+    
+ 
+    return Ok(new {
+        Claims = allClaims,
+       
+        UserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+    });
+}
 }
