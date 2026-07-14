@@ -23,13 +23,11 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 
-import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
+import { RecruiterDashboardPage } from "@/pages/recruiter/RecruiterDashboardPage";
 import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
-
-import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
 // Hiring Manager Page Imports
 import HiringDashboardPage from "@/pages/hiring/HiringDashboard";
@@ -37,49 +35,39 @@ import InterviewSchedulingPage from "@/pages/hiring/InterviewScheduling";
 import CandidateEvaluationsPage from "@/pages/hiring/CandidateEvaluations";
 import InterviewFeedbackPage from "@/pages/hiring/InterviewFeedback";
 import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
+// 🎯 Added specialized profile and settings imports here
+import HiringProfilePage from "@/pages/hiring/HiringProfilePage";
+import HiringSettingsPage from "@/pages/hiring/HiringSettingsPage";
 
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
+
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+import AIResumeMatchingPage from "@/pages/admin/AIResumeMatchingPage";
+import AIJobRecommendationPage from "@/pages/admin/AIJobRecommendationPage";
+import UserManagementPage from "@/pages/admin/UserManagementPage";
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public Pages */}
       <Route element={<PublicLayout />}>
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
+        <Route path="/" element={<HomePage />} />
       </Route>
 
       {/* Candidate Routes */}
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["Candidate"]}
-          />
-        }
-      >
+      <Route element={<ProtectedRoute allowedRoles={["Candidate"]} />}>
         <Route element={<DashboardLayout />}>
           <Route
             path="/candidate/dashboard"
             element={<CandidateDashboardPage />}
           />
-           <Route
-            path="/candidate/profile"
-            element={<CandidateProfilePage />}
-          />
+          <Route path="/candidate/profile" element={<CandidateProfilePage />} />
         </Route>
       </Route>
 
       {/* Recruiter Routes */}
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["Recruiter"]}
-          />
-        }
-      >
+      <Route element={<ProtectedRoute allowedRoles={["Recruiter"]} />}>
         <Route element={<DashboardLayout />}>
           <Route
             path="/recruiter/dashboard"
@@ -91,15 +79,9 @@ export default function AppRoutes() {
             element={<CompanySetupPage />}
           />
 
-          <Route
-            path="/recruiter/jobs"
-            element={<JobsPage />}
-          />
+          <Route path="/recruiter/jobs" element={<JobsPage />} />
 
-          <Route
-            path="/recruiter/jobs/create"
-            element={<CreateJobPage />}
-          />
+          <Route path="/recruiter/jobs/create" element={<CreateJobPage />} />
 
           <Route
             path="/recruiter/applications"
@@ -109,34 +91,26 @@ export default function AppRoutes() {
       </Route>
 
       {/* Admin Routes */}
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["Admin"]}
-          />
-        }
-      >
+      <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/users" element={<UserManagementPage />} />
           <Route
-            path="/admin/dashboard"
-            element={<AdminDashboardPage />}
+            path="/admin/ai/resume-matching"
+            element={<AIResumeMatchingPage />}
+          />
+
+          <Route
+            path="/admin/ai/job-recommendations"
+            element={<AIJobRecommendationPage />}
           />
         </Route>
       </Route>
 
       {/* Hiring Manager Routes */}
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["HiringManager"]}
-          />
-        }
-      >
+      <Route element={<ProtectedRoute allowedRoles={["HiringManager"]} />}>
         <Route element={<DashboardLayout />}>
-          <Route
-            path="/hiring/dashboard"
-            element={<HiringDashboardPage />}
-          />
+          <Route path="/hiring/dashboard" element={<HiringDashboardPage />} />
           <Route
             path="/hiring/interviews"
             element={<InterviewSchedulingPage />}
@@ -145,61 +119,37 @@ export default function AppRoutes() {
             path="/hiring/evaluations"
             element={<CandidateEvaluationsPage />}
           />
-          <Route
-            path="/hiring/feedback"
-            element={<InterviewFeedbackPage />}
-          />
-          <Route
-            path="/hiring/decisions"
-            element={<HiringDecisionsPage />}
-          />
+          <Route path="/hiring/feedback" element={<InterviewFeedbackPage />} />
+          <Route path="/hiring/decisions" element={<HiringDecisionsPage />} />
+          {/* 🎯 Added unique hiring manager specific workspaces down below */}
+          <Route path="/hiring/profile" element={<HiringProfilePage />} />
+          <Route path="/hiring/settings" element={<HiringSettingsPage />} />
         </Route>
       </Route>
 
       {/* Shared Authenticated Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
-          <Route
-            path="/profile"
-            element={<ProfilePage />}
-          />
+          <Route path="/profile" element={<ProfilePage />} />
 
-          <Route
-            path="/settings"
-            element={<SettingsPage />}
-          />
+          <Route path="/settings" element={<SettingsPage />} />
 
           {/* Temporary Legacy Dashboard */}
-          <Route
-            path="/dashboard"
-            element={<DashboardPage />}
-          />
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
       </Route>
 
       {/* Authentication Routes */}
       <Route element={<PublicRoute />}>
         <Route element={<AuthLayout />}>
-          <Route
-            path="/login"
-            element={<LoginPage />}
-          />
+          <Route path="/login" element={<LoginPage />} />
 
-          <Route
-            path="/register"
-            element={<RegisterPage />}
-          />
+          <Route path="/register" element={<RegisterPage />} />
 
-          <Route
-            path="/forgot-password"
-            element={<ForgotPasswordPage />}
-          />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-          <Route
-            path="/reset-password"
-            element={<ResetPasswordPage />}
-          />
-          
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+
           <Route
             path="/email-verification"
             element={<EmailVerificationPage />}
@@ -208,16 +158,10 @@ export default function AppRoutes() {
       </Route>
 
       {/* Unauthorized Page */}
-      <Route
-        path="/unauthorized"
-        element={<UnauthorizedPage />}
-      />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       {/* 404 Page */}
-      <Route
-        path="*"
-        element={<NotFoundPage />}
-      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

@@ -115,10 +115,34 @@ public class JobService : IJobService
 
         // Map DTO to Entity
         var job = _mapper.Map<Job>(request);
+
         job.CompanyId = company.Id;
         job.DepartmentId = department.Id;
         job.Status = JobStatus.Open.ToString();
         job.IsActive = true;
+
+        // Convert ApplicationDeadline to UTC before saving
+        if (job.ApplicationDeadline.HasValue)
+        {
+            job.ApplicationDeadline = DateTime.SpecifyKind(
+                job.ApplicationDeadline.Value,
+                DateTimeKind.Utc
+            );
+        }
+
+        job.CreatedAt = DateTime.UtcNow;
+        job.UpdatedAt = DateTime.UtcNow;
+
+        Console.WriteLine("========== DATE DEBUG ==========");
+        Console.WriteLine($"Request Deadline: {request.ApplicationDeadline}");
+        Console.WriteLine($"Request Kind: {request.ApplicationDeadline?.Kind}");
+
+        Console.WriteLine($"Job Deadline: {job.ApplicationDeadline}");
+        Console.WriteLine($"Job Kind: {job.ApplicationDeadline?.Kind}");
+
+        Console.WriteLine($"CreatedAt: {job.CreatedAt} ({job.CreatedAt.Kind})");
+        Console.WriteLine($"UpdatedAt: {job.UpdatedAt} ({job.UpdatedAt.Kind})");
+        Console.WriteLine("================================");
 
         await _jobRepository.AddAsync(job);
         await _jobRepository.SaveChangesAsync();
