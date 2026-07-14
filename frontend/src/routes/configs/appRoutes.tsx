@@ -80,11 +80,6 @@ export default function AppRoutes() {
       element={<Navigate to="/recruiter/dashboard" replace />}
       />  
 
-
-
-
-
-
       {/* Recruiter Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Recruiter"]} />}>
         <Route element={<DashboardLayout />}>
