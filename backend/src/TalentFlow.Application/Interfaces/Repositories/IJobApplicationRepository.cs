@@ -8,6 +8,7 @@ namespace TalentFlow.Application.Interfaces.Repositories;
 public interface IJobApplicationRepository
 {
     Task<JobApplication?> GetByIdAsync(Guid id);
+    Task<IEnumerable<JobApplication>> GetApplicationsByCandidateIdAsync(Guid candidateId); 
     Task AddAsync(JobApplication jobApplication);
     void Update(JobApplication jobApplication);
     void Delete(JobApplication jobApplication);
