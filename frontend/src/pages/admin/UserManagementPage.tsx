@@ -22,46 +22,57 @@ export default function UserManagementPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold">
+      <h1 className="text-4xl font-bold">
         User Management
       </h1>
 
-      <div className="mt-6 overflow-x-auto">
-        <table className="w-full border rounded-xl">
+      <div className="flex gap-4 my-6">
+        <input
+          type="text"
+          placeholder="Search users..."
+          className="border rounded-lg px-4 py-2"
+        />
+
+        <select className="border rounded-lg px-4 py-2">
+          <option>All Roles</option>
+          <option>Admin</option>
+          <option>Recruiter</option>
+          <option>Candidate</option>
+          <option>Hiring Manager</option>
+        </select>
+
+        <button className="bg-orange-500 text-white px-4 py-2 rounded-lg">
+          Add User
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl border overflow-hidden">
+        <table className="w-full">
           <thead className="bg-slate-100">
             <tr>
-              <th className="p-3 text-left">
-                Name
-              </th>
-              <th className="p-3 text-left">
-                Email
-              </th>
-              <th className="p-3 text-left">
-                Role
-              </th>
-              <th className="p-3 text-left">
-                Status
-              </th>
+              <th className="text-left p-4">Name</th>
+              <th className="text-left p-4">Email</th>
+              <th className="text-left p-4">Role</th>
+              <th className="text-left p-4">Status</th>
+              <th className="text-left p-4">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             {users.map((user, index) => (
-              <tr
-                key={index}
-                className="border-t"
-              >
-                <td className="p-3">
-                  {user.name}
-                </td>
-                <td className="p-3">
-                  {user.email}
-                </td>
-                <td className="p-3">
-                  {user.role}
-                </td>
-                <td className="p-3">
-                  {user.status}
+              <tr key={index} className="border-t">
+                <td className="p-4">{user.name}</td>
+                <td className="p-4">{user.email}</td>
+                <td className="p-4">{user.role}</td>
+                <td className="p-4">{user.status}</td>
+                <td className="p-4">
+                  <button className="text-blue-600 mr-4">
+                    Edit
+                  </button>
+
+                  <button className="text-red-600">
+                    Disable
+                  </button>
                 </td>
               </tr>
             ))}
