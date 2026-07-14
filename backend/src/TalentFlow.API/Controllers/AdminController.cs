@@ -30,15 +30,4 @@ public class AdminController : ControllerBase
             }
         );
     }
-    [HttpGet("users")]
-    public async Task<IActionResult> GetUsers()
-    {
-        var users = await _adminService.GetAllUsersAsync();
-
-        return Ok(new
-        {
-            success = true,
-            data = users
-        });
-    }
 }

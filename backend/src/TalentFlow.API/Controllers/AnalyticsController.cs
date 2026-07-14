@@ -9,8 +9,8 @@ using TalentFlow.Infrastructure.Persistence.Contexts;
 namespace TalentFlow.API.Controllers
 {
     [ApiController]
-    [Route("api/analytics")] // 🎯 Explicit lowercase routing to prevent case-sensitivity mismatches
-    [Authorize(Roles = "HiringManager")] 
+    [Route("api/[controller]")]
+    [Authorize(Roles = "HiringManager")] // Securely locked down to Member 4's target role
     public class AnalyticsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -20,32 +20,25 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // GET: api/analytics/summary
+        // 1. GET: api/analytics/summary
         [HttpGet("summary")]
         public async Task<IActionResult> GetHiringSummary()
         {
-            // 🚀 Database-level scalar aggregation (Zero row-loading RAM overhead)
             var totalInterviews = await _context.Interviews.CountAsync();
             var totalEvaluations = await _context.Evaluations.CountAsync();
-            var totalDecisions = await _context.HiringDecisions.CountAsync();
             
-            // EF Core translates these directly into targeted SQL COUNT queries
-            var offersAccepted = await _context.HiringDecisions
-                .CountAsync(d => d.Decision == "Accepted");
-                
-            var offersRejected = await _context.HiringDecisions
-                .CountAsync(d => d.Decision == "Rejected");
+            var decisions = await _context.HiringDecisions.ToListAsync();
+            var offersAccepted = decisions.Count(d => d.Decision.Equals("Accepted", StringComparison.OrdinalIgnoreCase));
+            var offersRejected = decisions.Count(d => d.Decision.Equals("Rejected", StringComparison.OrdinalIgnoreCase));
 
             var summary = new
             {
                 TotalInterviewsScheduled = totalInterviews,
                 TotalEvaluationsCompleted = totalEvaluations,
-                TotalDecisionsMade = totalDecisions,
+                TotalDecisionsMade = decisions.Count,
                 AcceptedCount = offersAccepted,
                 RejectedCount = offersRejected,
-                ConversionRate = totalDecisions > 0 
-                    ? Math.Round((double)offersAccepted / totalDecisions * 100, 1) 
-                    : 0.0
+                ConversionRate = decisions.Count > 0 ? (double)offersAccepted / decisions.Count * 100 : 0.0
             };
 
             return Ok(summary);
