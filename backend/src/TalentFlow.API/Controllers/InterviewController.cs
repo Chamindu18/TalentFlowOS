@@ -1,61 +1,56 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TalentFlow.Domain.Entities;
+using TalentFlow.Infrastructure.Persistence.Contexts;
 
 namespace TalentFlow.API.Controllers
 {
-    public class ScheduleInterviewDto
-    {
-        [JsonPropertyName("candidateName")] 
-        public string CandidateName { get; set; } = string.Empty;
-
-        [JsonPropertyName("position")]      
-        public string Position { get; set; } = string.Empty;
-
-        [JsonPropertyName("date")]          
-        public string Date { get; set; } = string.Empty;       
-
-        [JsonPropertyName("timeSlot")]      
-        public string TimeSlot { get; set; } = string.Empty;   
-
-        [JsonPropertyName("notes")]         
-        public string Notes { get; set; } = string.Empty;      
-    }
-
     [ApiController]
-    [Route("api")] 
-    [Authorize(Roles = "HiringManager")] 
+    [Route("api/[controller]")]
+    [Authorize(Roles = "HiringManager")] // Consuming the team authentication structure
     public class InterviewController : ControllerBase
     {
-        // 1. POST: api/interviews (Completely fake it for now to avoid DB headaches!)
-        [HttpPost("/api/interviews")]
-        public IActionResult ScheduleInterview([FromBody] ScheduleInterviewDto dto)
+        private readonly ApplicationDbContext _context;
+
+        public InterviewController(ApplicationDbContext context)
         {
-            // 🚀 Pure fake success response. No database saving = no 500 errors!
-            return Ok(new { message = "Interview scheduled successfully", interviewId = Guid.NewGuid() });
+            _context = context;
         }
 
-        // 2. GET: api/interviews (Feeds your sidebar tracking loop)
-        [HttpGet("/api/interviews")]
-        public IActionResult GetAllInterviews()
+        // 1. POST: api/interview/schedule
+        [HttpPost("schedule")]
+        public async Task<IActionResult> ScheduleInterview([FromBody] Interview interview)
         {
-            // Just returns a static list so your UI looks beautiful and ready
-            var mockList = new List<object>
+            if (interview == null)
             {
-                new { Id = Guid.NewGuid().ToString(), CandidateName = "chamindu hansana", Position = "Fullstack Developer", InterviewDate = "2026-07-11", InterviewTime = "11:01 AM" },
-                new { Id = Guid.NewGuid().ToString(), CandidateName = "Kavindu Wickramathilaka", Position = "UI/UX Designer", InterviewDate = "2026-07-15", InterviewTime = "02:30 PM" }
-            };
-            return Ok(mockList);
+                return BadRequest("Interview data is required.");
+            }
+
+            interview.Id = Guid.NewGuid();
+            _context.Interviews.Add(interview);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Interview scheduled successfully", interviewId = interview.Id });
         }
 
-        // 4. GET: api/interview/today
-        [HttpGet("/api/interview/today")]
-        public IActionResult GetTodayInterviews()
+        // 2. GET: api/interview/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetInterviewById(Guid id)
         {
-            return Ok(new List<object>()); 
+            var interview = await _context.Interviews
+                .Include(i => i.Schedules)
+                .Include(i => i.Feedbacks)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (interview == null)
+            {
+                return NotFound($"Interview with ID {id} not found.");
+            }
+
+            return Ok(interview);
         }
     }
 }
