@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 using TalentFlow.Application.DTOs.Companies;
 
+using TalentFlow.Domain.Entities;
+
 namespace TalentFlow.Application.Interfaces.Services;
 
 public interface ICompanyService
 {
+    Task<Company> GetDefaultCompanyAsync();
     Task<CompanyResponseDTO> GetByIdAsync(Guid id);
     Task<IEnumerable<CompanyResponseDTO>> GetAllAsync();
     Task<IEnumerable<CompanyResponseDTO>> SearchAsync(string? searchTerm);
     Task<CompanyResponseDTO> CreateAsync(CreateCompanyRequestDTO request);
     Task<CompanyResponseDTO> UpdateAsync(Guid id, UpdateCompanyRequestDTO request);
     Task DeleteAsync(Guid id);
+    
 }

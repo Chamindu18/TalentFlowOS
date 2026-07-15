@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const api = axios.create({
-
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5007/api',
   headers: {
     "Content-Type": "application/json",
@@ -10,7 +9,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    
     const token = localStorage.getItem("accessToken") || localStorage.getItem("token");
 
     if (token) {
@@ -24,14 +22,11 @@ api.interceptors.request.use(
   }
 );
 
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-     
       console.error("Unauthorized! Token expired or invalid.");
-   
     }
     return Promise.reject(error);
   }
