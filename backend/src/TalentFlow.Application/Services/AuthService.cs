@@ -33,7 +33,6 @@ public class AuthService : IAuthService
         _frontendSettings = frontendSettings.Value;
     }
 
-    public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
     public async Task<CurrentUserDto> GetCurrentUserAsync(Guid userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
