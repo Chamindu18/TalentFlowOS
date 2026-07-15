@@ -8,7 +8,7 @@ using TalentFlow.Application.Common.Settings;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
-using TalentFlow.Application.Mappings;
+using TalentFlow.Application.Mappings; 
 using TalentFlow.Application.Services;
 using TalentFlow.Infrastructure.Persistence.Contexts;
 using TalentFlow.Infrastructure.Repositories;
