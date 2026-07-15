@@ -93,6 +93,44 @@ export const useAuthStore = create<AuthState>((set) => ({
         token: null,
         isAuthenticated: false,
       });
-    }
-  },
-}));
+    },
+
+    initializeAuth: async () => {
+      const token =
+        localStorage.getItem(
+          "accessToken",
+        );
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        const currentUser =
+          await authService.getCurrentUser();
+
+        set({
+          token,
+          user: {
+            token,
+            userId: currentUser.userId,
+            email: currentUser.email,
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            role: currentUser.role,
+        },
+          isAuthenticated: true,
+        });
+      } catch {
+        localStorage.removeItem(
+          "accessToken",
+        );
+
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        });
+      }
+    },
+  }));
