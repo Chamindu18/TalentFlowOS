@@ -115,10 +115,10 @@ export const useAuthStore =
             token,
             userId: currentUser.userId,
             email: currentUser.email,
-            firstName: "",
-            lastName: "",
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
             role: currentUser.role,
-          },
+        },
           isAuthenticated: true,
         });
       } catch {
