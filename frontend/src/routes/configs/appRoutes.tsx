@@ -1,4 +1,4 @@
-import { Route, Routes , Navigate  } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
 
@@ -28,6 +28,7 @@ import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
+import { RecruiterProfilePage } from "@/pages/recruiter/RecruiterProfilePage";
 
 // Hiring Manager Page Imports
 import HiringDashboardPage from "@/pages/hiring/HiringDashboard";
@@ -70,15 +71,7 @@ export default function AppRoutes() {
 
 
 
-      {/* Redirects */}
-      <Route
-       path="/"
-       element={<Navigate to="/recruiter/dashboard" replace />}
-       />
-      <Route
-       path="/dashboard"
-      element={<Navigate to="/recruiter/dashboard" replace />}
-      />  
+      
 
       {/* Recruiter Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Recruiter"]} />}>
