@@ -6,6 +6,7 @@ import {
     Users,
     User,
     Settings,
+    BarChart3,
     LogOut,
     X
 } from "lucide-react";
@@ -37,6 +38,11 @@ const navItems = [
         label: "Candidates",
     },
     {
+        path: "/recruiter/analytics",
+        icon: BarChart3,
+        label: "Analytics",
+    },
+    {
         path: "/recruiter/profile",
         icon: User,
         label: "Profile",
@@ -48,7 +54,7 @@ const navItems = [
     },
 ];
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function RecruiterSidebar({ isOpen, onClose }: SidebarProps) {
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         window.location.href = "/login";
@@ -64,11 +70,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 />
             )}
 
-            {/* Sidebar */}
+            {/* Sidebar - Fixed top to bottom */}
             <aside
-                className={`fixed left-0 top-0 z-50 h-full w-72 bg-white shadow-xl transition-transform duration-300 lg:sticky lg:translate-x-0 ${
+                className={`fixed left-0 top-0 z-50 h-screen w-72 bg-white shadow-xl transition-transform duration-300 ${
                     isOpen ? "translate-x-0" : "-translate-x-full"
-                }`}
+                } lg:sticky lg:top-0 lg:translate-x-0`}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
@@ -81,7 +87,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </button>
                 </div>
 
-                {/* Navigation */}
+                {/* Navigation - Takes remaining space */}
                 <nav className="flex-1 overflow-y-auto py-4 px-3">
                     <ul className="space-y-1">
                         {navItems.map((item) => {
@@ -109,7 +115,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </ul>
                 </nav>
 
-                {/* Logout */}
+                {/* Logout - Stays at bottom */}
                 <div className="border-t border-gray-200 p-3">
                     <button
                         onClick={handleLogout}
