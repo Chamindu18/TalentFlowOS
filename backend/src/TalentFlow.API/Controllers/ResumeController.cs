@@ -1,55 +1,48 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using TalentFlow.Application.Interfaces.Services;
 
 namespace TalentFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Candidate")]
     public class ResumeController : ControllerBase
     {
-        private readonly IResumeService _resumeService;
+        private readonly ICandidateService _candidateService;
 
-        public ResumeController(IResumeService resumeService)
+        public ResumeController(ICandidateService candidateService)
         {
-            _resumeService = resumeService;
+            _candidateService = candidateService;
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload(Guid candidateId, IFormFile file)
+        public async Task<IActionResult> UploadResume(IFormFile file)
         {
-            try
-            {
-                if (file == null || file.Length == 0) 
-                    return BadRequest("File is empty or null.");
+            if (file == null || file.Length == 0)
+                return BadRequest("Please upload a valid PDF or Word document.");
 
-                // IFormFile එකෙන් Stream එක අරන් Service එකට pass කරනවා
-                using (var stream = file.OpenReadStream())
-                {
-                    var filePath = await _resumeService.UploadResumeAsync(candidateId, stream, file.FileName);
-                    return Ok(new { message = "Resume uploaded successfully!", path = filePath });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
+            var extension = Path.GetExtension(file.FileName).ToLower();
+            if (extension != ".pdf" && extension != ".docx" && extension != ".doc")
+                return BadRequest("Only .pdf, .doc, and .docx files are allowed.");
 
-        [HttpGet("download/{candidateId}")]
-        public async Task<IActionResult> Download(Guid candidateId)
-        {
-            try
+            var candidateId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+           
+            using (var memoryStream = new MemoryStream())
             {
-                var (fileStream, contentType, fileName) = await _resumeService.DownloadResumeAsync(candidateId);
-                return File(fileStream, contentType, fileName);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { message = ex.Message });
+                await file.CopyToAsync(memoryStream);
+                var fileBytes = memoryStream.ToArray();
+
+                
+                var fileUrl = await _candidateService.UploadResumeAsync(candidateId, file.FileName, fileBytes);
+                
+                return Ok(new { message = "Resume uploaded successfully!", resumeUrl = fileUrl });
             }
         }
     }

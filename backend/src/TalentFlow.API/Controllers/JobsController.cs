@@ -7,7 +7,6 @@ namespace TalentFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class JobsController : ControllerBase
 {
     private readonly IJobService _jobService;
@@ -17,9 +16,7 @@ public class JobsController : ControllerBase
         _jobService = jobService;
     }
 
-    /// <summary>
-    /// Get all jobs
-    /// </summary>
+    // Get all jobs (Public access)
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -27,9 +24,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, data = jobs });
     }
 
-    /// <summary>
-    /// Get active jobs
-    /// </summary>
+    // Get active jobs (Public access)
     [HttpGet("active")]
     public async Task<IActionResult> GetActive()
     {
@@ -37,19 +32,16 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, data = jobs });
     }
 
-    /// <summary>
-    /// Get job by ID
-    /// </summary>
+    // Get job by ID (Public access)
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var job = await _jobService.GetByIdAsync(id);
+        if (job == null) return NotFound(new { success = false, message = "Job not found" });
         return Ok(new { success = true, data = job });
     }
 
-    /// <summary>
-    /// Get jobs by company
-    /// </summary>
+    // Get jobs by company (Public access)
     [HttpGet("company/{companyId}")]
     public async Task<IActionResult> GetByCompany(Guid companyId)
     {
@@ -57,9 +49,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, data = jobs });
     }
 
-    /// <summary>
-    /// Get jobs by department
-    /// </summary>
+    // Get jobs by department (Public access)
     [HttpGet("department/{departmentId}")]
     public async Task<IActionResult> GetByDepartment(Guid departmentId)
     {
@@ -67,9 +57,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, data = jobs });
     }
 
-    /// <summary>
-    /// Search jobs
-    /// </summary>
+    // Search jobs (Public access)
     [HttpGet("search")]
     public async Task<IActionResult> Search(
         [FromQuery] string? searchTerm,
@@ -80,9 +68,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, data = jobs });
     }
 
-    /// <summary>
-    /// Create a new job
-    /// </summary>
+    // Create a new job (Admin/Recruiter only)
     [HttpPost]
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Create([FromBody] CreateJobRequestDTO request)
@@ -92,9 +78,7 @@ public class JobsController : ControllerBase
             new { success = true, message = "Job created successfully", data = job });
     }
 
-    /// <summary>
-    /// Update an existing job
-    /// </summary>
+    // Update an existing job (Admin/Recruiter only)
     [HttpPut("{id}")]
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateJobRequestDTO request)
@@ -103,9 +87,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, message = "Job updated successfully", data = job });
     }
 
-    /// <summary>
-    /// Delete a job (soft delete)
-    /// </summary>
+    // Delete a job (Admin/Recruiter only)
     [HttpDelete("{id}")]
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Delete(Guid id)
@@ -114,9 +96,7 @@ public class JobsController : ControllerBase
         return Ok(new { success = true, message = "Job deleted successfully" });
     }
 
-    /// <summary>
-    /// Close a job
-    /// </summary>
+    // Close a job (Admin/Recruiter only)
     [HttpPatch("{id}/close")]
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Close(Guid id)
