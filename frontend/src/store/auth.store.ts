@@ -8,7 +8,7 @@ import type {
 
 interface AuthState {
   user: AuthResponse | null;
-  token: string | null;
+  token: string |null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (data: LoginRequest) => Promise<void>;
@@ -25,8 +25,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (data) => {
     set({ isLoading: true });
+
     try {
       const response = await authService.login(data);
+
       localStorage.setItem("accessToken", response.token);
 
       set({
@@ -43,9 +45,13 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   register: async (data) => {
     set({ isLoading: true });
+
     try {
       await authService.register(data);
-      set({ isLoading: false });
+
+      set({
+        isLoading: false,
+      });
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -54,6 +60,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     localStorage.removeItem("accessToken");
+
     set({
       user: null,
       token: null,
@@ -65,13 +72,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      set({ isAuthenticated: false, isLoading: false });
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
       return;
     }
 
     try {
-      // Cast the response to any to bypass the missing property restrictions on CurrentUser
-      const currentUser = await authService.getCurrentUser() as any;
+      const currentUser = await authService.getCurrentUser();
 
       set({
         token,
@@ -79,58 +90,24 @@ export const useAuthStore = create<AuthState>((set) => ({
           token,
           userId: currentUser.userId,
           email: currentUser.email,
-          firstName: currentUser.firstName || "", 
-          lastName: currentUser.lastName || "",
+          firstName: currentUser.firstName ?? "",
+          lastName: currentUser.lastName ?? "",
           role: currentUser.role,
-        } as unknown as AuthResponse,
+        } as AuthResponse,
         isAuthenticated: true,
+        isLoading: false,
       });
     } catch (error) {
-      console.error("Auth initialization failed, clearing token...", error);
+      console.error("Auth initialization failed:", error);
+
       localStorage.removeItem("accessToken");
+
       set({
         user: null,
         token: null,
         isAuthenticated: false,
+        isLoading: false,
       });
-    },
-
-    initializeAuth: async () => {
-      const token =
-        localStorage.getItem(
-          "accessToken",
-        );
-
-      if (!token) {
-        return;
-      }
-
-      try {
-        const currentUser =
-          await authService.getCurrentUser();
-
-        set({
-          token,
-          user: {
-            token,
-            userId: currentUser.userId,
-            email: currentUser.email,
-            firstName: currentUser.firstName,
-            lastName: currentUser.lastName,
-            role: currentUser.role,
-        },
-          isAuthenticated: true,
-        });
-      } catch {
-        localStorage.removeItem(
-          "accessToken",
-        );
-
-        set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-        });
-      }
-    },
-  }));
+    }
+  },
+}));
