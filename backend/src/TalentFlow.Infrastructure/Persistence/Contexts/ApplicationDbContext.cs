@@ -34,5 +34,16 @@ public DbSet<Interview> Interviews => Set<Interview>();
             entity.HasMany(c => c.Skills).WithOne(s => s.Candidate).HasForeignKey(s => s.CandidateId);
             entity.HasMany(c => c.Certificates).WithOne(c => c.Candidate).HasForeignKey(c => c.CandidateId);
         });
+
+        modelBuilder.Entity<JobApplication>(entity =>
+{
+            entity.HasOne(ja => ja.Candidate)
+                .WithMany()
+                .HasForeignKey(ja => ja.CandidateId);
+
+            entity.HasOne(ja => ja.Job)
+                .WithMany(j => j.JobApplications)
+                .HasForeignKey(ja => ja.JobId);
+        });
     }
 }

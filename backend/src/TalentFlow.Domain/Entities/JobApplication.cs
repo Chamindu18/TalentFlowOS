@@ -24,4 +24,9 @@ public class JobApplication
     public Candidate Candidate { get; set; } = null!; 
     
     public ICollection<Interview> Interviews { get; set; } = new List<Interview>();
+
+    public Candidate Candidate { get; set; } = null!;
 }
+
+    
+

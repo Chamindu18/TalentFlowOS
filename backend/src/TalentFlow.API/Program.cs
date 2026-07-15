@@ -17,6 +17,7 @@ using TalentFlow.Infrastructure.Security;
 using TalentFlow.Infrastructure.Services;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
+using TalentFlow.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -67,15 +67,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
-
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(JobProfile).Assembly);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -94,7 +91,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// =====================================
 // Application Services
+// =====================================
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IApplicationService, JobApplicationService>();
@@ -104,7 +103,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 
+// =====================================
 // Repositories
+// =====================================
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
@@ -114,12 +115,24 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 
+// =====================================
 // Security
+// =====================================
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 var app = builder.Build();
 
+// Seed default data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await SeedData.SeedAsync(dbContext);
+}
+
+// =====================================
+// Development Middleware
+// =====================================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -131,6 +144,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("Frontend");
 app.UseAuthentication(); 
 app.UseAuthorization();
+    
 app.MapControllers();
 
 app.Run();

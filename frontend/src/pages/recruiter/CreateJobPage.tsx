@@ -16,22 +16,49 @@ interface JobFormData {
     location: string;
     isRemote: boolean;
     applicationDeadline: string;
-    companyId: string;
-    departmentId: string;
 }
 
 export const CreateJobPage: React.FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<JobFormData>();
+
+    const { register, handleSubmit, formState: { errors } } = useForm<JobFormData>();
 
     const onSubmit = async (data: JobFormData) => {
         try {
             setLoading(true);
-            await jobService.create(data);
+
+            // HARDCODE COMPANY AND DEPARTMENT
+            const payload = {
+            companyName: "Tech Corp",
+            departmentName: "Engineering",
+            title: data.title,
+            description: data.description,
+            responsibilities: data.responsibilities,
+            requirements: data.requirements,
+            employmentType: data.employmentType,
+            experienceLevel: data.experienceLevel,
+            salaryMin: data.salaryMin,
+            salaryMax: data.salaryMax,
+            location: data.location,
+            isRemote: data.isRemote,
+
+            applicationDeadline: data.applicationDeadline
+                ? new Date(data.applicationDeadline + "T00:00:00Z").toISOString()
+                : undefined,
+        };
+
+            console.log('PAYLOAD BEING SENT:', JSON.stringify(payload, null, 2));
+
+
+            console.log('Sending payload:', payload);
+
+            await jobService.create(payload);
+            
             toast.success('Job created successfully!');
             navigate('/recruiter/jobs');
         } catch (error: any) {
+            console.error('Error:', error);
             toast.error(error.response?.data?.message || 'Failed to create job');
         } finally {
             setLoading(false);
@@ -46,6 +73,7 @@ export const CreateJobPage: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+
                 {/* Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Job Title *</label>
@@ -173,8 +201,6 @@ export const CreateJobPage: React.FC = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                     />
                 </div>
-
-                {/* Note: Company and Department selection will be added once we have those APIs */}
 
                 {/* Submit Buttons */}
                 <div className="flex gap-4 pt-4 border-t border-gray-200">

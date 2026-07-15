@@ -29,6 +29,14 @@ public class DepartmentService : IDepartmentService
         _mapper = mapper;
     }
 
+
+public async Task<Department> GetDefaultDepartmentAsync(Guid companyId)
+{
+    var departments = await _departmentRepository.GetByCompanyIdAsync(companyId);
+    return departments.FirstOrDefault() ?? throw new NotFoundException("No department found");
+}
+ 
+
     public async Task<DepartmentResponseDTO> GetByIdAsync(Guid id)
     {
         var department = await _departmentRepository.GetByIdAsync(id);
