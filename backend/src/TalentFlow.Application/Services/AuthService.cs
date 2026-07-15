@@ -34,6 +34,25 @@ public class AuthService : IAuthService
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
+    public async Task<CurrentUserDto> GetCurrentUserAsync(Guid userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+            throw new InvalidCredentialsException();
+
+        return new CurrentUserDto
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = user.Role.ToString()
+        };
+    }
+
+    public async Task<AuthResponseDto> RegisterAsync(
+        RegisterRequestDto request)
     {
         var email = request.Email.Trim().ToLower();
         var userExists = await _userRepository.ExistsAsync(email);

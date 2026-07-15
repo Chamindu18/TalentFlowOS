@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using TalentFlow.Application.DTOs.Auth;
 using TalentFlow.Application.Interfaces.Services;
+using System.Security.Claims;
 
 namespace TalentFlow.API.Controllers;
 
@@ -106,17 +107,17 @@ public class AuthController : ControllerBase
         });
     }
 
-[Authorize]
-[HttpGet("me")]
-public IActionResult Me()
-{
-    var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
     
- 
-    return Ok(new {
-        Claims = allClaims,
-       
-        UserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
-    });
-}
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+            Email = User.FindFirst(ClaimTypes.Email)?.Value,
+            Role = User.FindFirst(ClaimTypes.Role)?.Value
+        });
+    }
 }
