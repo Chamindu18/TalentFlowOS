@@ -1,208 +1,125 @@
+import { NavLink } from "react-router-dom";
 import {
-  NavLink,
-  useNavigate,
-} from "react-router-dom";
-
-import {
-  BarChart3,
-  BriefcaseBusiness,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  User,
-  X,
+    LayoutDashboard,
+    Briefcase,
+    FileText,
+    Users,
+    User,
+    Settings,
+    LogOut,
+    X
 } from "lucide-react";
 
-import { useAuthStore } from "@/store/auth.store";
-
 interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-const navigation = [
-  {
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    path: "/dashboard",
-  },
-  {
-    label: "Jobs",
-    icon: BriefcaseBusiness,
-    path: "/jobs",
-  },
-  {
-    label: "Analytics",
-    icon: BarChart3,
-    path: "/analytics",
-  },
-  {
-    label: "Profile",
-    icon: User,
-    path: "/profile",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    path: "/settings",
-  },
+const navItems = [
+    {
+        path: "/recruiter/dashboard",
+        icon: LayoutDashboard,
+        label: "Dashboard",
+    },
+    {
+        path: "/recruiter/jobs",
+        icon: Briefcase,
+        label: "Jobs",
+    },
+    {
+        path: "/recruiter/applications",
+        icon: FileText,
+        label: "Applications",
+    },
+    {
+        path: "/recruiter/candidates",
+        icon: Users,
+        label: "Candidates",
+    },
+    {
+        path: "/recruiter/profile",
+        icon: User,
+        label: "Profile",
+    },
+    {
+        path: "/settings",
+        icon: Settings,
+        label: "Settings",
+    },
 ];
 
-export default function Sidebar({
-  isOpen,
-  onClose,
-}: SidebarProps) {
-  const navigate = useNavigate();
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        window.location.href = "/login";
+    };
 
-  const logout = useAuthStore(
-    (state) => state.logout,
-  );
+    return (
+        <>
+            {/* Mobile Overlay */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
 
-  const handleLogout = () => {
-    logout();
+            {/* Sidebar */}
+            <aside
+                className={`fixed left-0 top-0 z-50 h-full w-72 bg-white shadow-xl transition-transform duration-300 lg:sticky lg:translate-x-0 ${
+                    isOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
+                {/* Header */}
+                <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+                    <span className="text-xl font-bold text-indigo-600">TalentFlow</span>
+                    <button
+                        onClick={onClose}
+                        className="p-1 rounded-lg hover:bg-gray-100 transition lg:hidden"
+                    >
+                        <X className="w-6 h-6 text-gray-600" />
+                    </button>
+                </div>
 
-    navigate("/login");
-  };
+                {/* Navigation */}
+                <nav className="flex-1 overflow-y-auto py-4 px-3">
+                    <ul className="space-y-1">
+                        {navItems.map((item) => {
+                            const Icon = item.icon;
 
-  return (
-    <>
-      {/* Mobile Overlay */}
-      {isOpen && (
-        <div
-          className="
-            fixed
-            inset-0
-            z-40
-            bg-black/40
-            lg:hidden
-          "
-          onClick={onClose}
-        />
-      )}
+                            return (
+                                <li key={item.path}>
+                                    <NavLink
+                                        to={item.path}
+                                        onClick={onClose}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                                                isActive
+                                                    ? "bg-indigo-50 text-indigo-600"
+                                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                            }`
+                                        }
+                                    >
+                                        <Icon className="w-5 h-5" />
+                                        <span className="text-sm font-medium">{item.label}</span>
+                                    </NavLink>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
 
-      <aside
-        className={`
-          fixed
-          left-0
-          top-0
-          z-50
-          flex
-          h-screen
-          w-72
-          flex-col
-          border-r
-          border-slate-200
-          bg-white
-          transition-transform
-          duration-300
-          lg:static
-          lg:translate-x-0
-          ${
-            isOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
-          }
-        `}
-      >
-        {/* Header */}
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            border-b
-            border-slate-100
-            p-6
-          "
-        >
-          <h1
-            className="
-              text-2xl
-              font-bold
-              text-[#FF5B1F]
-            "
-          >
-            TalentFlow
-          </h1>
-
-          <button
-            onClick={onClose}
-            className="lg:hidden"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 space-y-2 p-4">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <NavLink
-                key={item.label}
-                to={item.path}
-                onClick={onClose}
-                className={({ isActive }) =>
-                  `
-                  flex
-                  items-center
-                  gap-3
-                  rounded-2xl
-                  px-4
-                  py-3
-                  text-sm
-                  font-semibold
-                  transition-all
-                  duration-300
-                  ${
-                    isActive
-                      ? "bg-[#FFF3EC] text-[#FF5B1F]"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }
-                `
-                }
-              >
-                <Icon className="h-5 w-5" />
-
-                {item.label}
-              </NavLink>
-            );
-          })}
-        </nav>
-
-        {/* Logout */}
-        <div
-          className="
-            border-t
-            border-slate-100
-            p-4
-          "
-        >
-          <button
-            onClick={handleLogout}
-            className="
-              flex
-              w-full
-              items-center
-              gap-3
-              rounded-2xl
-              px-4
-              py-3
-              text-sm
-              font-semibold
-              text-red-500
-              transition-all
-              duration-300
-              hover:bg-red-50
-            "
-          >
-            <LogOut className="h-5 w-5" />
-
-            Logout
-          </button>
-        </div>
-      </aside>
-    </>
-  );
+                {/* Logout */}
+                <div className="border-t border-gray-200 p-3">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-all duration-200"
+                    >
+                        <LogOut className="w-5 h-5" />
+                        <span className="text-sm font-medium">Logout</span>
+                    </button>
+                </div>
+            </aside>
+        </>
+    );
 }
