@@ -3,9 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
 
 import AppRoutes from "@/routes/configs/appRoutes";
-
 import AppLoader from "@/components/common/AppLoader";
-
 import { useAuthStore } from "@/store/auth.store";
 
 export default function App() {
@@ -13,8 +11,7 @@ export default function App() {
     (state) => state.initializeAuth,
   );
 
-  const [isInitializing, setIsInitializing] =
-    useState(true);
+  const [isInitializing, setIsInitializing] = useState<boolean>(true);
 
   useEffect(() => {
     const init = async () => {
@@ -35,9 +32,8 @@ export default function App() {
 
   return (
     <BrowserRouter>
-       <Toaster position="top-right" richColors closeButton duration={3000} />      <AppRoutes />
+      <Toaster position="top-right" richColors closeButton duration={3000} />
+      <AppRoutes />
     </BrowserRouter>
   );
 }
-
-
