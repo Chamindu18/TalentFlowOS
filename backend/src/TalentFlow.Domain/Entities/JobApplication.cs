@@ -17,16 +17,8 @@ public class JobApplication
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    
+    // Navigation Properties
     public Job Job { get; set; } = null!;
-    
-    
     public Candidate Candidate { get; set; } = null!; 
-    
     public ICollection<Interview> Interviews { get; set; } = new List<Interview>();
-
-    public Candidate Candidate { get; set; } = null!;
 }
-
-    
-
