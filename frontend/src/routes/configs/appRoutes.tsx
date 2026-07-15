@@ -28,6 +28,7 @@ import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
+import { RecruiterProfilePage } from "@/pages/recruiter/RecruiterProfilePage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
@@ -37,6 +38,8 @@ import InterviewSchedulingPage from "@/pages/hiring/InterviewScheduling";
 import CandidateEvaluationsPage from "@/pages/hiring/CandidateEvaluations";
 import InterviewFeedbackPage from "@/pages/hiring/InterviewFeedback";
 import HiringDecisionsPage from "@/pages/hiring/HiringDecisions";
+
+
 
 import UnauthorizedPage from "@/pages/errors/UnauthorizedPage";
 import NotFoundPage from "@/pages/errors/NotFoundPage";
@@ -72,6 +75,10 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+
+
+      
+
       {/* Recruiter Routes */}
       <Route
         element={
@@ -84,6 +91,11 @@ export default function AppRoutes() {
           <Route
             path="/recruiter/dashboard"
             element={<RecruiterDashboardPage />}
+          />
+
+          <Route
+          path="/recruiter/profile"
+          element={<RecruiterProfilePage />}
           />
 
           <Route
@@ -212,6 +224,9 @@ export default function AppRoutes() {
         path="/unauthorized"
         element={<UnauthorizedPage />}
       />
+
+
+
 
       {/* 404 Page */}
       <Route
