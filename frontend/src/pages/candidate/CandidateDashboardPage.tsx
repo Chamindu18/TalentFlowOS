@@ -1,111 +1,231 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  BriefcaseBusiness,
+  CalendarDays,
+  FileText,
+  UserCircle,
+} from "lucide-react";
 
-interface RecentApplication {
-    jobTitle: string;
-    companyName: string;
-    status: string;
-}
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import StatCard from "@/components/dashboard/StatCard";
+import SectionCard from "@/components/dashboard/SectionCard";
+import ProgressCard from "@/components/dashboard/ProgressCard";
+import JobCard from "@/components/dashboard/JobCard";
+import EmptyState from "@/components/dashboard/EmptyState";
 
-interface DashboardData {
-    profileCompletion: number;
-    totalApplications: number;
-    recentApplications: RecentApplication[];
-}
+import candidateService from "@/services/candidateService";
+import type { CandidateDashboardData } from "@/services/candidateService";
 
-const CandidateDashboardPage = () => {
-    const [data, setData] = useState<DashboardData | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+export default function CandidateDashboardPage() {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-    const fetchDashboardData = async () => {
-        try {
-            setLoading(true);
-            
-            const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
-            
-            
-            const response = await axios.get('http://localhost:5007/api/Candidate/dashboard', {
-    headers: { Authorization: `Bearer ${token}` }
-});
+  const [dashboard, setDashboard] =
+    useState<CandidateDashboardData | null>(null);
 
-            console.log("Dashboard Data:", response.data);
-            setData(response.data);
-            setError(null);
-        } catch (err: any) {
-            console.error("Dashboard error:", err.response?.data || err);
-           
-            setError(err.response?.status === 403 ? "You are not authorized to view this." : "Failed to load data from the system.");
-        } finally {
-            setLoading(false);
-        }
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        setLoading(true);
+
+        const data = await candidateService.getDashboard();
+
+        setDashboard(data);
+      } catch (error) {
+        console.error("Dashboard Error:", error);
+        setError("Failed to load dashboard.");
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchDashboardData();
-}, []);
 
-    if (loading) return <div className="p-10 text-center text-lg">Loading Dashboard...</div>;
-    
-    if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
+    loadDashboard();
+  }, []);
 
+  if (loading) {
     return (
-        <div className="p-8 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">Candidate Dashboard</h1>
-            
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 className="text-gray-500 font-medium">Profile Completion</h3>
-                    <div className="mt-4 flex items-center justify-between">
-                        <span className="text-4xl font-bold text-blue-600">{data?.profileCompletion || 0}%</span>
-                        <div className="w-full ml-4 bg-gray-200 rounded-full h-2.5">
-                            <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${data?.profileCompletion || 0}%` }}></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 className="text-gray-500 font-medium">Total Applications</h3>
-                    <p className="text-4xl font-bold text-green-600 mt-4">{data?.totalApplications || 0}</p>
-                </div>
-            </div>
-
-            {/* Recent Applications Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-100">
-                    <h2 className="text-xl font-bold text-gray-800">Recent Applications</h2>
-                </div>
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th className="p-4 text-gray-600">Job Title</th>
-                            <th className="p-4 text-gray-600">Company</th>
-                            <th className="p-4 text-gray-600">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data?.recentApplications && data.recentApplications.length > 0 ? (
-                            data.recentApplications.map((app, index) => (
-                                <tr key={index} className="border-t border-gray-100">
-                                    <td className="p-4 font-medium text-gray-800">{app.jobTitle}</td>
-                                    <td className="p-4 text-gray-600">{app.companyName}</td>
-                                    <td className="p-4">
-                                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
-                                            {app.status}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={3} className="p-8 text-center text-gray-500">No applications found.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      <div className="flex h-[70vh] items-center justify-center text-lg font-medium">
+        Loading dashboard...
+      </div>
     );
-};
+  }
 
-export default CandidateDashboardPage;
+  if (error) {
+    return (
+      <div className="flex h-[70vh] items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+
+      <DashboardHeader
+        title="Welcome Back 👋"
+        description="Track your applications and discover your next career opportunity."
+        buttonText="Browse Jobs"
+        onButtonClick={() => navigate("/candidate/jobs")}
+      />
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+        <StatCard
+          title="Applications"
+          value={dashboard?.totalApplications ?? 0}
+          subtitle="Jobs Applied"
+          icon={FileText}
+        />
+
+        <StatCard
+          title="Saved Jobs"
+          value={0}
+          subtitle="Coming Soon"
+          icon={BriefcaseBusiness}
+        />
+
+        <StatCard
+          title="Interviews"
+          value={0}
+          subtitle="Upcoming"
+          icon={CalendarDays}
+        />
+
+        <StatCard
+          title="Profile"
+          value={`${dashboard?.profileCompletion ?? 0}%`}
+          subtitle="Completion"
+          icon={UserCircle}
+        />
+
+      </div>
+
+      <div className="grid gap-8 xl:grid-cols-3">
+
+        <div className="space-y-8 xl:col-span-2">
+
+          <SectionCard title="Recommended Jobs">
+
+            <div className="grid gap-4 md:grid-cols-2">
+
+              <JobCard
+                title="Software Engineer"
+                company="WSO2"
+                location="Colombo"
+              />
+
+              <JobCard
+                title="Frontend Developer"
+                company="Dialog"
+                location="Hybrid"
+              />
+
+            </div>
+
+          </SectionCard>
+
+          <SectionCard title="Recent Applications">
+
+            {dashboard &&
+            dashboard.recentApplications &&
+            dashboard.recentApplications.length > 0 ? (
+
+              <div className="overflow-x-auto">
+
+                <table className="w-full">
+
+                  <thead>
+
+                    <tr className="border-b">
+
+                      <th className="py-3 text-left">
+                        Job
+                      </th>
+
+                      <th className="py-3 text-left">
+                        Company
+                      </th>
+
+                      <th className="py-3 text-left">
+                        Status
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    {dashboard.recentApplications.map(
+                      (application, index) => (
+                        <tr
+                          key={index}
+                          className="border-b"
+                        >
+                          <td className="py-4">
+                            {application.jobTitle}
+                          </td>
+
+                          <td>
+                            {application.companyName}
+                          </td>
+
+                          <td>
+
+                            <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-600">
+
+                              {application.status}
+
+                            </span>
+
+                          </td>
+
+                        </tr>
+                      )
+                    )}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            ) : (
+
+              <EmptyState
+                title="No Applications Yet"
+                description="Start applying for jobs to track your recruitment progress."
+              />
+
+            )}
+
+          </SectionCard>
+
+        </div>
+
+        <div className="space-y-8">
+
+          <ProgressCard
+            percentage={dashboard?.profileCompletion ?? 0}
+          />
+
+          <SectionCard title="Upcoming Interviews">
+
+            <EmptyState
+              title="No Interviews"
+              description="Interview schedules will appear here."
+            />
+
+          </SectionCard>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
