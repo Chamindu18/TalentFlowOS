@@ -19,12 +19,14 @@ import EmailVerificationPage from "@/pages/auth/EmailVerificationPage";
 
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
-import SettingsPage from "@/pages/settings/SettingsPage";
 
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 
 import {RecruiterDashboardPage } from "@/pages/recruiter/RecruiterDashboardPage";
 import { RecruiterProfilePage } from "@/pages/recruiter/RecruiterProfilePage";
+import { RecruiterAnalyticsPage } from "@/pages/recruiter/RecruiterAnalyticsPage";
+import { RecruiterSettingsPage } from "@/pages/recruiter/RecruiterSettingsPage";
+
 
 
 
@@ -131,8 +133,22 @@ export default function AppRoutes() {
             path="/recruiter/applications"
             element={<ApplicationsPage />}
           />
+        
+
+          <Route
+          path="/recruiter/settings"
+          element={<RecruiterSettingsPage />}
+          />
+
+          <Route
+          path="/recruiter/analytics"
+          element={<RecruiterAnalyticsPage />}
+          />
+          </Route>
+
         </Route>
-      </Route>
+
+        
 
       {/* Admin Routes */}
       <Route
@@ -197,11 +213,6 @@ export default function AppRoutes() {
           <Route
             path="/profile"
             element={<ProfilePage />}
-          />
-
-          <Route
-            path="/settings"
-            element={<SettingsPage />}
           />
 
           {/* Temporary Legacy Dashboard */}

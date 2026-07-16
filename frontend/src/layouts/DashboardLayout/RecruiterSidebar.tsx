@@ -48,10 +48,10 @@ const navItems = [
         label: "Profile",
     },
     {
-        path: "/settings",
-        icon: Settings,
-        label: "Settings",
-    },
+    path: "/recruiter/settings",
+    icon: Settings,
+    label: "Settings",
+}
 ];
 
 export default function RecruiterSidebar({ isOpen, onClose }: SidebarProps) {
