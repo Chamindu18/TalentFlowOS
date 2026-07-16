@@ -63,7 +63,10 @@ export default function AppRoutes() {
     <Routes>
       {/* Public Pages */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
       </Route>
 
       {/* Authentication Routes */}
