@@ -1,147 +1,462 @@
-import React, { useState, useEffect } from 'react';
-import  candidateService  from '../../services/candidateService';
-import { toast } from 'sonner';
+import React, { useEffect, useState } from "react";
+import candidateService from "../../services/candidateService";
+import { toast } from "sonner";
+
+import {
+  User,
+  Phone,
+  FileText,
+  Upload,
+  CheckCircle2,
+} from "lucide-react";
 
 const CandidateProfilePage: React.FC = () => {
   const [profile, setProfile] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    bio: ''
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    bio: "",
   });
+
   const [file, setFile] = useState<File | null>(null);
+
   const [loading, setLoading] = useState(false);
 
-  // Load existing profile data on initial mount to maintain persistence on refresh
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await candidateService.getMe();
-        if (response.data) {
-          setProfile({
-            firstName: response.data.firstName || '',
-            lastName: response.data.lastName || '',
-            phoneNumber: response.data.phoneNumber || '',
-            bio: response.data.bio || ''
-          });
-        }
-      } catch (error) {
-        console.error("Error loading profile data:", error);
-        toast.error("Failed to load profile settings.");
-      }
-    };
-
-    fetchProfileData();
+    fetchProfile();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setProfile(prev => ({ ...prev, [name]: value }));
+  const completion =
+  (profile.firstName ? 20 : 0) +
+  (profile.lastName ? 20 : 0) +
+  (profile.phoneNumber ? 20 : 0) +
+  (profile.bio ? 20 : 0) +
+  (file ? 20 : 0);
+
+  async function fetchProfile() {
+    try {
+      const response = await candidateService.getMe();
+
+      if (response.data) {
+        setProfile({
+          firstName: response.data.firstName || "",
+          lastName: response.data.lastName || "",
+          phoneNumber: response.data.phoneNumber || "",
+          bio: response.data.bio || "",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load profile.");
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    setProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
+
     setLoading(true);
 
-    // Build the structural multi-part form payload required by the C# backend
     const formData = new FormData();
-    formData.append('firstName', profile.firstName);
-    formData.append('lastName', profile.lastName);
-    formData.append('phoneNumber', profile.phoneNumber);
-    formData.append('bio', profile.bio);
-    
+
+    formData.append("firstName", profile.firstName);
+    formData.append("lastName", profile.lastName);
+    formData.append(
+      "phoneNumber",
+      profile.phoneNumber
+    );
+    formData.append("bio", profile.bio);
+
     if (file) {
-      formData.append('resume', file);
+      formData.append("resume", file);
     }
 
     try {
-      // Calls axios wrapper using explicit multipart/form-data rules
       await candidateService.updateProfile(formData);
-      toast.success('Profile updated successfully! 🎉');
+
+      toast.success(
+        "Profile updated successfully!"
+      );
+
+      fetchProfile();
     } catch (error: any) {
-      console.error("Update Error:", error);
-      const errorMsg = error.response?.data?.message || 'Error updating profile. Check Backend Route!';
-      toast.error(errorMsg);
+      toast.error(
+        error.response?.data?.message ??
+          "Failed to update profile."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="p-8 max-w-2xl mx-auto bg-white shadow rounded-lg border">
-      <h2 className="text-2xl font-bold mb-6 text-[#102541]">Candidate Profile Management</h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-1">First Name</label>
-          <input 
-            type="text"
-            name="firstName" 
-            placeholder="First Name" 
-            value={profile.firstName} 
-            onChange={handleInputChange} 
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            required 
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-1">Last Name</label>
-          <input 
-            type="text"
-            name="lastName" 
-            placeholder="Last Name" 
-            value={profile.lastName} 
-            onChange={handleInputChange} 
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            required 
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-1">Phone Number</label>
-          <input 
-            type="text"
-            name="phoneNumber" 
-            placeholder="Phone Number" 
-            value={profile.phoneNumber} 
-            onChange={handleInputChange} 
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            required 
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-1">Bio</label>
-          <textarea 
-            name="bio" 
-            placeholder="Tell us about yourself..." 
-            value={profile.bio} 
-            onChange={handleInputChange} 
-            className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            rows={4} 
-          />
-        </div>
-        
-        <div className="border-2 border-dashed p-4 mt-4 rounded bg-gray-50 border-gray-300">
-          <label className="block font-bold mb-2 text-gray-700">Upload Resume (PDF/Doc)</label>
-          <input 
-            type="file" 
-            accept=".pdf,.doc,.docx" 
-            onChange={(e) => setFile(e.target.files?.[0] || null)} 
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          />
-          {file && <p className="mt-2 text-xs text-green-600 font-medium">Selected file: {file.name}</p>}
+  return (    <div className="mx-auto max-w-7xl space-y-8">
+
+      {/* Header */}
+
+      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-orange-500 p-8 text-white shadow-xl">
+
+        <h1 className="text-4xl font-bold">
+          Candidate Profile
+        </h1>
+
+        <p className="mt-3 max-w-2xl text-slate-200">
+          Keep your profile updated to improve recruiter visibility and
+          increase your chances of getting shortlisted.
+        </p>
+
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        className="grid gap-8 lg:grid-cols-3"
+      >
+
+        {/* LEFT PANEL */}
+
+        <div className="space-y-6">
+
+          {/* Avatar */}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+
+            <div className="flex flex-col items-center">
+
+              <div className="flex h-28 w-28 items-center justify-center rounded-full bg-orange-100">
+
+                <User className="h-14 w-14 text-orange-500" />
+
+              </div>
+
+              <h2 className="mt-5 text-2xl font-bold">
+
+                {profile.firstName || "Candidate"}{" "}
+                {profile.lastName}
+
+              </h2>
+
+              <p className="mt-1 text-slate-500">
+                TalentFlow Candidate
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* Profile Completion */}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+
+            <div className="flex items-center justify-between">
+
+              <h3 className="font-bold">
+                Profile Completion
+              </h3>
+
+              <span className="font-bold text-orange-600">
+
+                {completion}%
+
+              </span>
+
+            </div>
+
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-200">
+
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-orange-500 to-orange-600 transition-all duration-500"
+                style={{
+                  width: `${completion}%`,
+                }}
+              />
+
+            </div>
+
+            <div className="mt-6 space-y-3 text-sm">
+
+              <div className="flex items-center gap-3">
+
+                <CheckCircle2
+                  className={`h-5 w-5 ${
+                    profile.firstName
+                      ? "text-green-500"
+                      : "text-slate-300"
+                  }`}
+                />
+
+                Personal Information
+
+              </div>
+
+              <div className="flex items-center gap-3">
+
+                <CheckCircle2
+                  className={`h-5 w-5 ${
+                    profile.bio
+                      ? "text-green-500"
+                      : "text-slate-300"
+                  }`}
+                />
+
+                About Me
+
+              </div>
+
+              <div className="flex items-center gap-3">
+
+                <CheckCircle2
+                  className={`h-5 w-5 ${
+                    file
+                      ? "text-green-500"
+                      : "text-slate-300"
+                  }`}
+                />
+
+                Resume Uploaded
+
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
 
-        <button 
-          type="submit" 
-          disabled={loading} 
-          className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition disabled:bg-blue-300"
-        >
-          {loading ? 'Saving...' : 'Save Profile'}
-        </button>
+        {/* RIGHT PANEL */}
+
+        <div className="space-y-8 lg:col-span-2">
+
+          {/* Personal Information */}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+
+            <h2 className="mb-8 text-2xl font-bold">
+              Personal Information
+            </h2>
+
+            <div className="grid gap-6 md:grid-cols-2">
+
+              <div>
+
+                <label className="mb-2 block text-sm font-semibold">
+
+                  First Name
+
+                </label>
+
+                <input
+                  type="text"
+                  name="firstName"
+                  value={profile.firstName}
+                  onChange={handleInputChange}
+                  className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-orange-500"
+                />
+
+              </div>
+
+              <div>
+
+                <label className="mb-2 block text-sm font-semibold">
+
+                  Last Name
+
+                </label>
+
+                <input
+                  type="text"
+                  name="lastName"
+                  value={profile.lastName}
+                  onChange={handleInputChange}
+                  className="w-full rounded-xl border border-slate-300 p-3 outline-none transition focus:border-orange-500"
+                />
+
+              </div>
+
+              <div className="md:col-span-2">
+
+                <label className="mb-2 block text-sm font-semibold">
+
+                  Phone Number
+
+                </label>
+
+                <div className="relative">
+
+                  <Phone className="absolute left-4 top-4 h-5 w-5 text-slate-400" />
+
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={profile.phoneNumber}
+                    onChange={handleInputChange}
+                    className="w-full rounded-xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition focus:border-orange-500"
+                  />
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* About Me */}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+
+            <h2 className="mb-5 text-2xl font-bold">
+              About Me
+            </h2>
+
+            <textarea
+              rows={6}
+              name="bio"
+              value={profile.bio}
+              onChange={handleInputChange}
+              placeholder="Tell recruiters about yourself..."
+              className="w-full rounded-xl border border-slate-300 p-4 outline-none transition focus:border-orange-500"
+            />
+          </div>          {/* Resume */}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+
+            <div className="mb-6 flex items-center gap-3">
+
+              <div className="rounded-xl bg-orange-100 p-3">
+
+                <FileText className="h-6 w-6 text-orange-500" />
+
+              </div>
+
+              <div>
+
+                <h2 className="text-2xl font-bold">
+                  Resume
+                </h2>
+
+                <p className="text-sm text-slate-500">
+                  Upload your latest CV to increase recruiter visibility.
+                </p>
+
+              </div>
+
+            </div>
+
+            <label
+              className="
+                flex
+                cursor-pointer
+                flex-col
+                items-center
+                justify-center
+                rounded-2xl
+                border-2
+                border-dashed
+                border-orange-300
+                bg-orange-50
+                p-10
+                transition
+                hover:bg-orange-100
+              "
+            >
+
+              <Upload className="mb-4 h-12 w-12 text-orange-500" />
+
+              <p className="font-semibold">
+                Click to upload your Resume
+              </p>
+
+              <p className="mt-2 text-sm text-slate-500">
+                PDF, DOC or DOCX (Maximum 5 MB)
+              </p>
+
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+                onChange={(e) =>
+                  setFile(e.target.files?.[0] || null)
+                }
+              />
+
+            </label>
+
+            {file && (
+
+              <div className="mt-5 rounded-xl bg-green-50 p-4">
+
+                <div className="flex items-center gap-3">
+
+                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+
+                  <div>
+
+                    <p className="font-semibold text-green-700">
+
+                      Resume Selected
+
+                    </p>
+
+                    <p className="text-sm text-green-600">
+
+                      {file.name}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            )}
+
+          </div>
+
+          {/* Save Button */}
+
+          <div className="flex justify-end">
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="
+                rounded-xl
+                bg-orange-500
+                px-10
+                py-3
+                font-semibold
+                text-white
+                transition
+                hover:bg-orange-600
+                disabled:cursor-not-allowed
+                disabled:bg-orange-300
+              "
+            >
+              {loading
+                ? "Saving Changes..."
+                : "Save Changes"}
+            </button>
+
+          </div>
+
+        </div>
+
       </form>
+
     </div>
   );
 };
