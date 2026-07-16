@@ -15,6 +15,7 @@ import ResumeUpload from "@/pages/candidate/ResumeUpload";
 import CandidateJobsPage from "@/pages/candidate/CandidateJobsPage"; 
 import CandidateAnalyticsPage from "@/pages/candidate/CandidateAnalyticsPage";
 import CandidateSettingsPage from "@/pages/candidate/CandidateSettingsPage";
+import CandidateApplicationsPage from "@/pages/candidate/CandidateApplicationsPage";
 
 // Recruiter Pages
 import { RecruiterDashboardPage } from "@/pages/recruiter/RecruiterDashboardPage";
@@ -83,6 +84,7 @@ export default function AppRoutes() {
           <Route path="/candidate/jobs" element={<CandidateJobsPage />} />
           <Route path="/candidate/analytics" element={<CandidateAnalyticsPage />} />
           <Route path="/candidate/settings" element={<CandidateSettingsPage />} />
+          <Route path="/candidate/applications" element={<CandidateApplicationsPage />} />
         </Route>
       </Route>
 
