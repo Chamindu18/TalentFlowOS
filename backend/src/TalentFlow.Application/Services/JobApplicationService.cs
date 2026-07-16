@@ -43,6 +43,19 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
     }
 
+    public async Task<IEnumerable<ApplicationResponseDTO>> GetMyApplicationsAsync(string userId)
+    {
+        var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+
+        if (candidate == null)
+            throw new NotFoundException("Candidate profile not found.");
+
+        var applications =
+            await _applicationRepository.GetByCandidateIdAsync(candidate.Id);
+
+        return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
+    }
+
     public async Task<IEnumerable<ApplicationResponseDTO>> GetByJobIdAsync(Guid jobId)
     {
         var applications = await _applicationRepository.GetByJobIdAsync(jobId);

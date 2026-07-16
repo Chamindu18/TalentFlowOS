@@ -1,32 +1,23 @@
 import { useEffect, useState } from "react";
 
 import { applicationService } from "@/services/applicationService";
-import { useAuthStore } from "@/store/auth.store";
-
 import type { Application } from "@/types/job";
 
 import ApplicationCard from "@/components/application/ApplicationCard";
 
 export default function CandidateApplicationsPage() {
-  const user = useAuthStore((state) => state.user);
-
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.userId) {
-      loadApplications(user.userId);
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+    loadApplications();
+  }, []);
 
-  const loadApplications = async (candidateId: string) => {
+  const loadApplications = async () => {
     try {
       setLoading(true);
 
-      const data =
-        await applicationService.getByCandidate(candidateId);
+      const data = await applicationService.getMyApplications();
 
       setApplications(data);
     } catch (error) {
@@ -47,9 +38,7 @@ export default function CandidateApplicationsPage() {
 
   return (
     <div className="space-y-8">
-
       <div>
-
         <h1 className="text-3xl font-bold">
           My Applications
         </h1>
@@ -57,13 +46,10 @@ export default function CandidateApplicationsPage() {
         <p className="mt-2 text-slate-500">
           Track all of your submitted job applications.
         </p>
-
       </div>
 
       {applications.length === 0 ? (
-
         <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center">
-
           <h2 className="text-xl font-semibold">
             No Applications Yet
           </h2>
@@ -71,26 +57,17 @@ export default function CandidateApplicationsPage() {
           <p className="mt-3 text-slate-500">
             Start applying for jobs to see your application history here.
           </p>
-
         </div>
-
       ) : (
-
         <div className="grid gap-6 lg:grid-cols-2">
-
           {applications.map((application) => (
-
             <ApplicationCard
               key={application.id}
               application={application}
             />
-
           ))}
-
         </div>
-
       )}
-
     </div>
   );
 }
