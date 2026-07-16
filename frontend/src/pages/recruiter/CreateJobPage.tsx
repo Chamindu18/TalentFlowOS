@@ -5,6 +5,8 @@ import { jobService } from '../../services/jobService';
 import { toast } from 'sonner';
 
 interface JobFormData {
+    companyName: string;      
+    departmentName: string;   
     title: string;
     description: string;
     responsibilities: string;
@@ -27,38 +29,27 @@ export const CreateJobPage: React.FC = () => {
     const onSubmit = async (data: JobFormData) => {
         try {
             setLoading(true);
-
-            // HARDCODE COMPANY AND DEPARTMENT
-            const payload = {
-            companyName: "Tech Corp",
-            departmentName: "Engineering",
-            title: data.title,
-            description: data.description,
-            responsibilities: data.responsibilities,
-            requirements: data.requirements,
-            employmentType: data.employmentType,
-            experienceLevel: data.experienceLevel,
-            salaryMin: data.salaryMin,
-            salaryMax: data.salaryMax,
-            location: data.location,
-            isRemote: data.isRemote,
-
-            applicationDeadline: data.applicationDeadline
-                ? new Date(data.applicationDeadline + "T00:00:00Z").toISOString()
-                : undefined,
-        };
-
-            console.log('PAYLOAD BEING SENT:', JSON.stringify(payload, null, 2));
-
-
-            console.log('Sending payload:', payload);
-
-            await jobService.create(payload);
+            
+            // Send companyName and departmentName instead of IDs
+            await jobService.create({
+                companyName: data.companyName,
+                departmentName: data.departmentName,
+                title: data.title,
+                description: data.description,
+                responsibilities: data.responsibilities,
+                requirements: data.requirements,
+                employmentType: data.employmentType,
+                experienceLevel: data.experienceLevel,
+                salaryMin: data.salaryMin,
+                salaryMax: data.salaryMax,
+                location: data.location,
+                isRemote: data.isRemote,
+                applicationDeadline: data.applicationDeadline,
+            });
             
             toast.success('Job created successfully!');
             navigate('/recruiter/jobs');
         } catch (error: any) {
-            console.error('Error:', error);
             toast.error(error.response?.data?.message || 'Failed to create job');
         } finally {
             setLoading(false);
@@ -73,6 +64,28 @@ export const CreateJobPage: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+
+                {/* Company Name - Text Input */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                    <input
+                        {...register('companyName')}
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        placeholder="e.g. Tech Corp"
+                    />
+                </div>
+
+                {/* Department Name - Text Input */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Department Name</label>
+                    <input
+                        {...register('departmentName')}
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        placeholder="e.g. Engineering"
+                    />
+                </div>
 
                 {/* Title */}
                 <div>

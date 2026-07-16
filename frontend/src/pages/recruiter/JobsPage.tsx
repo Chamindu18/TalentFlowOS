@@ -31,10 +31,8 @@ export const JobsPage: React.FC = () => {
 
             setJobs(data);
         } catch (error) {
-            console.error('Error loading jobs:', error);
-
             toast.error('Failed to load jobs');
-            
+            console.error(error);
         } finally {
             setLoading(false);
         }

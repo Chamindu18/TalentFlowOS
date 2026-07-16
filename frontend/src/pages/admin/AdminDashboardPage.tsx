@@ -1,31 +1,12 @@
 export default function AdminDashboardPage() {
-  const stats = [
-    {
-      title: "Total Users",
-      value: 125,
-    },
-    {
-      title: "Total Jobs",
-      value: 48,
-    },
-    {
-      title: "Applications",
-      value: 312,
-    },
-    {
-      title: "Interviews",
-      value: 24,
-    },
-  ];
-
   return (
     <div className="p-8">
-      <h1 className="text-4xl font-bold">
+      <h1 className="text-3xl font-bold">
         Admin Dashboard
       </h1>
 
-      <p className="text-slate-500 mt-2">
-        Manage users and monitor system activity.
+      <p className="mt-2 text-slate-500">
+        Under development...
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
@@ -89,4 +70,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-``
