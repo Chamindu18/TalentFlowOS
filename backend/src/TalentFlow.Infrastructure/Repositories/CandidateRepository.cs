@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Domain.Entities;
@@ -9,7 +8,11 @@ namespace TalentFlow.Infrastructure.Repositories;
 public class CandidateRepository : ICandidateRepository
 {
     private readonly ApplicationDbContext _context;
-    public CandidateRepository(ApplicationDbContext context) => _context = context;
+
+    public CandidateRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
 
     public async Task<Candidate?> GetCandidateByUserIdAsync(string userId)
     {
@@ -21,5 +24,13 @@ public class CandidateRepository : ICandidateRepository
             .FirstOrDefaultAsync(c => c.UserId == userId);
     }
 
-    public async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
+    public async Task AddAsync(Candidate candidate)
+    {
+        await _context.Candidates.AddAsync(candidate);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
+    }
 }
