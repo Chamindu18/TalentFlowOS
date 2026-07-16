@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import candidateService from "../../services/candidateService";
 import { toast } from "sonner";
 
@@ -6,7 +7,6 @@ import {
   User,
   Phone,
   FileText,
-  Upload,
   CheckCircle2,
 } from "lucide-react";
 
@@ -18,8 +18,6 @@ const CandidateProfilePage: React.FC = () => {
     bio: "",
   });
 
-  const [file, setFile] = useState<File | null>(null);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,11 +25,10 @@ const CandidateProfilePage: React.FC = () => {
   }, []);
 
   const completion =
-  (profile.firstName ? 20 : 0) +
-  (profile.lastName ? 20 : 0) +
-  (profile.phoneNumber ? 20 : 0) +
-  (profile.bio ? 20 : 0) +
-  (file ? 20 : 0);
+  (profile.firstName ? 25 : 0) +
+  (profile.lastName ? 25 : 0) +
+  (profile.phoneNumber ? 25 : 0) +
+  (profile.bio ? 25 : 0);
 
   async function fetchProfile() {
     try {
@@ -80,10 +77,6 @@ const CandidateProfilePage: React.FC = () => {
       profile.phoneNumber
     );
     formData.append("bio", profile.bio);
-
-    if (file) {
-      formData.append("resume", file);
-    }
 
     try {
       await candidateService.updateProfile(formData);
@@ -214,21 +207,6 @@ const CandidateProfilePage: React.FC = () => {
                 About Me
 
               </div>
-
-              <div className="flex items-center gap-3">
-
-                <CheckCircle2
-                  className={`h-5 w-5 ${
-                    file
-                      ? "text-green-500"
-                      : "text-slate-300"
-                  }`}
-                />
-
-                Resume Uploaded
-
-              </div>
-
             </div>
 
           </div>
@@ -329,102 +307,58 @@ const CandidateProfilePage: React.FC = () => {
               placeholder="Tell recruiters about yourself..."
               className="w-full rounded-xl border border-slate-300 p-4 outline-none transition focus:border-orange-500"
             />
-          </div>          {/* Resume */}
+          </div>           
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          {/* Resume Summary */}
 
-            <div className="mb-6 flex items-center gap-3">
+<div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
 
-              <div className="rounded-xl bg-orange-100 p-3">
+  <div className="mb-6 flex items-center gap-3">
 
-                <FileText className="h-6 w-6 text-orange-500" />
+    <div className="rounded-xl bg-orange-100 p-3">
+      <FileText className="h-6 w-6 text-orange-500" />
+    </div>
 
-              </div>
+    <div>
+      <h2 className="text-2xl font-bold">
+        Resume
+      </h2>
 
-              <div>
+      <p className="text-sm text-slate-500">
+        Manage your resume from the dedicated Resume page.
+      </p>
+    </div>
 
-                <h2 className="text-2xl font-bold">
-                  Resume
-                </h2>
+  </div>
 
-                <p className="text-sm text-slate-500">
-                  Upload your latest CV to increase recruiter visibility.
-                </p>
+  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
 
-              </div>
+    <div className="flex items-center justify-between">
 
-            </div>
+      <div>
 
-            <label
-              className="
-                flex
-                cursor-pointer
-                flex-col
-                items-center
-                justify-center
-                rounded-2xl
-                border-2
-                border-dashed
-                border-orange-300
-                bg-orange-50
-                p-10
-                transition
-                hover:bg-orange-100
-              "
-            >
+        <p className="font-semibold">
+          Current Resume
+        </p>
 
-              <Upload className="mb-4 h-12 w-12 text-orange-500" />
+        <p className="mt-1 text-sm text-slate-500">
+          Upload or replace your CV from the Resume page.
+        </p>
 
-              <p className="font-semibold">
-                Click to upload your Resume
-              </p>
+      </div>
 
-              <p className="mt-2 text-sm text-slate-500">
-                PDF, DOC or DOCX (Maximum 5 MB)
-              </p>
+      <Link
+          to="/candidate/resume"
+          className="rounded-xl bg-orange-500 px-5 py-2 font-medium text-white transition hover:bg-orange-600"
+      >
+          Manage Resume
+      </Link>
 
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx"
-                className="hidden"
-                onChange={(e) =>
-                  setFile(e.target.files?.[0] || null)
-                }
-              />
+    </div>
 
-            </label>
+  </div>
 
-            {file && (
-
-              <div className="mt-5 rounded-xl bg-green-50 p-4">
-
-                <div className="flex items-center gap-3">
-
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
-
-                  <div>
-
-                    <p className="font-semibold text-green-700">
-
-                      Resume Selected
-
-                    </p>
-
-                    <p className="text-sm text-green-600">
-
-                      {file.name}
-
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            )}
-
-          </div>
+</div>
 
           {/* Save Button */}
 
