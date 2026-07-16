@@ -38,22 +38,51 @@ export default function CandidateJobsPage() {
   };
 
   const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
-      const matchesSearch =
-        job.title.toLowerCase().includes(search.toLowerCase()) ||
-        job.companyName.toLowerCase().includes(search.toLowerCase()) ||
-        (job.location ?? "")
-          .toLowerCase()
-          .includes(search.toLowerCase());
+  return jobs.filter((job) => {
+    const searchTerm = search.trim().toLowerCase();
 
-      const matchesFilter =
-        filter === "All" ||
-        (filter === "Remote" && job.isRemote) ||
-        job.employmentType === filter;
+    const matchesSearch =
+      searchTerm === "" ||
+      job.title.toLowerCase().includes(searchTerm) ||
+      job.companyName.toLowerCase().includes(searchTerm) ||
+      (job.location ?? "").toLowerCase().includes(searchTerm);
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [jobs, search, filter]);
+    const employment =
+      (job.employmentType ?? "")
+        .toLowerCase()
+        .replace("-", " ");
+
+    let matchesFilter = true;
+
+    switch (filter) {
+      case "Remote":
+        matchesFilter = job.isRemote;
+        break;
+
+      case "On-site":
+        matchesFilter = !job.isRemote;
+        break;
+
+      case "Full Time":
+        matchesFilter = employment.includes("full");
+        break;
+
+      case "Part Time":
+        matchesFilter = employment.includes("part");
+        break;
+
+      case "Internship":
+        matchesFilter =
+          employment.includes("intern");
+        break;
+
+      default:
+        matchesFilter = true;
+    }
+
+    return matchesSearch && matchesFilter;
+  });
+}, [jobs, search, filter]);
 
   const handleApply = (job: Job) => {
     navigate(`/candidate/jobs/${job.id}`);
@@ -81,6 +110,34 @@ export default function CandidateJobsPage() {
         </p>
 
       </div>
+
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+  <div>
+
+    <h1 className="text-3xl font-bold">
+      Browse Jobs
+    </h1>
+
+    <p className="mt-2 text-slate-500">
+      Discover opportunities tailored to your career goals.
+    </p>
+
+  </div>
+
+  <div className="rounded-xl bg-orange-50 px-5 py-3">
+
+    <p className="text-sm text-slate-500">
+      Available Jobs
+    </p>
+
+    <h2 className="text-2xl font-bold text-orange-600">
+      {filteredJobs.length}
+    </h2>
+
+  </div>
+
+</div>
 
       <JobSearchBar
         value={search}
