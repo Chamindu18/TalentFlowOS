@@ -155,4 +155,23 @@ public async Task<IActionResult> Create(
         var count = await _applicationService.GetApplicationCountForJobAsync(jobId);
         return Ok(new { success = true, data = count });
     }
+
+    [HttpGet("my")]
+    [Authorize(Roles = "Candidate")]
+    public async Task<IActionResult> GetMyApplications()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var applications =
+            await _applicationService.GetMyApplicationsAsync(userId);
+
+        return Ok(new
+        {
+            success = true,
+            data = applications
+        });
+    }
 }
