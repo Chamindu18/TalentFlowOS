@@ -6,15 +6,19 @@ import {
 } from "lucide-react";
 
 interface Props {
-  title: string;
-  company: string;
-  location: string;
+    title: string;
+    company: string;
+    location: string;
+    buttonText?: string;
+    onClick?: () => void;
 }
 
 export default function JobCard({
   title,
   company,
   location,
+  buttonText,
+  onClick
 }: Props) {
   return (
     <div
@@ -85,6 +89,7 @@ export default function JobCard({
       </div>
 
       <Button
+        onClick={onClick}
         className="
           mt-6
           w-full
@@ -94,7 +99,7 @@ export default function JobCard({
           hover:bg-orange-600
         "
       >
-        View Job
+        {buttonText}
 
         <ArrowRight className="ml-2 h-4 w-4" />
 
