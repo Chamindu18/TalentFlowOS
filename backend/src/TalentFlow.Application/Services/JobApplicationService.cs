@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using AutoMapper;
 using TalentFlow.Application.DTOs.Applications;
 using TalentFlow.Application.Exceptions;
 using TalentFlow.Application.Interfaces.Repositories;
@@ -18,15 +12,18 @@ public class JobApplicationService : IApplicationService
 {
     private readonly IApplicationRepository _applicationRepository;
     private readonly IJobRepository _jobRepository;
+    private readonly ICandidateRepository _candidateRepository;
     private readonly IMapper _mapper;
 
     public JobApplicationService(
         IApplicationRepository applicationRepository,
         IJobRepository jobRepository,
+        ICandidateRepository candidateRepository,
         IMapper mapper)
     {
         _applicationRepository = applicationRepository;
         _jobRepository = jobRepository;
+        _candidateRepository = candidateRepository;
         _mapper = mapper;
     }
 
@@ -58,26 +55,48 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
     }
 
+    // ============================================================
+    // CREATE APPLICATION
+    // ============================================================
 
-
-    public async Task<ApplicationResponseDTO> CreateAsync(CreateApplicationRequestDTO request)
+    public async Task<ApplicationResponseDTO> CreateAsync(
+        CreateApplicationRequestDTO request,
+        string userId)
     {
-        // Validate Job exists
+        // Validate Job
         var job = await _jobRepository.GetByIdAsync(request.JobId);
+
         if (job == null)
             throw new NotFoundException($"Job with ID {request.JobId} not found");
 
-        // Validate Job is active
         if (!job.IsActive)
             throw new BusinessRuleException("This job is no longer accepting applications");
 
-        // Check if candidate already applied (CandidateId will come from authenticated user)
-        // For now, we'll skip this check since we don't have the candidate system yet
-        // This will be implemented when Member 2 completes the Candidate module
+        // Find Candidate using logged-in user
+        var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
 
+        if (candidate == null)
+            throw new NotFoundException("Candidate profile not found.");
+
+        // Prevent duplicate applications
+        var alreadyApplied =
+            await _applicationRepository.HasCandidateAppliedAsync(
+                candidate.Id,
+                request.JobId);
+
+        if (alreadyApplied)
+            throw new BusinessRuleException("You have already applied for this job.");
+
+        // Create application
         var application = _mapper.Map<JobApplication>(request);
+
+        application.CandidateId = candidate.Id;
+        application.JobId = request.JobId;
         application.Status = ApplicationStatus.Applied.ToString();
         application.AppliedAt = DateTime.UtcNow;
+        application.CreatedAt = DateTime.UtcNow;
+        application.UpdatedAt = DateTime.UtcNow;
+        application.IsDeleted = false;
 
         await _applicationRepository.AddAsync(application);
         await _applicationRepository.SaveChangesAsync();
@@ -85,15 +104,19 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<ApplicationResponseDTO>(application);
     }
 
+    // ============================================================
+    // UPDATE STATUS
+    // ============================================================
+
     public async Task<ApplicationResponseDTO> UpdateStatusAsync(
         Guid id,
         UpdateApplicationStatusRequestDTO request)
     {
         var application = await _applicationRepository.GetByIdAsync(id);
+
         if (application == null)
             throw new NotFoundException($"Application with ID {id} not found");
 
-        // Validate status is valid enum
         if (!Enum.TryParse<ApplicationStatus>(request.Status, true, out _))
             throw new BusinessRuleException($"Invalid status: {request.Status}");
 
@@ -106,25 +129,43 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<ApplicationResponseDTO>(application);
     }
 
+    // ============================================================
+    // DELETE
+    // ============================================================
+
     public async Task DeleteAsync(Guid id)
     {
         var application = await _applicationRepository.GetByIdAsync(id);
+
         if (application == null)
             throw new NotFoundException($"Application with ID {id} not found");
 
         _applicationRepository.Delete(application);
+
         await _applicationRepository.SaveChangesAsync();
     }
+
+    // ============================================================
+    // CHECK DUPLICATES
+    // ============================================================
 
     public async Task<bool> HasCandidateAppliedAsync(Guid candidateId, Guid jobId)
     {
         return await _applicationRepository.HasCandidateAppliedAsync(candidateId, jobId);
     }
 
+    // ============================================================
+    // COUNT
+    // ============================================================
+
     public async Task<int> GetApplicationCountForJobAsync(Guid jobId)
     {
         return await _applicationRepository.GetApplicationCountForJobAsync(jobId);
     }
+
+    // ============================================================
+    // FILTER
+    // ============================================================
 
     public async Task<IEnumerable<ApplicationResponseDTO>> GetApplicationsByStatusAsync(string status)
     {
@@ -132,9 +173,14 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
     }
 
+    // ============================================================
+    // SHORTLIST
+    // ============================================================
+
     public async Task ShortlistApplicationAsync(Guid id)
     {
         var application = await _applicationRepository.GetByIdAsync(id);
+
         if (application == null)
             throw new NotFoundException($"Application with ID {id} not found");
 

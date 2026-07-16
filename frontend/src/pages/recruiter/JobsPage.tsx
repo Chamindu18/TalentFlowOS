@@ -26,7 +26,7 @@ export const JobsPage: React.FC = () => {
             setLoading(true);
             console.log('Fetching jobs...');
 
-            const data = await jobService.getAll();
+            const data = await jobService.getAllJobs();
             console.log('Jobs data:', data);
 
             setJobs(data);
