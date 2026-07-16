@@ -27,4 +27,6 @@ public interface IAuthService
     Task ResendVerificationEmailAsync(
         string email
     );
+
+    Task<CurrentUserDto> GetCurrentUserAsync(Guid userId);
 }

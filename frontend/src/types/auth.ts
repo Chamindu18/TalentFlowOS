@@ -27,9 +27,11 @@ export interface AuthResponse {
 }
 
 export interface CurrentUser {
-  userId: string;
-  email: string;
-  role: UserRole;
+    userId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: UserRole;
 }
 
 export interface ResendVerificationRequest {

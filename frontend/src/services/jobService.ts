@@ -1,38 +1,21 @@
 import axios from "axios";
+import type { Job, UpdateJobRequest } from "../types/job";
 
-import type {
-  Job,
-  CreateJobRequest,
-  UpdateJobRequest,
-} from "../types/job";
-
-
-
-
-
-
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5007/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5007/api";
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
 });
 
-// Add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token =
-      localStorage.getItem(
-        "accessToken",
-      );
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+// Attach JWT token using interceptor
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
     return config;
   },
@@ -40,10 +23,8 @@ api.interceptors.request.use(
 
 export const jobService = {
   // Get all jobs
-  getAll: async (): Promise<Job[]> => {
-    const response =
-      await api.get("/Jobs");
-
+  getAllJobs: async (): Promise<Job[]> => {
+    const response = await api.get("/Jobs");
     return response.data.data;
   },
 
@@ -136,16 +117,8 @@ create: async (data: {
 },
 
   // Update job
-  update: async (
-    id: string,
-    data: UpdateJobRequest,
-  ): Promise<Job> => {
-    const response =
-      await api.put(
-        `/Jobs/${id}`,
-        data,
-      );
-
+  update: async (id: string, data: UpdateJobRequest): Promise<Job> => {
+    const response = await api.put(`/Jobs/${id}`, data);
     return response.data.data;
   },
 

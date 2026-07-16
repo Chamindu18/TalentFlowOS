@@ -22,6 +22,73 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Candidate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsProfileComplete")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Candidates");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Certificate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IssuedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Certificates");
+                });
+
             modelBuilder.Entity("TalentFlow.Domain.Entities.Company", b =>
                 {
                     b.Property<Guid>("Id")
@@ -73,11 +140,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Industry");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Department", b =>
@@ -111,10 +174,37 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CompanyId", "Name")
-                        .IsUnique();
+                    b.ToTable("Departments");
+                });
 
-                    b.ToTable("Departments", (string)null);
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Education", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("InstitutionName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Evaluation", b =>
@@ -130,8 +220,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
@@ -139,6 +228,39 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Evaluations");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Experience", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.HiringDecision", b =>
@@ -155,12 +277,10 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Decision")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Justification")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ManagerId")
                         .HasColumnType("uuid");
@@ -187,8 +307,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("InterviewType")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -220,8 +339,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Comments")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -270,8 +388,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("LocationOrLink")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ScheduledTime")
                         .HasColumnType("timestamp with time zone");
@@ -285,7 +402,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("InterviewerId");
 
-                    b.ToTable("InterviewSchedules");
+                    b.ToTable("InterviewSchedule");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Job", b =>
@@ -337,12 +454,10 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<decimal?>("SalaryMax")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal?>("SalaryMin")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
@@ -362,17 +477,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("IsActive");
-
-                    b.HasIndex("IsRemote");
-
-                    b.HasIndex("Location");
-
-                    b.HasIndex("Status");
-
-                    b.HasIndex("Title");
-
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.JobApplication", b =>
@@ -408,18 +513,35 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppliedAt");
-
                     b.HasIndex("CandidateId");
 
                     b.HasIndex("JobId");
 
-                    b.HasIndex("Status");
+                    b.ToTable("JobApplications");
+                });
 
-                    b.HasIndex("CandidateId", "JobId")
-                        .IsUnique();
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.ToTable("Applications", (string)null);
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProficiencyLevel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.User", b =>
@@ -433,8 +555,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("EmailVerificationToken")
                         .HasColumnType("text");
@@ -444,16 +565,14 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -473,10 +592,18 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.ToTable("Users");
+                });
 
-                    b.ToTable("Users", (string)null);
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Certificate", b =>
+                {
+                    b.HasOne("TalentFlow.Domain.Entities.Candidate", "Candidate")
+                        .WithMany("Certificates")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Department", b =>
@@ -484,10 +611,32 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasOne("TalentFlow.Domain.Entities.Company", "Company")
                         .WithMany("Departments")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Education", b =>
+                {
+                    b.HasOne("TalentFlow.Domain.Entities.Candidate", "Candidate")
+                        .WithMany("Educations")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Experience", b =>
+                {
+                    b.HasOne("TalentFlow.Domain.Entities.Candidate", "Candidate")
+                        .WithMany("Experiences")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Interview", b =>
@@ -495,7 +644,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasOne("TalentFlow.Domain.Entities.JobApplication", "Application")
                         .WithMany("Interviews")
                         .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Application");
@@ -512,7 +661,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasOne("TalentFlow.Domain.Entities.User", "Interviewer")
                         .WithMany()
                         .HasForeignKey("InterviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Interview");
@@ -531,7 +680,7 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasOne("TalentFlow.Domain.Entities.User", "Interviewer")
                         .WithMany()
                         .HasForeignKey("InterviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Interview");
@@ -544,13 +693,13 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
                     b.HasOne("TalentFlow.Domain.Entities.Company", "Company")
                         .WithMany("Jobs")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TalentFlow.Domain.Entities.Department", "Department")
                         .WithMany("Jobs")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -560,13 +709,43 @@ namespace TalentFlow.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.JobApplication", b =>
                 {
+                    b.HasOne("TalentFlow.Domain.Entities.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TalentFlow.Domain.Entities.Job", "Job")
                         .WithMany("JobApplications")
                         .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Candidate");
+
                     b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Skill", b =>
+                {
+                    b.HasOne("TalentFlow.Domain.Entities.Candidate", "Candidate")
+                        .WithMany("Skills")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+                });
+
+            modelBuilder.Entity("TalentFlow.Domain.Entities.Candidate", b =>
+                {
+                    b.Navigation("Certificates");
+
+                    b.Navigation("Educations");
+
+                    b.Navigation("Experiences");
+
+                    b.Navigation("Skills");
                 });
 
             modelBuilder.Entity("TalentFlow.Domain.Entities.Company", b =>

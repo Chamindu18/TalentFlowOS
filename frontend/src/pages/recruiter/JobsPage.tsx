@@ -24,7 +24,11 @@ export const JobsPage: React.FC = () => {
     const loadJobs = async () => {
         try {
             setLoading(true);
-            const data = await jobService.getAll();
+            console.log('Fetching jobs...');
+
+            const data = await jobService.getAllJobs();
+            console.log('Jobs data:', data);
+
             setJobs(data);
         } catch (error) {
             toast.error('Failed to load jobs');

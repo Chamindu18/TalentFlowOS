@@ -17,7 +17,7 @@ const api = axios.create({
 
 // Add token to requests
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accesstoken');
+    const token = localStorage.getItem('accessToken');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,10 +26,6 @@ api.interceptors.request.use((config) => {
     (error) => {
         return Promise.reject(error);
     
-
-
-
-
 });
 
 export const applicationService = {
@@ -46,8 +42,8 @@ export const applicationService = {
     },
 
     // Get applications by candidate
-    getByCandidate: async (candidateId: string): Promise<Application[]> => {
-        const response = await api.get(`/JobApplications/candidate/${candidateId}`);
+    getMyApplications: async (): Promise<Application[]> => {
+        const response = await api.get("/JobApplications/my");
         return response.data.data;
     },
 

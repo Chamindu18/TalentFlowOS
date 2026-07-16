@@ -18,6 +18,7 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.JobApplications
             .Include(a => a.Job)
+            .Include(a => a.Candidate)
             .FirstOrDefaultAsync(a => a.Id == id && !a.IsDeleted);
     }
 
@@ -33,6 +34,7 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.JobApplications
             .Include(a => a.Job)
+            .Include(a => a.Candidate)
             .Where(a => a.JobId == jobId && !a.IsDeleted)
             .ToListAsync();
     }
@@ -49,6 +51,7 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.JobApplications
             .Include(a => a.Job)
+            .Include(a => a.Candidate)
             .Where(a => !a.IsDeleted)
             .ToListAsync();
     }

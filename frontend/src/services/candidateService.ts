@@ -1,36 +1,96 @@
-import axios from 'axios';
+import axios from "axios";
 
+const API_BASE_URL = "http://localhost:5007/api";
 
-const API_BASE_URL = 'https://localhost:7001/api'; 
+const getAuthHeaders = (isMultipart = false) => {
+  const token = localStorage.getItem("accessToken");
 
-export interface CandidateProfile {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  bio: string;
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  if (!isMultipart) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return { headers };
+};
+
+/* ============================
+   Dashboard Types
+============================ */
+
+export interface RecentApplication {
+  jobTitle: string;
+  companyName: string;
+  status: string;
 }
 
-export const candidateService = {
+export interface CandidateDashboardData {
+  profileCompletion: number;
+  totalApplications: number;
+  recentApplications: RecentApplication[];
+}
 
-  updateProfile: async (candidateId: string, profileData: CandidateProfile) => {
-    const response = await axios.put(`${API_BASE_URL}/candidate/${candidateId}`, profileData);
+/* ============================
+   Candidate Service
+============================ */
+
+const candidateService = {
+  // Dashboard
+  getDashboard: async (): Promise<CandidateDashboardData> => {
+    const response = await axios.get(
+      `${API_BASE_URL}/Candidate/dashboard`,
+      getAuthHeaders()
+    );
+
     return response.data;
   },
 
- 
-  uploadResume: async (candidateId: string, file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await axios.post(
-      `${API_BASE_URL}/resume/upload?candidateId=${candidateId}`, 
-      formData, 
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+  // Logged-in Candidate
+  getMe: async () => {
+    return await axios.get(
+      `${API_BASE_URL}/Candidate/me`,
+      getAuthHeaders()
     );
-    return response.data;
-  }
+  },
+
+  // Update Profile
+  updateProfile: async (formData: FormData) => {
+    return await axios.put(
+      `${API_BASE_URL}/Candidate/profile`,
+      formData,
+      getAuthHeaders(true)
+    );
+  },
+
+  // Change Password
+  changePassword: async (
+    oldPassword: string,
+    newPassword: string
+  ) => {
+    return await axios.post(
+      `${API_BASE_URL}/Candidate/settings/change-password`,
+      {
+        oldPassword,
+        newPassword,
+      },
+      getAuthHeaders()
+    );
+  },
+
+  // Update Notification Settings
+  updateNotifications: async (
+    isEnabled: boolean
+  ) => {
+    return await axios.put(
+      `${API_BASE_URL}/Candidate/settings/notifications`,
+      {
+        receiveNotifications: isEnabled,
+      },
+      getAuthHeaders()
+    );
+  },
 };
+
+export default candidateService;
