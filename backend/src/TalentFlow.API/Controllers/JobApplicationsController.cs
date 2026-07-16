@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TalentFlow.Application.Services;
+using System.Security.Claims;
 
 using TalentFlow.Application.DTOs.Applications;
 using TalentFlow.Application.Interfaces.Services;
@@ -74,13 +75,33 @@ public class JobApplicationsController : ControllerBase
     /// Submit a new application
     /// </summary>
     [HttpPost]
-    [Authorize(Roles = "Candidate")]
-    public async Task<IActionResult> Create([FromBody] CreateApplicationRequestDTO request)
+[Authorize(Roles = "Candidate")]
+public async Task<IActionResult> Create(
+    [FromBody] CreateApplicationRequestDTO request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (string.IsNullOrWhiteSpace(userId))
     {
-        var application = await _applicationService.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = application.Id },
-            new { success = true, message = "Application submitted successfully", data = application });
+        return Unauthorized();
     }
+
+    var application =
+        await _applicationService.CreateAsync(
+            request,
+            userId
+        );
+
+    return CreatedAtAction(
+        nameof(GetById),
+        new { id = application.Id },
+        new
+        {
+            success = true,
+            message = "Application submitted successfully",
+            data = application
+        });
+}
 
     /// <summary>
     /// Update application status
@@ -133,5 +154,24 @@ public class JobApplicationsController : ControllerBase
     {
         var count = await _applicationService.GetApplicationCountForJobAsync(jobId);
         return Ok(new { success = true, data = count });
+    }
+
+    [HttpGet("my")]
+    [Authorize(Roles = "Candidate")]
+    public async Task<IActionResult> GetMyApplications()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var applications =
+            await _applicationService.GetMyApplicationsAsync(userId);
+
+        return Ok(new
+        {
+            success = true,
+            data = applications
+        });
     }
 }
