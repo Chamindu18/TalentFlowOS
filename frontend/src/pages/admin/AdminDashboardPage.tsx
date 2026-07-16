@@ -52,10 +52,10 @@ export default function AdminDashboardPage() {
           </h2>
 
           <div className="space-y-3">
-            <div>✅ New User Registered</div>
-            <div>✅ Job Created</div>
-            <div>✅ Interview Scheduled</div>
-            <div>✅ Application Submitted</div>
+            <div> New User Registered</div>
+            <div> Job Created</div>
+            <div> Interview Scheduled</div>
+            <div> Application Submitted</div>
           </div>
         </div>
 
@@ -65,10 +65,10 @@ export default function AdminDashboardPage() {
           </h2>
 
           <div className="space-y-3">
-            <div>🟢 Database Online</div>
-            <div>🟢 API Healthy</div>
-            <div>🟢 Notifications Active</div>
-            <div>🟢 AI Services Running</div>
+            <div> Database Online</div>
+            <div> API Healthy</div>
+            <div> Notifications Active</div>
+            <div> AI Services Running</div>
           </div>
         </div>
       </div>

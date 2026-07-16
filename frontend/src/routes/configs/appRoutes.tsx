@@ -38,6 +38,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AIResumeMatchingPage from "@/pages/admin/AIResumeMatchingPage";
 import AIJobRecommendationPage from "@/pages/admin/AIJobRecommendationPage";
 import UserManagementPage from "@/pages/admin/UserManagementPage";
+import AdminLayout from "@/layouts/AdminLayout/AdminLayout";
 
 // Shared Pages
 import DashboardPage from "@/pages/dashboard/DashboardPage";
@@ -113,7 +114,7 @@ export default function AppRoutes() {
 
       {/* Admin Specific Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
-        <Route element={<DashboardLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/users" element={<UserManagementPage />} />
           <Route path="/admin/ai/resume-matching" element={<AIResumeMatchingPage />} />
