@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { candidateService } from '../../services/candidateService';
+import  candidateService  from '../../services/candidateService';
 import { toast } from 'sonner';
 
 const CandidateProfilePage: React.FC = () => {

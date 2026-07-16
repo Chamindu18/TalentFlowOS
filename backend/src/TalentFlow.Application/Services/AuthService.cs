@@ -18,15 +18,18 @@ public class AuthService : IAuthService
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
     private readonly FrontendSettings _frontendSettings;
+    private readonly ICandidateRepository _candidateRepository;
 
     public AuthService(
         IUserRepository userRepository,
+        ICandidateRepository candidateRepository,
         IPasswordHasher passwordHasher,
         IJwtTokenGenerator jwtTokenGenerator,
         IEmailService emailService,
         IOptions<FrontendSettings> frontendSettings)
     {
         _userRepository = userRepository;
+        _candidateRepository = candidateRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
         _emailService = emailService;
@@ -54,12 +57,11 @@ public class AuthService : IAuthService
         RegisterRequestDto request)
     {
         var email = request.Email.Trim().ToLower();
+
         var userExists = await _userRepository.ExistsAsync(email);
 
         if (userExists)
-        {
             throw new UserAlreadyExistsException(email);
-        }
 
         var user = new User
         {
@@ -78,6 +80,26 @@ public class AuthService : IAuthService
 
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
+
+        // Automatically create Candidate profile
+        if (user.Role == UserRole.Candidate)
+        {
+            var candidate = new Candidate
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id.ToString(),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = "",
+                Bio = "",
+                IsProfileComplete = false,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _candidateRepository.AddAsync(candidate);
+            await _candidateRepository.SaveChangesAsync();
+        }
 
         await SendVerificationEmailAsync(user);
 

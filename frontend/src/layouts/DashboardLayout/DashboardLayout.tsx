@@ -1,43 +1,73 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
-// 🔄 Import BOTH sidebars now
-import Sidebar from "./Sidebar"; 
-import HiringSidebar from "./HiringSidebar"; 
+import CandidateSidebar from "./CandidateSidebar";
+import Sidebar from "./Sidebar";
+import HiringSidebar from "./HiringSidebar";
 import Topbar from "./Topbar";
 
-// 🔐 Import your auth store to read who is currently logged in
 import { useAuthStore } from "@/store/auth.store";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 🕵️‍♂️ Extract the current logged-in user object from your state store
   const user = useAuthStore((state) => state.user);
+  const role = user?.role;
 
-  // 🎯 Check if the user explicitly matches your Hiring Manager role profile
-  const isHiringManager = user?.role === "HiringManager";
+  const renderSidebar = () => {
+    switch (role) {
+      case "Candidate":
+        return (
+          <CandidateSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        );
+
+      case "Recruiter":
+        return (
+          <Sidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        );
+
+      case "HiringManager":
+        return (
+          <HiringSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        );
+
+      case "Admin":
+        return (
+          <Sidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        );
+
+      default:
+        return (
+          <CandidateSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        );
+    }
+  };
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
-      
-      {/* 🔄 Dynamic Role Swap logic */}
-      {isHiringManager ? (
-        <HiringSidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
-      ) : (
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-        />
-      )}
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
+      {renderSidebar()}
 
-      <main className="flex min-w-0 flex-1 flex-col">
-        <Topbar onMenuClick={() => setIsSidebarOpen(true)} />
+      <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <Topbar
+          onMenuClick={() => setIsSidebarOpen(true)}
+        />
 
-        <div className="flex-1 p-4 lg:p-6">
+        <div className="flex-1 overflow-y-auto p-6 lg:p-8">
           <Outlet />
         </div>
       </main>
