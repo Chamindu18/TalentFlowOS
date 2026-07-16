@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { candidateService } from '@/services/candidateService';
+import candidateService from '@/services/candidateService';
 
 interface CandidateStore {
     dashboardData: any;
