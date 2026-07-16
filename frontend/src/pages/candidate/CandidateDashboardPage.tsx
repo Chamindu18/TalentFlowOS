@@ -82,16 +82,26 @@ export default function CandidateDashboardPage() {
         />
 
         <StatCard
-          title="Saved Jobs"
-          value={0}
-          subtitle="Coming Soon"
+          title="Pending"
+          value={
+            dashboard?.recentApplications?.filter(
+              (a) =>
+                a.status === "Applied" ||
+                a.status === "Pending"
+            ).length ?? 0
+          }
+          subtitle="Awaiting review"
           icon={BriefcaseBusiness}
         />
 
         <StatCard
-          title="Interviews"
-          value={0}
-          subtitle="Upcoming"
+          title="Shortlisted"
+          value={
+            dashboard?.recentApplications?.filter(
+              (a) => a.status === "Shortlisted"
+            ).length ?? 0
+          }
+          subtitle="Great progress"
           icon={CalendarDays}
         />
 
@@ -108,22 +118,40 @@ export default function CandidateDashboardPage() {
 
         <div className="space-y-8 xl:col-span-2">
 
-          <SectionCard title="Recommended Jobs">
+          <SectionCard title="Quick Actions">
 
-            <div className="grid gap-4 md:grid-cols-2">
-
+            <div className="grid gap-5 md:grid-cols-2">
               <JobCard
-                title="Software Engineer"
-                company="WSO2"
-                location="Colombo"
+                  title="Browse Jobs"
+                  company="Discover new career opportunities"
+                  location="Explore all available jobs"
+                  buttonText="Browse Jobs"
+                  onClick={() => navigate("/candidate/jobs")}
               />
 
               <JobCard
-                title="Frontend Developer"
-                company="Dialog"
-                location="Hybrid"
+                  title="Complete Profile"
+                  company="Increase recruiter visibility"
+                  location="Keep your profile updated"
+                  buttonText="Edit Profile"
+                  onClick={() => navigate("/candidate/profile")}
               />
 
+              <JobCard
+                  title="My Applications"
+                  company="Track your application progress"
+                  location="View submitted applications"
+                  buttonText="View Applications"
+                  onClick={() => navigate("/candidate/applications")}
+              />
+
+              <JobCard
+                  title="Upload Resume"
+                  company="Improve your profile"
+                  location="Keep your latest CV ready"
+                  buttonText="Upload Resume"
+                  onClick={() => navigate("/candidate/resume")}
+              />
             </div>
 
           </SectionCard>
@@ -176,10 +204,21 @@ export default function CandidateDashboardPage() {
 
                           <td>
 
-                            <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-600">
-
+                            <span
+                              className={`rounded-full px-3 py-1 text-sm font-medium
+                                ${
+                                  application.status === "Applied"
+                                    ? "bg-orange-100 text-orange-700"
+                                    : application.status === "Shortlisted"
+                                    ? "bg-green-100 text-green-700"
+                                    : application.status === "Interview"
+                                    ? "bg-blue-100 text-blue-700"
+                                    : application.status === "Rejected"
+                                    ? "bg-red-100 text-red-700"
+                                    : "bg-slate-100 text-slate-700"
+                                }`}
+                            >
                               {application.status}
-
                             </span>
 
                           </td>
