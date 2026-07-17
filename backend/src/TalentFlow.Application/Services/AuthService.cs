@@ -49,7 +49,8 @@ public class AuthService : IAuthService
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = user.Role.ToString()
+            Role = user.Role.ToString(),
+            CompanyId = user.CompanyId
         };
     }
 
@@ -110,7 +111,8 @@ public class AuthService : IAuthService
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = user.Role.ToString()
+            Role = user.Role.ToString(),
+            CompanyId = user.CompanyId
         };
     }
 
@@ -148,7 +150,8 @@ public class AuthService : IAuthService
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = user.Role.ToString()
+            Role = user.Role.ToString(),
+            CompanyId = user.CompanyId
         };
     }
 
