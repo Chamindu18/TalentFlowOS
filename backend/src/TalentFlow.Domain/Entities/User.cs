@@ -37,4 +37,8 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public Guid? CompanyId { get; set; }
+
+    public Company? Company { get; set; }
 }
