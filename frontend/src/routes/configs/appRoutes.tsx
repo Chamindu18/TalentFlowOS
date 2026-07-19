@@ -19,7 +19,7 @@ import CandidateApplicationsPage from "@/pages/candidate/CandidateApplicationsPa
 import CandidateJobDetailsPage from "@/pages/candidate/CandidateJobDetailsPage";
 
 // Recruiter Pages
-import { RecruiterDashboardPage } from "@/pages/recruiter/RecruiterDashboardPage";
+import  RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
