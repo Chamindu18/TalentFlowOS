@@ -13,4 +13,5 @@ public class AuthResponseDto
     public string LastName { get; set; } = string.Empty;
 
     public string Role { get; set; } = string.Empty;
+    public Guid? CompanyId { get; set; }
 }
