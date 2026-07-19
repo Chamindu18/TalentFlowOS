@@ -35,15 +35,21 @@ public DbSet<Interview> Interviews => Set<Interview>();
             entity.HasMany(c => c.Certificates).WithOne(c => c.Candidate).HasForeignKey(c => c.CandidateId);
         });
 
-        modelBuilder.Entity<JobApplication>(entity =>
-{
-            entity.HasOne(ja => ja.Candidate)
-                .WithMany()
-                .HasForeignKey(ja => ja.CandidateId);
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Company)
+            .WithMany(c => c.Users)
+            .HasForeignKey(u => u.CompanyId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-            entity.HasOne(ja => ja.Job)
-                .WithMany(j => j.JobApplications)
-                .HasForeignKey(ja => ja.JobId);
-        });
-    }
-}
+        modelBuilder.Entity<JobApplication>(entity =>
+        {
+                    entity.HasOne(ja => ja.Candidate)
+                        .WithMany()
+                        .HasForeignKey(ja => ja.CandidateId);
+
+                    entity.HasOne(ja => ja.Job)
+                        .WithMany(j => j.JobApplications)
+                        .HasForeignKey(ja => ja.JobId);
+                });
+            }
+        }
