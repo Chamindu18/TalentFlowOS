@@ -44,4 +44,6 @@ public class Company
     // Navigation Properties
     public ICollection<Department> Departments { get; set; } = new List<Department>();
     public ICollection<Job> Jobs { get; set; } = new List<Job>();
+
+    public ICollection<User> Users { get; set; } = new List<User>();
 }
