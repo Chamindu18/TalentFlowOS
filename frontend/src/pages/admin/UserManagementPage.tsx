@@ -1,24 +1,66 @@
 export default function UserManagementPage() {
   const users = [
-    {
-      name: "John Doe",
-      email: "john@test.com",
-      role: "Candidate",
-      status: "Active",
-    },
-    {
-      name: "Jane Smith",
-      email: "jane@test.com",
-      role: "Recruiter",
-      status: "Active",
-    },
-    {
-      name: "Admin User",
-      email: "admin@test.com",
-      role: "Admin",
-      status: "Active",
-    },
-  ];
+  {
+    name: "Nethsara Induwara",
+    email: "nethsara@gmail.com",
+    role: "Admin",
+    status: "Active",
+  },
+  {
+    name: "John Doe",
+    email: "john.doe@gmail.com",
+    role: "Candidate",
+    status: "Verified",
+  },
+  {
+    name: "Jane Smith",
+    email: "jane.smith@gmail.com",
+    role: "Recruiter",
+    status: "Active",
+  },
+  {
+    name: "Michael Perera",
+    email: "michael@gmail.com",
+    role: "Hiring Manager",
+    status: "Active",
+  },
+  {
+    name: "Sarah Fernando",
+    email: "sarah@gmail.com",
+    role: "Candidate",
+    status: "Pending",
+  },
+  {
+    name: "David Silva",
+    email: "david@gmail.com",
+    role: "Recruiter",
+    status: "Active",
+  },
+  {
+    name: "Kevin Wijesinghe",
+    email: "kevin@gmail.com",
+    role: "Candidate",
+    status: "Verified",
+  },
+  {
+    name: "Amanda Jayasinghe",
+    email: "amanda@gmail.com",
+    role: "Candidate",
+    status: "Pending",
+  },
+  {
+    name: "Robert Brown",
+    email: "robert@gmail.com",
+    role: "Hiring Manager",
+    status: "Active",
+  },
+  {
+    name: "Emily Watson",
+    email: "emily@gmail.com",
+    role: "Recruiter",
+    status: "Verified",
+  },
+];
 
   return (
     <div className="p-8">
