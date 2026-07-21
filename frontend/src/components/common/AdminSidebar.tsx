@@ -5,43 +5,50 @@ import {
   Brain,
   Settings,
   User,
+  Bell,
+  ClipboardList,
 } from "lucide-react";
 
 export default function AdminSidebar() {
   const location = useLocation();
 
   const items = [
-    {
-      path: "/admin/dashboard",
-      label: "Dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      path: "/admin/users",
-      label: "User Management",
-      icon: Users,
-    },
-    {
-      path: "/admin/ai/resume-matching",
-      label: "Resume Matching",
-      icon: Brain,
-    },
-    {
-      path: "/admin/ai/job-recommendations",
-      label: "AI Recommendations",
-      icon: Brain,
-    },
-    {
-      path: "/profile",
-      label: "Profile",
-      icon: User,
-    },
-    {
-      path: "/settings",
-      label: "Settings",
-      icon: Settings,
-    },
-  ];
+  {
+    path: "/admin/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+  },
+
+  {
+    path: "/admin/users",
+    label: "User Management",
+    icon: Users,
+  },
+
+  {
+    path: "/admin/notifications",
+    label: "Notifications",
+    icon: Bell,
+  },
+
+  {
+    path: "/admin/activity-logs",
+    label: "Activity Logs",
+    icon: ClipboardList,
+  },
+
+  {
+    path: "/admin/profile",
+    label: "Profile",
+    icon: User,
+  },
+
+  {
+    path: "/settings",
+    label: "Settings",
+    icon: Settings,
+  },
+];
 
   return (
     <aside className="w-64 bg-white border-r min-h-screen">

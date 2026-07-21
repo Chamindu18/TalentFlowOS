@@ -1,21 +1,46 @@
 using TalentFlow.Application.DTOs.Admin;
+using TalentFlow.Application.DTOs.Users;
+using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Services;
 
 namespace TalentFlow.Application.Services;
 
 public class AdminService : IAdminService
 {
+    private readonly IUserRepository _userRepository;
+
+    public AdminService(
+        IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
     public async Task<DashboardStatsDto> GetDashboardStatsAsync()
     {
-        return await Task.FromResult(
-            new DashboardStatsDto
-            {
-                TotalUsers = 0,
-                TotalCandidates = 0,
-                TotalCompanies = 0,
-                TotalJobs = 0,
-                TotalInterviews = 0
-            }
-        );
+        var users = await _userRepository.GetAllAsync();
+
+        return new DashboardStatsDto
+        {
+            TotalUsers = users.Count(),
+            TotalCandidates = 0,
+            TotalCompanies = 0,
+            TotalJobs = 0,
+            TotalInterviews = 0
+        };
+    }
+
+    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+
+        return users.Select(user => new UserResponseDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            IsEmailVerified = user.IsEmailVerified
+        });
     }
 }
