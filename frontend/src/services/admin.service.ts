@@ -10,4 +10,28 @@ export const adminService = {
 
     return response.data.data;
   },
+
+  async getDashboardStats() {
+    const response = await axios.get(
+      `${API_URL}/admin/dashboard`
+    );
+
+    return response.data.data;
+  },
+
+  async getNotifications() {
+    const response = await axios.get(
+      `${API_URL}/notification`
+    );
+
+    return response.data.data;
+  },
+
+  async getActivityLogs() {
+    const response = await axios.get(
+      `${API_URL}/activitylog`
+    );
+
+    return response.data.data;
+  }
 };
