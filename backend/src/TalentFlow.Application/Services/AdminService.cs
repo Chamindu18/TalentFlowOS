@@ -29,18 +29,22 @@ public class AdminService : IAdminService
         };
     }
 
-    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
+    public async Task<IEnumerable<UserResponseDto>>
+        GetAllUsersAsync()
     {
-        var users = await _userRepository.GetAllAsync();
+        var users =
+            await _userRepository.GetAllAsync();
 
-        return users.Select(user => new UserResponseDto
-        {
-            Id = user.Id,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Role = user.Role.ToString(),
-            IsEmailVerified = user.IsEmailVerified
-        });
+        return users.Select(user =>
+            new UserResponseDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role.ToString(),
+                IsEmailVerified =
+                    user.IsEmailVerified
+            });
     }
 }
