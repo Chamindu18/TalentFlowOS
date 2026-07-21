@@ -37,6 +37,21 @@ export default function UserManagementPage() {
 
     return matchesSearch && matchesRole;
   });
+  const totalUsers = users.length;
+
+  const adminCount = users.filter((user) => user.role === "Admin").length;
+
+  const recruiterCount = users.filter(
+    (user) => user.role === "Recruiter",
+  ).length;
+
+  const candidateCount = users.filter(
+    (user) => user.role === "Candidate",
+  ).length;
+
+  const hiringManagerCount = users.filter(
+    (user) => user.role === "HiringManager",
+  ).length;
 
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
@@ -45,6 +60,44 @@ export default function UserManagementPage() {
       <p className="text-slate-500 mt-2">
         Manage users, roles and account status.
       </p>
+      {/* User Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-8 mb-8">
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Total Users</p>
+
+          <h2 className="text-3xl font-bold text-blue-600">{totalUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Admins</p>
+
+          <h2 className="text-3xl font-bold text-purple-600">{adminCount}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Recruiters</p>
+
+          <h2 className="text-3xl font-bold text-green-600">
+            {recruiterCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Candidates</p>
+
+          <h2 className="text-3xl font-bold text-orange-600">
+            {candidateCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Hiring Managers</p>
+
+          <h2 className="text-3xl font-bold text-pink-600">
+            {hiringManagerCount}
+          </h2>
+        </div>
+      </div>
 
       {/* Search + Filter */}
       <div className="flex flex-col md:flex-row gap-4 my-6">
