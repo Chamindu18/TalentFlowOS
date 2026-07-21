@@ -11,15 +11,15 @@ import EmailVerificationPage from "@/pages/auth/EmailVerificationPage";
 // Candidate Pages
 import CandidateDashboardPage from "@/pages/candidate/CandidateDashboardPage";
 import CandidateProfilePage from "@/pages/candidate/CandidateProfile";
-import ResumeUpload from "@/pages/candidate/ResumeUpload"; 
-import CandidateJobsPage from "@/pages/candidate/CandidateJobsPage"; 
+import ResumeUpload from "@/pages/candidate/ResumeUpload";
+import CandidateJobsPage from "@/pages/candidate/CandidateJobsPage";
 import CandidateAnalyticsPage from "@/pages/candidate/CandidateAnalyticsPage";
 import CandidateSettingsPage from "@/pages/candidate/CandidateSettingsPage";
 import CandidateApplicationsPage from "@/pages/candidate/CandidateApplicationsPage";
 import CandidateJobDetailsPage from "@/pages/candidate/CandidateJobDetailsPage";
 
 // Recruiter Pages
-import  RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
+import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
 import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
@@ -41,6 +41,9 @@ import AIResumeMatchingPage from "@/pages/admin/AIResumeMatchingPage";
 import AIJobRecommendationPage from "@/pages/admin/AIJobRecommendationPage";
 import UserManagementPage from "@/pages/admin/UserManagementPage";
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout";
+import NotificationsPage from "@/pages/admin/NotificationsPage";
+import ActivityLogsPage from "@/pages/admin/ActivityLogsPage";
+import AdminProfilePage from "@/pages/admin/AdminProfilePage";
 
 // Shared Pages
 import DashboardPage from "@/pages/dashboard/DashboardPage";
@@ -63,10 +66,7 @@ export default function AppRoutes() {
     <Routes>
       {/* Public Pages */}
       <Route element={<PublicLayout />}>
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
+        <Route path="/" element={<HomePage />} />
       </Route>
 
       {/* Authentication Routes */}
@@ -76,33 +76,60 @@ export default function AppRoutes() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/email-verification" element={<EmailVerificationPage />} />
+          <Route
+            path="/email-verification"
+            element={<EmailVerificationPage />}
+          />
         </Route>
       </Route>
 
       {/* Candidate Specific Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Candidate"]} />}>
         <Route element={<DashboardLayout />}>
-          <Route path="/candidate/dashboard" element={<CandidateDashboardPage />} />
+          <Route
+            path="/candidate/dashboard"
+            element={<CandidateDashboardPage />}
+          />
           <Route path="/candidate/profile" element={<CandidateProfilePage />} />
           <Route path="/candidate/resume" element={<ResumeUpload />} />
           <Route path="/candidate/jobs" element={<CandidateJobsPage />} />
-          <Route path="/candidate/jobs/:id" element={<CandidateJobDetailsPage />} />
-          <Route path="/candidate/analytics" element={<CandidateAnalyticsPage />} />
-          <Route path="/candidate/settings" element={<CandidateSettingsPage />} />
-          <Route path="/candidate/applications" element={<CandidateApplicationsPage />} />
+          <Route
+            path="/candidate/jobs/:id"
+            element={<CandidateJobDetailsPage />}
+          />
+          <Route
+            path="/candidate/analytics"
+            element={<CandidateAnalyticsPage />}
+          />
+          <Route
+            path="/candidate/settings"
+            element={<CandidateSettingsPage />}
+          />
+          <Route
+            path="/candidate/applications"
+            element={<CandidateApplicationsPage />}
+          />
         </Route>
       </Route>
 
       {/* Recruiter Specific Routes */}
       <Route element={<ProtectedRoute allowedRoles={["Recruiter"]} />}>
         <Route element={<DashboardLayout />}>
-          <Route path="/recruiter/dashboard" element={<RecruiterDashboardPage />} />
+          <Route
+            path="/recruiter/dashboard"
+            element={<RecruiterDashboardPage />}
+          />
           <Route path="/recruiter/profile" element={<RecruiterProfilePage />} />
-          <Route path="/recruiter/setup-company" element={<CompanySetupPage />} />
+          <Route
+            path="/recruiter/setup-company"
+            element={<CompanySetupPage />}
+          />
           <Route path="/recruiter/jobs" element={<JobsPage />} />
           <Route path="/recruiter/jobs/create" element={<CreateJobPage />} />
-          <Route path="/recruiter/applications" element={<ApplicationsPage />} />
+          <Route
+            path="/recruiter/applications"
+            element={<ApplicationsPage />}
+          />
         </Route>
       </Route>
 
@@ -110,8 +137,14 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={["HiringManager"]} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/hiring/dashboard" element={<HiringDashboardPage />} />
-          <Route path="/hiring/interviews" element={<InterviewSchedulingPage />} />
-          <Route path="/hiring/evaluations" element={<CandidateEvaluationsPage />} />
+          <Route
+            path="/hiring/interviews"
+            element={<InterviewSchedulingPage />}
+          />
+          <Route
+            path="/hiring/evaluations"
+            element={<CandidateEvaluationsPage />}
+          />
           <Route path="/hiring/feedback" element={<InterviewFeedbackPage />} />
           <Route path="/hiring/decisions" element={<HiringDecisionsPage />} />
           <Route path="/hiring/profile" element={<HiringProfilePage />} />
@@ -124,8 +157,9 @@ export default function AppRoutes() {
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/users" element={<UserManagementPage />} />
-          <Route path="/admin/ai/resume-matching" element={<AIResumeMatchingPage />} />
-          <Route path="/admin/ai/job-recommendations" element={<AIJobRecommendationPage />} />
+          <Route path="/admin/notifications" element={<NotificationsPage />} />
+          <Route path="/admin/activity-logs" element={<ActivityLogsPage />} />
+          <Route path="/admin/profile" element={<AdminProfilePage />} />
         </Route>
       </Route>
 
