@@ -56,6 +56,37 @@ export default function UserManagementPage() {
 
   const pendingUsers = users.filter((user) => !user.isEmailVerified).length;
 
+  const exportUsers = () => {
+    const headers = ["First Name", "Last Name", "Email", "Role", "Status"];
+
+    const rows = users.map((user) => [
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.role,
+      user.isEmailVerified ? "Verified" : "Pending",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const link = document.createElement("a");
+
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = "users.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
       <h1 className="text-4xl font-bold">User Management</h1>
@@ -134,6 +165,12 @@ export default function UserManagementPage() {
           <option>Recruiter</option>
           <option>HiringManager</option>
         </select>
+        <button
+          onClick={exportUsers}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+        >
+          Export Users
+        </button>
       </div>
 
       {/* User Count */}
