@@ -52,6 +52,9 @@ export default function UserManagementPage() {
   const hiringManagerCount = users.filter(
     (user) => user.role === "HiringManager",
   ).length;
+  const verifiedUsers = users.filter((user) => user.isEmailVerified).length;
+
+  const pendingUsers = users.filter((user) => !user.isEmailVerified).length;
 
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
@@ -96,6 +99,17 @@ export default function UserManagementPage() {
           <h2 className="text-3xl font-bold text-pink-600">
             {hiringManagerCount}
           </h2>
+        </div>
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Verified Users</p>
+
+          <h2 className="text-3xl font-bold text-green-600">{verifiedUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Pending Users</p>
+
+          <h2 className="text-3xl font-bold text-yellow-600">{pendingUsers}</h2>
         </div>
       </div>
 
