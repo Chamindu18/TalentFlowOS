@@ -10,4 +10,11 @@ export const adminService = {
 
     return response.data.data;
   },
+  async getDashboardStats() {
+  const response = await axios.get(
+    `${API_URL}/admin/dashboard`
+  );
+
+  return response.data.data;
+},
 };
