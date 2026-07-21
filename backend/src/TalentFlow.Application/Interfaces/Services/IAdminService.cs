@@ -7,5 +7,6 @@ public interface IAdminService
 {
     Task<DashboardStatsDto> GetDashboardStatsAsync();
 
-    Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
+    Task<IEnumerable<UserResponseDto>>
+        GetAllUsersAsync();
 }
