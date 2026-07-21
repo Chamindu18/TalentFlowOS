@@ -8,6 +8,9 @@ export default function UserManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const [selectedRole, setSelectedRole] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -124,11 +127,28 @@ export default function UserManagementPage() {
                       View
                     </button>
 
-                    <button className="text-green-600 hover:text-green-800">
+                    <button
+                      onClick={() => {
+                        setEditingUser(user);
+                        setSelectedRole(user.role);
+                      }}
+                      className="text-green-600 hover:text-green-800"
+                    >
                       Edit
                     </button>
 
-                    <button className="text-red-600 hover:text-red-800">
+                    <button
+                      onClick={() => {
+                        const confirmed = window.confirm(
+                          `Disable ${user.firstName}?`,
+                        );
+
+                        if (confirmed) {
+                          alert("User disabled");
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-800"
+                    >
                       Disable
                     </button>
                   </div>
@@ -173,6 +193,52 @@ export default function UserManagementPage() {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+      {editingUser && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6">Edit User Role</h2>
+
+            <p className="mb-2">
+              <strong>User:</strong> {editingUser.firstName}{" "}
+              {editingUser.lastName}
+            </p>
+
+            <p className="mb-4">
+              <strong>Email:</strong> {editingUser.email}
+            </p>
+
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              className="w-full border rounded-lg px-4 py-2"
+            >
+              <option>Admin</option>
+              <option>Candidate</option>
+              <option>Recruiter</option>
+              <option>HiringManager</option>
+            </select>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  alert(`Role updated to ${selectedRole}`);
+                  setEditingUser(null);
+                }}
+                className="bg-indigo-600 text-white px-5 py-2 rounded-lg"
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => setEditingUser(null)}
+                className="bg-gray-200 px-5 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
