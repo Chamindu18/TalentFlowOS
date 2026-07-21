@@ -1,26 +1,28 @@
+import { useEffect, useState } from "react";
+
+import { adminService } from "@/services/admin.service";
+import type { ActivityLog } from "@/types/activityLog";
+
 export default function ActivityLogsPage() {
-  const logs = [
-    {
-      action: "User Login",
-      user: "Nethsara Induwara",
-      time: "09:30 AM",
-    },
-    {
-      action: "Job Created",
-      user: "Recruiter User",
-      time: "10:10 AM",
-    },
-    {
-      action: "Application Submitted",
-      user: "John Doe",
-      time: "10:45 AM",
-    },
-    {
-      action: "Interview Scheduled",
-      user: "Hiring Manager",
-      time: "11:15 AM",
-    },
-  ];
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, []);
+
+  const fetchLogs = async () => {
+    try {
+      const data =
+        await adminService.getActivityLogs();
+
+      setLogs(data);
+    } catch (error) {
+      console.error(
+        "Failed to load activity logs",
+        error
+      );
+    }
+  };
 
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
@@ -29,30 +31,45 @@ export default function ActivityLogsPage() {
       </h1>
 
       <p className="text-slate-500 mt-2">
-        Track user and system activities.
+        Monitor system activity and user actions.
       </p>
 
-      <div className="bg-white rounded-xl border mt-8 overflow-hidden">
+      <div className="mt-6">
+        <p className="text-sm text-slate-500">
+          Total Logs: {logs.length}
+        </p>
+      </div>
+
+      <div className="bg-white rounded-xl border mt-8 overflow-hidden shadow-sm">
         <table className="w-full">
           <thead className="bg-slate-100">
             <tr>
-              <th className="text-left p-4">Action</th>
-              <th className="text-left p-4">User</th>
-              <th className="text-left p-4">Time</th>
+              <th className="text-left p-4">
+                Activity
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {logs.map((log, index) => (
-              <tr key={index} className="border-t">
-                <td className="p-4">{log.action}</td>
-                <td className="p-4">{log.user}</td>
-                <td className="p-4">{log.time}</td>
+              <tr
+                key={index}
+                className="border-t"
+              >
+                <td className="p-4">
+                  {log.action}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {logs.length === 0 && (
+        <div className="bg-white border rounded-xl p-8 mt-8 text-center text-slate-500">
+          No activity logs found.
+        </div>
+      )}
     </div>
   );
 }
