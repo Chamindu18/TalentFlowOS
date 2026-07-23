@@ -327,9 +327,23 @@ export default function UserManagementPage() {
 
             <div className="flex gap-3 mt-6">
               <button
-                onClick={() => {
-                  alert(`Role updated to ${selectedRole}`);
-                  setEditingUser(null);
+                onClick={async () => {
+                  try {
+                    await adminService.updateUserRole(
+                      editingUser.id,
+                      selectedRole,
+                    );
+
+                    await fetchUsers();
+
+                    setEditingUser(null);
+
+                    alert("Role updated successfully");
+                  } catch (error) {
+                    console.error(error);
+
+                    alert("Failed to update role");
+                  }
                 }}
                 className="bg-indigo-600 text-white px-5 py-2 rounded-lg"
               >

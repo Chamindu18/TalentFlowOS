@@ -47,4 +47,33 @@ public class AdminService : IAdminService
                     user.IsEmailVerified
             });
     }
+
+    public async Task<bool> UpdateUserRoleAsync(
+    Guid userId,
+    string role)
+    {
+        var user =
+            await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        if (
+            Enum.TryParse(
+                role,
+                out TalentFlow.Domain.Enums.UserRole userRole
+            )
+        )
+        {
+            user.Role = userRole;
+
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -9,4 +9,9 @@ public interface IAdminService
 
     Task<IEnumerable<UserResponseDto>>
         GetAllUsersAsync();
+
+    Task<bool> UpdateUserRoleAsync(
+    Guid userId,
+    string role);
+
 }
