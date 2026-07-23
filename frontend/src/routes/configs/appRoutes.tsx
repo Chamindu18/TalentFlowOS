@@ -61,7 +61,6 @@ import ProtectedRoute from "@/routes/guards/ProtectedRoute";
 
 //AI
 import AICareerAssistantPage from "@/pages/ai/AICareerAssistantPage";
-import AIJobRecommendationPage from "@/pages/ai/AIJobRecommendationPage";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -180,10 +179,7 @@ export default function AppRoutes() {
 
       {/* AI part Routes */}
       <Route path="/ai/career-assistant" element={<AICareerAssistantPage />} />
-      <Route
-        path="/ai/job-recommendations"
-        element={<AIJobRecommendationPage />}
-      />
+
     </Routes>
   );
 }

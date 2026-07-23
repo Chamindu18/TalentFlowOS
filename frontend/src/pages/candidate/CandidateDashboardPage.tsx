@@ -157,17 +157,9 @@ export default function CandidateDashboardPage() {
                 buttonText="Open Assistant"
                 onClick={() => navigate("/ai/career-assistant")}
               />
-
-              <JobCard
-                title="AI Job Recommendations"
-                company="Personalized opportunities"
-                location="Recommended roles based on your skills"
-                buttonText="View Recommendations"
-                onClick={() => navigate("/ai/job-recommendations")}
-              />
             </div>
           </SectionCard>
-          
+
           <SectionCard title="Recent Applications">
             {dashboard &&
             dashboard.recentApplications &&

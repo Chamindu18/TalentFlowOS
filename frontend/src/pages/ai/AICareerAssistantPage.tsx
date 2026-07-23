@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AICareerAssistantPage() {
+  const navigate = useNavigate();
   const [skills, setSkills] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
@@ -11,19 +13,23 @@ export default function AICareerAssistantPage() {
     }[]
   >([]);
 
-  const [careerReadiness, setCareerReadiness] =
-    useState(0);
+  const [careerReadiness, setCareerReadiness] = useState(0);
 
-  const [missingSkills, setMissingSkills] =
-    useState<string[]>([]);
+  const [missingSkills, setMissingSkills] = useState<string[]>([]);
 
-  const [careerOutlook, setCareerOutlook] =
-    useState({
-      demand: "",
-      growth: "",
-      salary: "",
-      remote: "",
-    });
+  const [careerOutlook, setCareerOutlook] = useState({
+    demand: "",
+    growth: "",
+    salary: "",
+    remote: "",
+  });
+  const [recommendedJobs, setRecommendedJobs] = useState<
+    {
+      title: string;
+      company: string;
+      salary: string;
+    }[]
+  >([]);
 
   const skillOptions = [
     "Java",
@@ -42,25 +48,14 @@ export default function AICareerAssistantPage() {
 
   const toggleSkill = (skill: string) => {
     if (selectedSkills.includes(skill)) {
-      setSelectedSkills(
-        selectedSkills.filter(
-          (item) => item !== skill
-        )
-      );
+      setSelectedSkills(selectedSkills.filter((item) => item !== skill));
     } else {
-      setSelectedSkills([
-        ...selectedSkills,
-        skill,
-      ]);
+      setSelectedSkills([...selectedSkills, skill]);
     }
   };
 
   const analyzeSkills = () => {
-    const text = (
-      skills +
-      " " +
-      selectedSkills.join(" ")
-    ).toLowerCase();
+    const text = (skills + " " + selectedSkills.join(" ")).toLowerCase();
 
     const recommendations: {
       role: string;
@@ -84,20 +79,14 @@ export default function AICareerAssistantPage() {
         score: 88,
       });
 
-      if (!text.includes("docker"))
-        gaps.push("Docker");
+      if (!text.includes("docker")) gaps.push("Docker");
 
-      if (!text.includes("azure"))
-        gaps.push("Azure");
+      if (!text.includes("azure")) gaps.push("Azure");
 
-      if (!text.includes("microservices"))
-        gaps.push("Microservices");
+      if (!text.includes("microservices")) gaps.push("Microservices");
     }
 
-    if (
-      text.includes("react") ||
-      text.includes("typescript")
-    ) {
+    if (text.includes("react") || text.includes("typescript")) {
       recommendations.push({
         role: "Frontend Developer",
         score: 94,
@@ -108,14 +97,10 @@ export default function AICareerAssistantPage() {
         score: 87,
       });
 
-      if (!text.includes("next"))
-        gaps.push("Next.js");
+      if (!text.includes("next")) gaps.push("Next.js");
     }
 
-    if (
-      text.includes("python") ||
-      text.includes("machine learning")
-    ) {
+    if (text.includes("python") || text.includes("machine learning")) {
       recommendations.push({
         role: "Data Scientist",
         score: 95,
@@ -126,11 +111,9 @@ export default function AICareerAssistantPage() {
         score: 91,
       });
 
-      if (!text.includes("tensorflow"))
-        gaps.push("TensorFlow");
+      if (!text.includes("tensorflow")) gaps.push("TensorFlow");
 
-      if (!text.includes("deep learning"))
-        gaps.push("Deep Learning");
+      if (!text.includes("deep learning")) gaps.push("Deep Learning");
     }
 
     if (
@@ -143,69 +126,123 @@ export default function AICareerAssistantPage() {
         score: 89,
       });
 
-      if (!text.includes("terraform"))
-        gaps.push("Terraform");
+      if (!text.includes("terraform")) gaps.push("Terraform");
     }
 
     let readiness = 40;
 
     readiness += recommendations.length * 10;
 
-    if (text.includes("sql"))
-      readiness += 10;
+    if (text.includes("sql")) readiness += 10;
 
-    if (text.includes("docker"))
-      readiness += 10;
+    if (text.includes("docker")) readiness += 10;
 
-    if (text.includes("python"))
-      readiness += 10;
+    if (text.includes("python")) readiness += 10;
 
-    if (text.includes("react"))
-      readiness += 10;
+    if (text.includes("react")) readiness += 10;
 
-    if (readiness > 100)
-      readiness = 100;
+    if (readiness > 100) readiness = 100;
 
-    if (
-      recommendations[0]?.role ===
-      "Backend Developer"
-    ) {
+    if (recommendations[0]?.role === "Backend Developer") {
       setCareerOutlook({
         demand: "High",
         growth: "Excellent",
         salary: "LKR 300,000 - 450,000",
         remote: "Available",
       });
-    } else if (
-      recommendations[0]?.role ===
-      "Frontend Developer"
-    ) {
+
+      setRecommendedJobs([
+        {
+          title: "Backend Developer",
+          company: "TechCorp",
+          salary: "LKR 300,000 - 450,000",
+        },
+        {
+          title: "Software Engineer",
+          company: "ABC Solutions",
+          salary: "LKR 280,000 - 420,000",
+        },
+        {
+          title: "Java Developer",
+          company: "FutureTech",
+          salary: "LKR 320,000 - 480,000",
+        },
+      ]);
+    } else if (recommendations[0]?.role === "Frontend Developer") {
       setCareerOutlook({
         demand: "High",
         growth: "Excellent",
         salary: "LKR 250,000 - 400,000",
         remote: "Highly Available",
       });
-    } else if (
-      recommendations[0]?.role ===
-      "Data Scientist"
-    ) {
+
+      setRecommendedJobs([
+        {
+          title: "Frontend Developer",
+          company: "Creative Labs",
+          salary: "LKR 250,000 - 400,000",
+        },
+        {
+          title: "UI Engineer",
+          company: "Digital Studio",
+          salary: "LKR 220,000 - 350,000",
+        },
+        {
+          title: "React Developer",
+          company: "CodeFusion",
+          salary: "LKR 260,000 - 410,000",
+        },
+      ]);
+    } else if (recommendations[0]?.role === "Data Scientist") {
       setCareerOutlook({
         demand: "Very High",
         growth: "Outstanding",
         salary: "LKR 350,000 - 600,000",
         remote: "Available",
       });
-    } else if (
-      recommendations[0]?.role ===
-      "DevOps Engineer"
-    ) {
+
+      setRecommendedJobs([
+        {
+          title: "Data Scientist",
+          company: "DataVision",
+          salary: "LKR 350,000 - 600,000",
+        },
+        {
+          title: "ML Engineer",
+          company: "AI Nexus",
+          salary: "LKR 400,000 - 650,000",
+        },
+        {
+          title: "AI Engineer",
+          company: "FutureAI",
+          salary: "LKR 420,000 - 700,000",
+        },
+      ]);
+    } else if (recommendations[0]?.role === "DevOps Engineer") {
       setCareerOutlook({
         demand: "High",
         growth: "Excellent",
         salary: "LKR 350,000 - 550,000",
         remote: "Available",
       });
+
+      setRecommendedJobs([
+        {
+          title: "DevOps Engineer",
+          company: "CloudWorks",
+          salary: "LKR 350,000 - 550,000",
+        },
+        {
+          title: "Cloud Engineer",
+          company: "AzureTech",
+          salary: "LKR 380,000 - 600,000",
+        },
+        {
+          title: "Infrastructure Engineer",
+          company: "CloudBridge",
+          salary: "LKR 330,000 - 520,000",
+        },
+      ]);
     }
 
     setResults(recommendations);
@@ -217,49 +254,36 @@ export default function AICareerAssistantPage() {
     <div className="min-h-screen bg-slate-50 p-8">
       {/* Hero */}
       <div className="bg-gradient-to-r from-black via-slate-900 to-orange-600 rounded-3xl p-8 text-white">
-        <h1 className="text-4xl font-bold">
-          🤖 AI Career Assistant
-        </h1>
+        <h1 className="text-4xl font-bold">🤖 AI Career Assistant</h1>
 
         <p className="mt-3 text-slate-300">
-          Discover your ideal career path,
-          identify skill gaps and receive
+          Discover your ideal career path, identify skill gaps and receive
           AI-powered career guidance.
         </p>
       </div>
 
       {/* Skills Input */}
       <div className="bg-white border rounded-3xl p-8 mt-8 shadow-sm">
-        <h2 className="text-xl font-semibold">
-          Skills Assessment
-        </h2>
+        <h2 className="text-xl font-semibold">Skills Assessment</h2>
 
         <textarea
           rows={4}
           value={skills}
-          onChange={(e) =>
-            setSkills(e.target.value)
-          }
+          onChange={(e) => setSkills(e.target.value)}
           placeholder="Enter additional skills..."
           className="w-full border rounded-xl p-4 mt-4"
         />
 
         <div className="mt-6">
-          <p className="font-medium mb-3">
-            Select Skills
-          </p>
+          <p className="font-medium mb-3">Select Skills</p>
 
           <div className="flex flex-wrap gap-2">
             {skillOptions.map((skill) => (
               <button
                 key={skill}
-                onClick={() =>
-                  toggleSkill(skill)
-                }
+                onClick={() => toggleSkill(skill)}
                 className={`px-4 py-2 rounded-full border transition ${
-                  selectedSkills.includes(
-                    skill
-                  )
+                  selectedSkills.includes(skill)
                     ? "bg-orange-500 text-white border-orange-500"
                     : "bg-white hover:bg-slate-100"
                 }`}
@@ -278,6 +302,18 @@ export default function AICareerAssistantPage() {
         </button>
       </div>
 
+      {results.length === 0 && (
+        <div className="bg-white border rounded-3xl p-12 mt-8 text-center shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-800">
+            Start Your AI Career Analysis
+          </h2>
+
+          <p className="mt-4 text-slate-500">
+            Select skills or enter your technologies and click "Analyze Career
+            Path" to receive personalized AI-powered career guidance.
+          </p>
+        </div>
+      )}
       {results.length > 0 && (
         <>
           {/* Top Recommendation */}
@@ -286,9 +322,10 @@ export default function AICareerAssistantPage() {
               ⭐ Top Career Recommendation
             </h2>
 
-            <p className="text-4xl font-bold mt-4">
-              {results[0].role}
-            </p>
+            <p className="text-4xl font-bold mt-4">{results[0].role}</p>
+            <div className="mt-4 inline-flex rounded-full bg-orange-500/20 px-4 py-2 text-orange-100">
+              {results[0].score}% Career Match
+            </div>
 
             <p className="mt-3 text-orange-100">
               Based on your selected skills and profile.
@@ -297,40 +334,32 @@ export default function AICareerAssistantPage() {
 
           {/* Row */}
           <div className="grid lg:grid-cols-3 gap-6 mt-8">
-
             {/* Career Match */}
             <div className="bg-white border rounded-3xl p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-orange-600 mb-4">
                 Career Match
               </h2>
 
-              {results.slice(0, 3).map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="mb-5"
-                  >
-                    <div className="flex justify-between">
-                      <span className="font-medium">
-                        {item.role}
-                      </span>
+              {results.slice(0, 3).map((item, index) => (
+                <div key={index} className="mb-5">
+                  <div className="flex justify-between">
+                    <span className="font-medium">{item.role}</span>
 
-                      <span className="font-bold text-green-600">
-                        {item.score}%
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-slate-200 rounded-full h-2 mt-2">
-                      <div
-                        className="bg-orange-500 h-2 rounded-full"
-                        style={{
-                          width: `${item.score}%`,
-                        }}
-                      />
-                    </div>
+                    <span className="font-bold text-green-600">
+                      {item.score}%
+                    </span>
                   </div>
-                )
-              )}
+
+                  <div className="w-full bg-slate-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-orange-500 h-2 rounded-full"
+                      style={{
+                        width: `${item.score}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Skill Gap */}
@@ -341,22 +370,17 @@ export default function AICareerAssistantPage() {
 
               {missingSkills.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {missingSkills.map(
-                    (skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-2 bg-red-100 text-red-700 rounded-full text-sm"
-                      >
-                        ❌ {skill}
-                      </span>
-                    )
-                  )}
+                  {missingSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-2 bg-red-100 text-red-700 rounded-full text-sm"
+                    >
+                      ❌ {skill}
+                    </span>
+                  ))}
                 </div>
               ) : (
-                <p className="text-green-600">
-                  ✅ No major skill gaps
-                  found
-                </p>
+                <p className="text-green-600">✅ No major skill gaps found</p>
               )}
             </div>
 
@@ -367,20 +391,18 @@ export default function AICareerAssistantPage() {
               </h2>
 
               <ul className="space-y-3 text-slate-700">
-                <li>✅ Build portfolio projects</li>
-                <li>✅ Learn Git & GitHub</li>
-                <li>✅ Practice system design</li>
-                <li>✅ Prepare for interviews</li>
-                <li>✅ Earn certifications</li>
+                <li> Build portfolio projects</li>
+                <li> Learn Git & GitHub</li>
+                <li> Practice system design</li>
+                <li> Prepare for interviews</li>
+                <li> Earn certifications</li>
               </ul>
             </div>
           </div>
 
           {/* Readiness */}
           <div className="bg-slate-900 text-white rounded-3xl p-8 mt-8">
-            <h2 className="text-2xl font-semibold">
-              Career Readiness Score
-            </h2>
+            <h2 className="text-2xl font-semibold">Career Readiness Score</h2>
 
             <div className="w-full bg-slate-700 h-5 rounded-full mt-6">
               <div
@@ -403,25 +425,13 @@ export default function AICareerAssistantPage() {
             </h2>
 
             <div className="space-y-3 text-slate-700">
-              <p>
-                ✓ Your profile aligns with
-                current industry demand.
-              </p>
+              <p> Your profile aligns with current industry demand.</p>
 
-              <p>
-                ✓ Multiple career paths are
-                available.
-              </p>
+              <p> Multiple career paths are available.</p>
 
-              <p>
-                ✓ Focus on roles above 85%
-                match score.
-              </p>
+              <p> Focus on roles above 85% match score.</p>
 
-              <p>
-                ✓ Continue building practical
-                projects.
-              </p>
+              <p> Continue building practical projects.</p>
             </div>
           </div>
 
@@ -433,9 +443,7 @@ export default function AICareerAssistantPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <p className="text-slate-500">
-                  Market Demand
-                </p>
+                <p className="text-slate-500">Market Demand</p>
 
                 <p className="font-bold text-green-600">
                   {careerOutlook.demand}
@@ -443,9 +451,7 @@ export default function AICareerAssistantPage() {
               </div>
 
               <div>
-                <p className="text-slate-500">
-                  Growth Potential
-                </p>
+                <p className="text-slate-500">Growth Potential</p>
 
                 <p className="font-bold text-orange-600">
                   {careerOutlook.growth}
@@ -453,24 +459,51 @@ export default function AICareerAssistantPage() {
               </div>
 
               <div>
-                <p className="text-slate-500">
-                  Remote Opportunities
-                </p>
+                <p className="text-slate-500">Remote Opportunities</p>
 
-                <p className="font-bold">
-                  {careerOutlook.remote}
-                </p>
+                <p className="font-bold">{careerOutlook.remote}</p>
               </div>
 
               <div>
-                <p className="text-slate-500">
-                  Estimated Salary
-                </p>
+                <p className="text-slate-500">Estimated Salary</p>
 
                 <p className="font-bold text-orange-600">
                   {careerOutlook.salary}
                 </p>
               </div>
+            </div>
+          </div>
+          {/* Recommended Opportunities */}
+          <div className="bg-white border rounded-3xl p-8 mt-8 shadow-sm">
+            <h2 className="text-2xl font-semibold text-orange-600 mb-6">
+              Recommended Opportunities
+            </h2>
+            <p className="text-slate-500 mb-6">
+              {recommendedJobs.length} matching opportunities found.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              {recommendedJobs.map((job) => (
+                <div key={job.title} className="border rounded-2xl p-5">
+                  <h3 className="font-bold text-lg">{job.title}</h3>
+
+                  <p className="mt-4 font-semibold text-orange-600">
+                    {job.salary}
+                  </p>
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/candidate/jobs?search=${encodeURIComponent(
+                          job.title,
+                        )}`,
+                      )
+                    }
+                    className="mt-4 w-full rounded-xl bg-orange-500 py-2 text-white hover:bg-orange-600 transition"
+                  >
+                    Apply Now
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </>
