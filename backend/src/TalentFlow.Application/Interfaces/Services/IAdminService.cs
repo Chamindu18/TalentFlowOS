@@ -14,4 +14,6 @@ public interface IAdminService
     Guid userId,
     string role);
 
+    Task<bool> DisableUserAsync(Guid userId);
+
 }

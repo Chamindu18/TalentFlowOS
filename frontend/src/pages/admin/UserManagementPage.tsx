@@ -242,13 +242,23 @@ export default function UserManagementPage() {
                     </button>
 
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         const confirmed = window.confirm(
                           `Disable ${user.firstName}?`,
                         );
 
                         if (confirmed) {
-                          alert("User disabled");
+                          try {
+                            await adminService.disableUser(user.id);
+
+                            await fetchUsers();
+
+                            alert("User disabled successfully");
+                          } catch (error) {
+                            console.error(error);
+
+                            alert("Failed to disable user");
+                          }
                         }
                       }}
                       className="text-red-600 hover:text-red-800"

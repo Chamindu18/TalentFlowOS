@@ -67,4 +67,24 @@ public class AdminController : ControllerBase
             message = "Role updated successfully"
         });
     }
+
+    [HttpPut("users/{id}/disable")]
+    public async Task<IActionResult>
+    DisableUser(Guid id)
+    {
+        var result =
+            await _adminService
+                .DisableUserAsync(id);
+
+        if (!result)
+        {
+            return BadRequest();
+        }
+
+        return Ok(new
+        {
+            success = true,
+            message = "User disabled successfully"
+        });
+    }
 }

@@ -32,4 +32,8 @@ export const adminService = {
       role,
     });
   },
+
+  async disableUser(id: string) {
+    return await axios.put(`${API_URL}/admin/users/${id}/disable`);
+  },
 };

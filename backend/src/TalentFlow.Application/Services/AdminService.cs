@@ -76,4 +76,21 @@ public class AdminService : IAdminService
 
         return false;
     }
+
+    public async Task<bool> DisableUserAsync(Guid userId)
+    {
+        var user =
+            await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        user.IsEmailVerified = false;
+
+        await _userRepository.UpdateAsync(user);
+
+        return true;
+    }
 }
