@@ -2,8 +2,7 @@ import { useState } from "react";
 
 export default function AICareerAssistantPage() {
   const [skills, setSkills] = useState("");
-  const [selectedSkills, setSelectedSkills] =
-    useState<string[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const [results, setResults] = useState<
     {
@@ -17,6 +16,14 @@ export default function AICareerAssistantPage() {
 
   const [missingSkills, setMissingSkills] =
     useState<string[]>([]);
+
+  const [careerOutlook, setCareerOutlook] =
+    useState({
+      demand: "",
+      growth: "",
+      salary: "",
+      remote: "",
+    });
 
   const skillOptions = [
     "Java",
@@ -144,20 +151,62 @@ export default function AICareerAssistantPage() {
 
     readiness += recommendations.length * 10;
 
-    if (text.includes("react"))
-      readiness += 10;
-
-    if (text.includes("python"))
-      readiness += 10;
-
     if (text.includes("sql"))
       readiness += 10;
 
     if (text.includes("docker"))
       readiness += 10;
 
+    if (text.includes("python"))
+      readiness += 10;
+
+    if (text.includes("react"))
+      readiness += 10;
+
     if (readiness > 100)
       readiness = 100;
+
+    if (
+      recommendations[0]?.role ===
+      "Backend Developer"
+    ) {
+      setCareerOutlook({
+        demand: "High",
+        growth: "Excellent",
+        salary: "LKR 300,000 - 450,000",
+        remote: "Available",
+      });
+    } else if (
+      recommendations[0]?.role ===
+      "Frontend Developer"
+    ) {
+      setCareerOutlook({
+        demand: "High",
+        growth: "Excellent",
+        salary: "LKR 250,000 - 400,000",
+        remote: "Highly Available",
+      });
+    } else if (
+      recommendations[0]?.role ===
+      "Data Scientist"
+    ) {
+      setCareerOutlook({
+        demand: "Very High",
+        growth: "Outstanding",
+        salary: "LKR 350,000 - 600,000",
+        remote: "Available",
+      });
+    } else if (
+      recommendations[0]?.role ===
+      "DevOps Engineer"
+    ) {
+      setCareerOutlook({
+        demand: "High",
+        growth: "Excellent",
+        salary: "LKR 350,000 - 550,000",
+        remote: "Available",
+      });
+    }
 
     setResults(recommendations);
     setMissingSkills(gaps);
@@ -167,7 +216,7 @@ export default function AICareerAssistantPage() {
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-black via-slate-900 to-orange-600 text-white rounded-3xl p-8">
+      <div className="bg-gradient-to-r from-black via-slate-900 to-orange-600 rounded-3xl p-8 text-white">
         <h1 className="text-4xl font-bold">
           🤖 AI Career Assistant
         </h1>
@@ -175,11 +224,11 @@ export default function AICareerAssistantPage() {
         <p className="mt-3 text-slate-300">
           Discover your ideal career path,
           identify skill gaps and receive
-          AI-powered guidance.
+          AI-powered career guidance.
         </p>
       </div>
 
-      {/* Input */}
+      {/* Skills Input */}
       <div className="bg-white border rounded-3xl p-8 mt-8 shadow-sm">
         <h2 className="text-xl font-semibold">
           Skills Assessment
@@ -242,12 +291,13 @@ export default function AICareerAssistantPage() {
             </p>
 
             <p className="mt-3 text-orange-100">
-              Based on your current skills.
+              Based on your selected skills and profile.
             </p>
           </div>
 
-          {/* Three Cards */}
+          {/* Row */}
           <div className="grid lg:grid-cols-3 gap-6 mt-8">
+
             {/* Career Match */}
             <div className="bg-white border rounded-3xl p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-orange-600 mb-4">
@@ -258,10 +308,10 @@ export default function AICareerAssistantPage() {
                 (item, index) => (
                   <div
                     key={index}
-                    className="mb-4"
+                    className="mb-5"
                   >
                     <div className="flex justify-between">
-                      <span>
+                      <span className="font-medium">
                         {item.role}
                       </span>
 
@@ -270,7 +320,7 @@ export default function AICareerAssistantPage() {
                       </span>
                     </div>
 
-                    <div className="w-full bg-slate-200 h-2 rounded-full mt-2">
+                    <div className="w-full bg-slate-200 rounded-full h-2 mt-2">
                       <div
                         className="bg-orange-500 h-2 rounded-full"
                         style={{
@@ -317,25 +367,11 @@ export default function AICareerAssistantPage() {
               </h2>
 
               <ul className="space-y-3 text-slate-700">
-                <li>
-                  ✅ Build portfolio projects
-                </li>
-
-                <li>
-                  ✅ Learn Git & GitHub
-                </li>
-
-                <li>
-                  ✅ Practice system design
-                </li>
-
-                <li>
-                  ✅ Prepare for interviews
-                </li>
-
-                <li>
-                  ✅ Earn certifications
-                </li>
+                <li>✅ Build portfolio projects</li>
+                <li>✅ Learn Git & GitHub</li>
+                <li>✅ Practice system design</li>
+                <li>✅ Prepare for interviews</li>
+                <li>✅ Earn certifications</li>
               </ul>
             </div>
           </div>
@@ -389,7 +425,7 @@ export default function AICareerAssistantPage() {
             </div>
           </div>
 
-          {/* Career Growth */}
+          {/* Growth Outlook */}
           <div className="bg-white border rounded-3xl p-8 mt-8 shadow-sm">
             <h2 className="text-2xl font-semibold text-orange-600 mb-6">
               Career Growth Outlook
@@ -402,7 +438,7 @@ export default function AICareerAssistantPage() {
                 </p>
 
                 <p className="font-bold text-green-600">
-                  High
+                  {careerOutlook.demand}
                 </p>
               </div>
 
@@ -412,7 +448,7 @@ export default function AICareerAssistantPage() {
                 </p>
 
                 <p className="font-bold text-orange-600">
-                  Excellent
+                  {careerOutlook.growth}
                 </p>
               </div>
 
@@ -422,7 +458,7 @@ export default function AICareerAssistantPage() {
                 </p>
 
                 <p className="font-bold">
-                  Available
+                  {careerOutlook.remote}
                 </p>
               </div>
 
@@ -432,7 +468,7 @@ export default function AICareerAssistantPage() {
                 </p>
 
                 <p className="font-bold text-orange-600">
-                  LKR 250,000 - 450,000
+                  {careerOutlook.salary}
                 </p>
               </div>
             </div>
