@@ -4,7 +4,7 @@ export default function AICareerAssistantPage() {
   const [skills, setSkills] = useState("");
 
   const [selectedSkills, setSelectedSkills] =
-    useState<string[]>(([]));
+    useState<string[]>([]);
 
   const [results, setResults] = useState<
     {

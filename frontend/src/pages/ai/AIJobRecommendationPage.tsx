@@ -2,54 +2,115 @@ import { useState } from "react";
 
 export default function AIJobRecommendationPage() {
   const [skills, setSkills] = useState("");
+
   const [jobs, setJobs] = useState<
     {
+      rank: number;
       title: string;
       company: string;
-      score: number;
+      match: number;
+      salary: string;
+      level: string;
+      mode: string;
+      demand: string;
+      skills: string[];
+      missingSkills: string[];
+      reason: string;
     }[]
   >([]);
 
   const generateRecommendations = () => {
     const text = skills.toLowerCase();
 
-    let recommendations = [];
+    const recommendations = [];
 
-    if (text.includes("java")) {
+    if (
+      text.includes("java") ||
+      text.includes("spring") ||
+      text.includes("sql")
+    ) {
       recommendations.push({
+        rank: 1,
         title: "Backend Developer",
         company: "TechCorp",
-        score: 95,
-      });
-
-      recommendations.push({
-        title: "Software Engineer",
-        company: "ABC Solutions",
-        score: 90,
+        match: 95,
+        salary: "LKR 300,000 - 450,000",
+        level: "Mid Level",
+        mode: "Hybrid",
+        demand: "High",
+        skills: ["Java", "Spring Boot", "SQL", "Docker"],
+        missingSkills: ["Microservices", "Azure"],
+        reason:
+          "Your backend development skills strongly align with current hiring trends.",
       });
     }
 
-    if (text.includes("react")) {
+    if (
+      text.includes("react") ||
+      text.includes("typescript")
+    ) {
       recommendations.push({
+        rank: 2,
         title: "Frontend Developer",
         company: "Creative Labs",
-        score: 94,
+        match: 92,
+        salary: "LKR 250,000 - 400,000",
+        level: "Junior - Mid Level",
+        mode: "Remote",
+        demand: "High",
+        skills: ["React", "TypeScript", "Tailwind"],
+        missingSkills: ["Next.js"],
+        reason:
+          "Strong frontend technology stack and UI development profile detected.",
       });
     }
 
-    if (text.includes("python")) {
+    if (
+      text.includes("python") ||
+      text.includes("machine learning")
+    ) {
       recommendations.push({
+        rank: 3,
         title: "Data Scientist",
         company: "DataVision",
-        score: 96,
+        match: 90,
+        salary: "LKR 350,000 - 500,000",
+        level: "Mid Level",
+        mode: "Hybrid",
+        demand: "Very High",
+        skills: [
+          "Python",
+          "Machine Learning",
+          "Pandas",
+        ],
+        missingSkills: ["TensorFlow"],
+        reason:
+          "Data analytics and AI capabilities indicate strong potential in data-focused careers.",
       });
     }
 
-    if (text.includes("docker")) {
+    if (
+      text.includes("docker") ||
+      text.includes("azure") ||
+      text.includes("kubernetes")
+    ) {
       recommendations.push({
+        rank: 4,
         title: "DevOps Engineer",
         company: "CloudWorks",
-        score: 88,
+        match: 89,
+        salary: "LKR 350,000 - 550,000",
+        level: "Mid Level",
+        mode: "Onsite",
+        demand: "High",
+        skills: [
+          "Docker",
+          "Azure",
+          "Kubernetes",
+        ],
+        missingSkills: ["Terraform"],
+        reason:
+          "Cloud infrastructure and deployment skills are highly relevant for DevOps roles.",
       });
     }
 
@@ -63,64 +124,157 @@ export default function AIJobRecommendationPage() {
       </h1>
 
       <p className="text-slate-500 mt-2">
-        Get personalized job suggestions
-        based on your skills.
+        Discover personalized job opportunities
+        based on your skills and career profile.
       </p>
 
       <div className="bg-white border rounded-2xl p-6 mt-8">
+        <label className="font-medium">
+          Enter Your Skills
+        </label>
+
         <textarea
-          rows={5}
+          rows={4}
           value={skills}
           onChange={(e) =>
             setSkills(e.target.value)
           }
-          placeholder="Enter skills: React, Java, Python..."
-          className="w-full border rounded-lg p-4"
+          placeholder="Example: Java, SQL, Spring Boot, React, Python"
+          className="w-full border rounded-lg p-4 mt-3"
         />
 
         <button
           onClick={generateRecommendations}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg mt-4"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg mt-4 hover:bg-indigo-700"
         >
           Generate Recommendations
         </button>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mt-8">
-        {jobs.map((job, index) => (
-          <div
-            key={index}
-            className="bg-white border rounded-2xl p-6"
-          >
-            <h2 className="text-xl font-semibold">
-              {job.title}
-            </h2>
+      {jobs.length > 0 && (
+        <div className="mt-8 space-y-6">
+          {jobs.map((job) => (
+            <div
+              key={job.rank}
+              className="bg-white border rounded-2xl p-6 shadow-sm"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-slate-500">
+                    Recommendation #{job.rank}
+                  </p>
 
-            <p className="text-slate-500 mt-2">
-              {job.company}
-            </p>
+                  <h2 className="text-2xl font-bold">
+                    {job.title}
+                  </h2>
 
-            <div className="mt-4">
-              <p className="font-medium">
-                Match Score
-              </p>
+                  <p className="text-slate-500">
+                    {job.company}
+                  </p>
+                </div>
 
-              <div className="w-full bg-slate-200 h-3 rounded-full mt-2">
-                <div
-                  className="bg-blue-500 h-3 rounded-full"
-                  style={{
-                    width: `${job.score}%`,
-                  }}
-                />
+                <div className="text-right">
+                  <p className="text-green-600 font-bold text-2xl">
+                    {job.match}%
+                  </p>
+
+                  <p className="text-sm text-slate-500">
+                    Match Score
+                  </p>
+                </div>
               </div>
 
-              <p className="mt-2 text-blue-600 font-semibold">
-                {job.score}%
-              </p>
+              <div className="grid md:grid-cols-3 gap-4 mt-6">
+                <div>
+                  <p className="text-sm text-slate-500">
+                    Salary Range
+                  </p>
+
+                  <p className="font-semibold">
+                    {job.salary}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm text-slate-500">
+                    Experience
+                  </p>
+
+                  <p className="font-semibold">
+                    {job.level}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm text-slate-500">
+                    Work Mode
+                  </p>
+
+                  <p className="font-semibold">
+                    {job.mode}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <p className="font-medium mb-2">
+                  Required Skills
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {job.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <p className="font-medium mb-2">
+                  Skill Gap Analysis
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {job.missingSkills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-xl bg-blue-50 p-4">
+                <h3 className="font-semibold text-blue-700">
+                  AI Recommendation
+                </h3>
+
+                <p className="mt-2 text-slate-600">
+                  {job.reason}
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
+                  Market Demand: {job.demand}
+                </span>
+              </div>
+
+              <button
+                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl"
+              >
+                Apply Now
+              </button>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
