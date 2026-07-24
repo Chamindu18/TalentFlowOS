@@ -9,6 +9,7 @@ import {
   User,
   FileBadge2,
   X,
+  Brain,
 } from "lucide-react";
 
 import { useAuthStore } from "@/store/auth.store";
@@ -45,6 +46,12 @@ const navigation = [
     path: "/candidate/analytics",
   },
   {
+    label: "AI Career Assistant",
+    icon: Brain,
+    path: "/ai/career-assistant",
+  },
+  
+  {
     label: "Profile",
     icon: User,
     path: "/candidate/profile",
@@ -56,10 +63,7 @@ const navigation = [
   },
 ];
 
-export default function CandidateSidebar({
-  isOpen,
-  onClose,
-}: SidebarProps) {
+export default function CandidateSidebar({ isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
 
   const logout = useAuthStore((state) => state.logout);
@@ -81,16 +85,13 @@ export default function CandidateSidebar({
       <aside
         className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-slate-200
            bg-white transition-transform duration-300 lg:static lg:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+             isOpen ? "translate-x-0" : "-translate-x-full"
+           }`}
       >
         {/* Logo */}
 
         <div className="border-b border-slate-200 px-6 py-5">
-
-          <h1 className="text-3xl font-bold text-[#FF5B1F]">
-            TalentFlow
-          </h1>
+          <h1 className="text-3xl font-bold text-[#FF5B1F]">TalentFlow</h1>
 
           <p className="mt-2 text-sm text-slate-500 font-semibold">
             Candidate Portal
@@ -102,15 +103,12 @@ export default function CandidateSidebar({
           >
             <X className="h-5 w-5" />
           </button>
-
         </div>
 
         {/* Navigation */}
 
         <nav className="flex-1 space-y-2 px-4 py-4">
-
           {navigation.map((item) => {
-
             const Icon = item.icon;
 
             return (
@@ -132,18 +130,13 @@ export default function CandidateSidebar({
               </NavLink>
             );
           })}
-
         </nav>
 
         {/* Bottom */}
 
         <div className="border-t border-slate-200 p-5">
-
           <div className="mb-5 rounded-2xl bg-slate-50 p-4">
-
-            <h3 className="font-semibold text-slate-800">
-              Need Help?
-            </h3>
+            <h3 className="font-semibold text-slate-800">Need Help?</h3>
 
             <p className="mt-2 text-xs text-slate-500">
               Contact the TalentFlow support team.
@@ -152,7 +145,6 @@ export default function CandidateSidebar({
             <p className="mt-2 text-sm font-medium text-[#FF5B1F]">
               support@talentflow.com
             </p>
-
           </div>
 
           <button
@@ -160,10 +152,8 @@ export default function CandidateSidebar({
             className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 font-semibold text-red-500 transition-all hover:bg-red-50"
           >
             <LogOut className="h-5 w-5" />
-
             Logout
           </button>
-
         </div>
       </aside>
     </>

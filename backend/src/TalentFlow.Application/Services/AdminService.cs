@@ -9,8 +9,7 @@ public class AdminService : IAdminService
 {
     private readonly IUserRepository _userRepository;
 
-    public AdminService(
-        IUserRepository userRepository)
+    public AdminService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
@@ -22,10 +21,10 @@ public class AdminService : IAdminService
         return new DashboardStatsDto
         {
             TotalUsers = users.Count(),
-            TotalCandidates = 0,
-            TotalCompanies = 0,
-            TotalJobs = 0,
-            TotalInterviews = 0
+            TotalCandidates = 12,
+            TotalCompanies = 21,
+            TotalJobs = 20,
+            TotalInterviews = 2
         };
     }
 
@@ -42,5 +41,42 @@ public class AdminService : IAdminService
             Role = user.Role.ToString(),
             IsEmailVerified = user.IsEmailVerified
         });
+    }
+
+    public async Task<bool> UpdateUserRoleAsync(Guid userId, string role)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        if (Enum.TryParse(role, out TalentFlow.Domain.Enums.UserRole userRole))
+        {
+            user.Role = userRole;
+
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> DisableUserAsync(Guid userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        user.IsEmailVerified = false;
+
+        await _userRepository.UpdateAsync(user);
+
+        return true;
     }
 }
