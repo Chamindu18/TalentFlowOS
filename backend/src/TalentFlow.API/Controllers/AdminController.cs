@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TalentFlow.Application.Interfaces.Services;
-
+using TalentFlow.Application.DTOs.Users;
 namespace TalentFlow.API.Controllers;
 
 [ApiController]
@@ -41,6 +41,50 @@ public class AdminController : ControllerBase
         {
             success = true,
             data = users
+        });
+    }
+
+    [HttpPut("users/{id}/role")]
+    public async Task<IActionResult>
+     UpdateUserRole(
+         Guid id,
+         UpdateUserRoleDto dto)
+    {
+        var result =
+            await _adminService
+                .UpdateUserRoleAsync(
+                    id,
+                    dto.Role);
+
+        if (!result)
+        {
+            return BadRequest();
+        }
+
+        return Ok(new
+        {
+            success = true,
+            message = "Role updated successfully"
+        });
+    }
+
+    [HttpPut("users/{id}/disable")]
+    public async Task<IActionResult>
+    DisableUser(Guid id)
+    {
+        var result =
+            await _adminService
+                .DisableUserAsync(id);
+
+        if (!result)
+        {
+            return BadRequest();
+        }
+
+        return Ok(new
+        {
+            success = true,
+            message = "User disabled successfully"
         });
     }
 }

@@ -8,6 +8,8 @@ export default function UserManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [selectedRole, setSelectedRole] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -34,7 +36,56 @@ export default function UserManagementPage() {
 
     return matchesSearch && matchesRole;
   });
+  const totalUsers = users.length;
 
+  const adminCount = users.filter((user) => user.role === "Admin").length;
+
+  const recruiterCount = users.filter(
+    (user) => user.role === "Recruiter",
+  ).length;
+
+  const candidateCount = users.filter(
+    (user) => user.role === "Candidate",
+  ).length;
+
+  const hiringManagerCount = users.filter(
+    (user) => user.role === "HiringManager",
+  ).length;
+  const verifiedUsers = users.filter((user) => user.isEmailVerified).length;
+
+  const pendingUsers = users.filter((user) => !user.isEmailVerified).length;
+
+  const exportUsers = () => {
+    const headers = ["First Name", "Last Name", "Email", "Role", "Status"];
+
+    const rows = users.map((user) => [
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.role,
+      user.isEmailVerified ? "Verified" : "Pending",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const link = document.createElement("a");
+
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = "users.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
       <h1 className="text-4xl font-bold">User Management</h1>
@@ -42,6 +93,55 @@ export default function UserManagementPage() {
       <p className="text-slate-500 mt-2">
         Manage users, roles and account status.
       </p>
+      {/* User Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-8 mb-8">
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Total Users</p>
+
+          <h2 className="text-3xl font-bold text-blue-600">{totalUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Admins</p>
+
+          <h2 className="text-3xl font-bold text-purple-600">{adminCount}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Recruiters</p>
+
+          <h2 className="text-3xl font-bold text-green-600">
+            {recruiterCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Candidates</p>
+
+          <h2 className="text-3xl font-bold text-orange-600">
+            {candidateCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Hiring Managers</p>
+
+          <h2 className="text-3xl font-bold text-pink-600">
+            {hiringManagerCount}
+          </h2>
+        </div>
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Verified Users</p>
+
+          <h2 className="text-3xl font-bold text-green-600">{verifiedUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Pending Users</p>
+
+          <h2 className="text-3xl font-bold text-yellow-600">{pendingUsers}</h2>
+        </div>
+      </div>
 
       {/* Search + Filter */}
       <div className="flex flex-col md:flex-row gap-4 my-6">
@@ -64,6 +164,12 @@ export default function UserManagementPage() {
           <option>Recruiter</option>
           <option>HiringManager</option>
         </select>
+        <button
+          onClick={exportUsers}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+        >
+          Export Users
+        </button>
       </div>
 
       {/* User Count */}
@@ -124,11 +230,38 @@ export default function UserManagementPage() {
                       View
                     </button>
 
-                    <button className="text-green-600 hover:text-green-800">
+                    <button
+                      onClick={() => {
+                        setEditingUser(user);
+                        setSelectedRole(user.role);
+                      }}
+                      className="text-green-600 hover:text-green-800"
+                    >
                       Edit
                     </button>
 
-                    <button className="text-red-600 hover:text-red-800">
+                    <button
+                      onClick={async () => {
+                        const confirmed = window.confirm(
+                          `Disable ${user.firstName}?`,
+                        );
+
+                        if (confirmed) {
+                          try {
+                            await adminService.disableUser(user.id);
+
+                            await fetchUsers();
+
+                            alert("User disabled successfully");
+                          } catch (error) {
+                            console.error(error);
+
+                            alert("Failed to disable user");
+                          }
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-800"
+                    >
                       Disable
                     </button>
                   </div>
@@ -173,6 +306,66 @@ export default function UserManagementPage() {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+      {editingUser && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6">Edit User Role</h2>
+
+            <p className="mb-2">
+              <strong>User:</strong> {editingUser.firstName}{" "}
+              {editingUser.lastName}
+            </p>
+
+            <p className="mb-4">
+              <strong>Email:</strong> {editingUser.email}
+            </p>
+
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              className="w-full border rounded-lg px-4 py-2"
+            >
+              <option>Admin</option>
+              <option>Candidate</option>
+              <option>Recruiter</option>
+              <option>HiringManager</option>
+            </select>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={async () => {
+                  try {
+                    await adminService.updateUserRole(
+                      editingUser.id,
+                      selectedRole,
+                    );
+
+                    await fetchUsers();
+
+                    setEditingUser(null);
+
+                    alert("Role updated successfully");
+                  } catch (error) {
+                    console.error(error);
+
+                    alert("Failed to update role");
+                  }
+                }}
+                className="bg-indigo-600 text-white px-5 py-2 rounded-lg"
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => setEditingUser(null)}
+                className="bg-gray-200 px-5 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
