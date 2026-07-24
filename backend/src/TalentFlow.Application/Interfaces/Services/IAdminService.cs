@@ -7,13 +7,11 @@ public interface IAdminService
 {
     Task<DashboardStatsDto> GetDashboardStatsAsync();
 
-    Task<IEnumerable<UserResponseDto>>
-        GetAllUsersAsync();
+    Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
 
     Task<bool> UpdateUserRoleAsync(
-    Guid userId,
-    string role);
+        Guid userId,
+        string role);
 
     Task<bool> DisableUserAsync(Guid userId);
-
 }

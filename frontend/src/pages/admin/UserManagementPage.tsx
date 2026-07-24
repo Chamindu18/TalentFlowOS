@@ -9,7 +9,6 @@ export default function UserManagementPage() {
   const [roleFilter, setRoleFilter] = useState("All");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-
   const [selectedRole, setSelectedRole] = useState("");
 
   useEffect(() => {

@@ -9,8 +9,7 @@ public class AdminService : IAdminService
 {
     private readonly IUserRepository _userRepository;
 
-    public AdminService(
-        IUserRepository userRepository)
+    public AdminService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
@@ -29,43 +28,31 @@ public class AdminService : IAdminService
         };
     }
 
-    public async Task<IEnumerable<UserResponseDto>>
-        GetAllUsersAsync()
+    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
     {
-        var users =
-            await _userRepository.GetAllAsync();
+        var users = await _userRepository.GetAllAsync();
 
-        return users.Select(user =>
-            new UserResponseDto
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Role = user.Role.ToString(),
-                IsEmailVerified =
-                    user.IsEmailVerified
-            });
+        return users.Select(user => new UserResponseDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role.ToString(),
+            IsEmailVerified = user.IsEmailVerified
+        });
     }
 
-    public async Task<bool> UpdateUserRoleAsync(
-        Guid userId,
-        string role)
+    public async Task<bool> UpdateUserRoleAsync(Guid userId, string role)
     {
-        var user =
-            await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
 
         if (user == null)
         {
             return false;
         }
 
-        if (
-            Enum.TryParse(
-                role,
-                out TalentFlow.Domain.Enums.UserRole userRole
-            )
-        )
+        if (Enum.TryParse(role, out TalentFlow.Domain.Enums.UserRole userRole))
         {
             user.Role = userRole;
 
@@ -79,8 +66,7 @@ public class AdminService : IAdminService
 
     public async Task<bool> DisableUserAsync(Guid userId)
     {
-        var user =
-            await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
 
         if (user == null)
         {
