@@ -4,6 +4,8 @@ namespace TalentFlow.Application.Interfaces.Repositories;
 
 public interface IUserRepository
 {
+    Task UpdateAsync(User user);
+
     Task<IEnumerable<User>> GetAllAsync();
 
     Task<User?> GetByEmailAsync(

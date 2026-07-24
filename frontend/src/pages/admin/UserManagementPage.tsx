@@ -6,8 +6,11 @@ import type { User } from "@/types/user";
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] =
-    useState("All");
+  const [roleFilter, setRoleFilter] = useState("All");
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const [selectedRole, setSelectedRole] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -15,57 +18,131 @@ export default function UserManagementPage() {
 
   const fetchUsers = async () => {
     try {
-      const data =
-        await adminService.getUsers();
+      const data = await adminService.getUsers();
 
       setUsers(data);
     } catch (error) {
-      console.error(
-        "Failed to fetch users",
-        error
-      );
+      console.error("Failed to fetch users", error);
     }
   };
 
-  const filteredUsers = users.filter(
-    (user) => {
-      const fullName =
-        `${user.firstName} ${user.lastName}`;
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`;
 
-      const matchesSearch =
-        fullName
-          .toLowerCase()
-          .includes(
-            searchTerm.toLowerCase()
-          ) ||
-        user.email
-          .toLowerCase()
-          .includes(
-            searchTerm.toLowerCase()
-          );
+    const matchesSearch =
+      fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesRole =
-        roleFilter === "All"
-          ? true
-          : user.role === roleFilter;
+    const matchesRole = roleFilter === "All" ? true : user.role === roleFilter;
 
-      return (
-        matchesSearch &&
-        matchesRole
-      );
-    }
-  );
+    return matchesSearch && matchesRole;
+  });
+  const totalUsers = users.length;
 
+  const adminCount = users.filter((user) => user.role === "Admin").length;
+
+  const recruiterCount = users.filter(
+    (user) => user.role === "Recruiter",
+  ).length;
+
+  const candidateCount = users.filter(
+    (user) => user.role === "Candidate",
+  ).length;
+
+  const hiringManagerCount = users.filter(
+    (user) => user.role === "HiringManager",
+  ).length;
+  const verifiedUsers = users.filter((user) => user.isEmailVerified).length;
+
+  const pendingUsers = users.filter((user) => !user.isEmailVerified).length;
+
+  const exportUsers = () => {
+    const headers = ["First Name", "Last Name", "Email", "Role", "Status"];
+
+    const rows = users.map((user) => [
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.role,
+      user.isEmailVerified ? "Verified" : "Pending",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const link = document.createElement("a");
+
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = "users.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
   return (
     <div className="p-8 bg-slate-50 min-h-screen">
-      <h1 className="text-4xl font-bold">
-        User Management
-      </h1>
+      <h1 className="text-4xl font-bold">User Management</h1>
 
       <p className="text-slate-500 mt-2">
-        Manage users, roles and account
-        status.
+        Manage users, roles and account status.
       </p>
+      {/* User Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-8 mb-8">
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Total Users</p>
+
+          <h2 className="text-3xl font-bold text-blue-600">{totalUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Admins</p>
+
+          <h2 className="text-3xl font-bold text-purple-600">{adminCount}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Recruiters</p>
+
+          <h2 className="text-3xl font-bold text-green-600">
+            {recruiterCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Candidates</p>
+
+          <h2 className="text-3xl font-bold text-orange-600">
+            {candidateCount}
+          </h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Hiring Managers</p>
+
+          <h2 className="text-3xl font-bold text-pink-600">
+            {hiringManagerCount}
+          </h2>
+        </div>
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Verified Users</p>
+
+          <h2 className="text-3xl font-bold text-green-600">{verifiedUsers}</h2>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5 shadow-sm">
+          <p className="text-slate-500">Pending Users</p>
+
+          <h2 className="text-3xl font-bold text-yellow-600">{pendingUsers}</h2>
+        </div>
+      </div>
 
       {/* Search + Filter */}
       <div className="flex flex-col md:flex-row gap-4 my-6">
@@ -73,17 +150,13 @@ export default function UserManagementPage() {
           type="text"
           placeholder="Search by name or email..."
           value={searchTerm}
-          onChange={(e) =>
-            setSearchTerm(e.target.value)
-          }
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="border rounded-lg px-4 py-2 flex-1"
         />
 
         <select
           value={roleFilter}
-          onChange={(e) =>
-            setRoleFilter(e.target.value)
-          }
+          onChange={(e) => setRoleFilter(e.target.value)}
           className="border rounded-lg px-4 py-2"
         >
           <option>All</option>
@@ -92,12 +165,17 @@ export default function UserManagementPage() {
           <option>Recruiter</option>
           <option>HiringManager</option>
         </select>
+        <button
+          onClick={exportUsers}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+        >
+          Export Users
+        </button>
       </div>
 
       {/* User Count */}
       <div className="mb-4 text-sm text-slate-500">
-        Total Users Found:{" "}
-        {filteredUsers.length}
+        Total Users Found: {filteredUsers.length}
       </div>
 
       {/* Table */}
@@ -105,85 +183,193 @@ export default function UserManagementPage() {
         <table className="w-full">
           <thead className="bg-slate-100">
             <tr>
-              <th className="text-left p-4">
-                Name
-              </th>
+              <th className="text-left p-4">Name</th>
 
-              <th className="text-left p-4">
-                Email
-              </th>
+              <th className="text-left p-4">Email</th>
 
-              <th className="text-left p-4">
-                Role
-              </th>
+              <th className="text-left p-4">Role</th>
 
-              <th className="text-left p-4">
-                Status
-              </th>
+              <th className="text-left p-4">Status</th>
 
-              <th className="text-left p-4">
-                Actions
-              </th>
+              <th className="text-left p-4">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredUsers.map(
-              (user) => (
-                <tr
-                  key={user.id}
-                  className="border-t"
-                >
-                  <td className="p-4">
-                    {user.firstName}{" "}
-                    {user.lastName}
-                  </td>
+            {filteredUsers.map((user) => (
+              <tr key={user.id} className="border-t">
+                <td className="p-4">
+                  {user.firstName} {user.lastName}
+                </td>
 
-                  <td className="p-4">
-                    {user.email}
-                  </td>
+                <td className="p-4">{user.email}</td>
 
-                  <td className="p-4">
-                    <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
-                      {user.role}
-                    </span>
-                  </td>
+                <td className="p-4">
+                  <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
+                    {user.role}
+                  </span>
+                </td>
 
-                  <td className="p-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        user.isEmailVerified
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
+                <td className="p-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      user.isEmailVerified
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {user.isEmailVerified ? "Verified" : "Pending"}
+                  </span>
+                </td>
+
+                <td className="p-4">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setSelectedUser(user)}
+                      className="text-blue-600 hover:text-blue-800"
                     >
-                      {user.isEmailVerified
-                        ? "Verified"
-                        : "Pending"}
-                    </span>
-                  </td>
+                      View
+                    </button>
 
-                  <td className="p-4">
-                    <div className="flex gap-3">
-                      <button className="text-blue-600 hover:text-blue-800">
-                        View
-                      </button>
+                    <button
+                      onClick={() => {
+                        setEditingUser(user);
+                        setSelectedRole(user.role);
+                      }}
+                      className="text-green-600 hover:text-green-800"
+                    >
+                      Edit
+                    </button>
 
-                      <button className="text-green-600 hover:text-green-800">
-                        Edit
-                      </button>
+                    <button
+                      onClick={async () => {
+                        const confirmed = window.confirm(
+                          `Disable ${user.firstName}?`,
+                        );
 
-                      <button className="text-red-600 hover:text-red-800">
-                        Disable
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            )}
+                        if (confirmed) {
+                          try {
+                            await adminService.disableUser(user.id);
+
+                            await fetchUsers();
+
+                            alert("User disabled successfully");
+                          } catch (error) {
+                            console.error(error);
+
+                            alert("Failed to disable user");
+                          }
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      Disable
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+      {selectedUser && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+          <div className="bg-white rounded-xl p-6 w-[500px]">
+            <h2 className="text-2xl font-bold mb-4">User Details</h2>
+
+            <div className="space-y-3">
+              <p>
+                <strong>Name:</strong> {selectedUser.firstName}{" "}
+                {selectedUser.lastName}
+              </p>
+
+              <p>
+                <strong>Email:</strong> {selectedUser.email}
+              </p>
+
+              <p>
+                <strong>Role:</strong> {selectedUser.role}
+              </p>
+
+              <p>
+                <strong>Status:</strong>{" "}
+                {selectedUser.isEmailVerified ? "Verified" : "Pending"}
+              </p>
+
+              <p>
+                <strong>User ID:</strong> {selectedUser.id}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setSelectedUser(null)}
+              className="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {editingUser && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6">Edit User Role</h2>
+
+            <p className="mb-2">
+              <strong>User:</strong> {editingUser.firstName}{" "}
+              {editingUser.lastName}
+            </p>
+
+            <p className="mb-4">
+              <strong>Email:</strong> {editingUser.email}
+            </p>
+
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              className="w-full border rounded-lg px-4 py-2"
+            >
+              <option>Admin</option>
+              <option>Candidate</option>
+              <option>Recruiter</option>
+              <option>HiringManager</option>
+            </select>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={async () => {
+                  try {
+                    await adminService.updateUserRole(
+                      editingUser.id,
+                      selectedRole,
+                    );
+
+                    await fetchUsers();
+
+                    setEditingUser(null);
+
+                    alert("Role updated successfully");
+                  } catch (error) {
+                    console.error(error);
+
+                    alert("Failed to update role");
+                  }
+                }}
+                className="bg-indigo-600 text-white px-5 py-2 rounded-lg"
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => setEditingUser(null)}
+                className="bg-gray-200 px-5 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

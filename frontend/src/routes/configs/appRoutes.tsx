@@ -37,8 +37,6 @@ import HiringSettingsPage from "@/pages/hiring/HiringSettingsPage";
 
 // Admin Pages
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
-import AIResumeMatchingPage from "@/pages/admin/AIResumeMatchingPage";
-import AIJobRecommendationPage from "@/pages/admin/AIJobRecommendationPage";
 import UserManagementPage from "@/pages/admin/UserManagementPage";
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout";
 import NotificationsPage from "@/pages/admin/NotificationsPage";
@@ -61,6 +59,8 @@ import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
 import PublicRoute from "@/routes/guards/PublicRoute";
 import ProtectedRoute from "@/routes/guards/ProtectedRoute";
 
+//AI
+import AICareerAssistantPage from "@/pages/ai/AICareerAssistantPage";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -175,6 +175,11 @@ export default function AppRoutes() {
       {/* Error Routes */}
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="*" element={<NotFoundPage />} />
+
+
+      {/* AI part Routes */}
+      <Route path="/ai/career-assistant" element={<AICareerAssistantPage />} />
+
     </Routes>
   );
 }
