@@ -104,19 +104,19 @@ export default function AdminDashboardPage() {
 
           <div className="space-y-3">
             <div className="p-3 rounded-lg bg-slate-50">
-              ✅ New user registered
+               New user registered
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50">
-              ✅ New recruiter created
+               New recruiter created
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50">
-              ✅ Interview scheduled
+               Interview scheduled
             </div>
 
             <div className="p-3 rounded-lg bg-slate-50">
-              ✅ Candidate application submitted
+               Candidate application submitted
             </div>
           </div>
         </div>

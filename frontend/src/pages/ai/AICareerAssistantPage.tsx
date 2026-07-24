@@ -305,13 +305,14 @@ export default function AICareerAssistantPage() {
       {results.length === 0 && (
         <div className="bg-white border rounded-3xl p-12 mt-8 text-center shadow-sm">
           <h2 className="text-2xl font-semibold text-slate-800">
-            Start Your AI Career Analysis
-          </h2>
+  Start Your AI Career Analysis
+</h2>
 
-          <p className="mt-4 text-slate-500">
-            Select skills or enter your technologies and click "Analyze Career
-            Path" to receive personalized AI-powered career guidance.
-          </p>
+<p className="mt-4 text-slate-500">
+  Select skills such as Java, React, Python, SQL or
+  Docker and let AI recommend the most suitable
+  career path for you.
+</p>
         </div>
       )}
       {results.length > 0 && (
