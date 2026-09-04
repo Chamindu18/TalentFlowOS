@@ -41,7 +41,7 @@ const RecruiterDashboardPage: React.FC = () => {
 
             let jobs: any[] = [];
             try {
-                jobs = await jobService.getAll();
+                jobs = await jobService.getAllJobs();
                 console.log('Jobs loaded:', jobs.length);
             } catch (err) {
                 console.error('Error loading jobs:', err);

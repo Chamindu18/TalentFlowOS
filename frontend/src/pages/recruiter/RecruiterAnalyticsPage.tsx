@@ -39,7 +39,7 @@ export const RecruiterAnalyticsPage: React.FC = () => {
             let applications: any[] = [];
 
             try {
-                jobs = await jobService.getAll();
+                jobs = await jobService.getAllJobs();
             } catch (err) {
                 console.error('Error loading jobs:', err);
             }
