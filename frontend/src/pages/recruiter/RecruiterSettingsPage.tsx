@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useAuthStore } from '@/store/auth.store';
 import { toast } from 'sonner';
 import {
-    User,
     Bell,
     Shield,
     Palette,
@@ -11,18 +9,12 @@ import {
     Save,
     Moon,
     Sun,
-    Mail,
-    Phone,
     Building,
-    Briefcase,
     ChevronRight,
-    LogOut,
     Sparkles,
-    CheckCircle,
 } from 'lucide-react';
 
 export const RecruiterSettingsPage: React.FC = () => {
-    const user = useAuthStore((state) => state.user);
     const [loading, setLoading] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
     const [emailNotifications, setEmailNotifications] = useState(true);

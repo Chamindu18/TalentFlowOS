@@ -1,11 +1,8 @@
 import { useState } from "react";
 
 import {
-  BarChart3,
-  ShieldCheck,
-  Sparkles,
   User,
-} from "lucide-react";
+  } from "lucide-react";
 
 import logo from "@/assets/logo/logo.png";
 

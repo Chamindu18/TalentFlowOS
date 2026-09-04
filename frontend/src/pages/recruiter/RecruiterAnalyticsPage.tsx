@@ -10,7 +10,6 @@ import {
     CheckCircle,
     Clock,
     XCircle,
-    BarChart3,
     Activity,
 } from 'lucide-react';
 
