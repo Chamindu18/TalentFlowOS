@@ -1,6 +1,6 @@
 import React, {
-  ChangeEvent,
-  FormEvent,
+  type ChangeEvent,
+  type FormEvent,
   useState,
 } from "react";
 
