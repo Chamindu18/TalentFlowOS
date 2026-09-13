@@ -1,0 +1,36 @@
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:5007 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:5007...
+* Established connection to localhost (::1 port 5007) from ::1 port 11899 
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0* using HTTP/1.x
+> POST /api/auth/register HTTP/1.1
+> Host: localhost:5007
+> User-Agent: curl/8.20.0
+> Accept: */*
+> Content-Length: 3
+> Content-Type: application/x-www-form-urlencoded
+> 
+} [3 bytes data]
+* upload completely sent off: 3 bytes
+< HTTP/1.1 415 Unsupported Media Type
+< Content-Type: application/problem+json; charset=utf-8
+< Date: Sat, 05 Sep 2026 08:38:02 GMT
+< Server: Kestrel
+< Transfer-Encoding: chunked
+< 
+{ [187 bytes data]
+100    179   0    176 100      3  19601    334                              0100    179   0    176 100      3  18737    319                              0100    179   0    176 100      3  17955    306                              0
+* Connection #0 to host localhost:5007 left intact
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.16","title":"Unsupported Media Type","status":415,"traceId":"00-94808b9946cad431b140b77e0895d4df-673fca21fe59251c-00"}Note: Unnecessary use of -X or --request, POST is already inferred.
+* Could not resolve host: application
+* Could not resolve host: application
+* Could not resolve: application:80
+* closing connection #1
+curl: (6) Could not resolve host: application
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* URL rejected: Malformed input to a URL function
+curl: (3) URL rejected: Malformed input to a URL function

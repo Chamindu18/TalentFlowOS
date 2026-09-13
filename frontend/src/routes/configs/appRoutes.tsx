@@ -24,6 +24,7 @@ import CompanySetupPage from "@/pages/recruiter/CompanySetupPage";
 import { JobsPage } from "@/pages/recruiter/JobsPage";
 import { CreateJobPage } from "@/pages/recruiter/CreateJobPage";
 import { ApplicationsPage } from "@/pages/recruiter/ApplicationsPage";
+import { EditJobPage } from "@/pages/recruiter/EditJobPage";
 import { RecruiterProfilePage } from "@/pages/recruiter/RecruiterProfilePage";
 
 // Hiring Manager Pages
@@ -126,6 +127,7 @@ export default function AppRoutes() {
           />
           <Route path="/recruiter/jobs" element={<JobsPage />} />
           <Route path="/recruiter/jobs/create" element={<CreateJobPage />} />
+          <Route path="/recruiter/jobs/edit/:id" element={<EditJobPage />} />
           <Route
             path="/recruiter/applications"
             element={<ApplicationsPage />}
