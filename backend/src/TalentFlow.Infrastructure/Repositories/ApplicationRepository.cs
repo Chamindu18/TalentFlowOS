@@ -26,6 +26,7 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.JobApplications
             .Include(a => a.Job)
+                .ThenInclude(j => j.Company)
             .Where(a => a.CandidateId == candidateId && !a.IsDeleted)
             .ToListAsync();
     }
