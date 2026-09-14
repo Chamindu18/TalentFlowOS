@@ -56,6 +56,12 @@ public class JobApplicationService : IApplicationService
         return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
     }
 
+    public async Task<IEnumerable<ApplicationResponseDTO>> GetApplicationsByCompanyIdAsync(Guid companyId)
+    {
+        var applications = await _applicationRepository.GetByCompanyIdAsync(companyId);
+        return _mapper.Map<IEnumerable<ApplicationResponseDTO>>(applications);
+    }
+
     public async Task<IEnumerable<ApplicationResponseDTO>> GetByJobIdAsync(Guid jobId)
     {
         var applications = await _applicationRepository.GetByJobIdAsync(jobId);

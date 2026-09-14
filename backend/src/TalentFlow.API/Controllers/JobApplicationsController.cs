@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TalentFlow.Application.Services;
 using System.Security.Claims;
-
 using TalentFlow.Application.DTOs.Applications;
 using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Infrastructure.Persistence.Contexts;
 
 namespace TalentFlow.API.Controllers;
 
@@ -14,10 +15,12 @@ namespace TalentFlow.API.Controllers;
 public class JobApplicationsController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
+    private readonly ApplicationDbContext _context;
 
-    public JobApplicationsController(IApplicationService applicationService)
+    public JobApplicationsController(IApplicationService applicationService, ApplicationDbContext context)
     {
         _applicationService = applicationService;
+        _context = context;
     }
 
     /// <summary>
@@ -173,5 +176,26 @@ public async Task<IActionResult> Create(
             success = true,
             data = applications
         });
+    }
+
+    /// <summary>
+    /// Get applications for the authenticated user's company (HiringManager)
+    /// </summary>
+    [HttpGet("company")]
+    [Authorize(Roles = "HiringManager")]
+    public async Task<IActionResult> GetByCompany()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        // Get the user's company ID
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        if (user == null || user.CompanyId == null)
+            return Forbid("User not associated with a company.");
+
+        var applications = await _applicationService.GetApplicationsByCompanyIdAsync(user.CompanyId.Value);
+        return Ok(new { success = true, data = applications });
     }
 }

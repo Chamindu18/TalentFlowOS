@@ -23,5 +23,6 @@ public interface IApplicationService
     Task<int> GetApplicationCountForJobAsync(Guid jobId);
     Task ShortlistApplicationAsync(Guid id);
     Task<IEnumerable<ApplicationResponseDTO>> GetMyApplicationsAsync(string userId);
+    Task<IEnumerable<ApplicationResponseDTO>> GetApplicationsByCompanyIdAsync(Guid companyId);
 
 }

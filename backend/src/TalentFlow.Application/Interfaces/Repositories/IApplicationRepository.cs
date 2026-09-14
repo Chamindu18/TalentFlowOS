@@ -28,6 +28,8 @@ public interface IApplicationRepository
 
     Task<int> GetApplicationCountForJobAsync(Guid jobId);
 
+    Task<IEnumerable<JobApplication>> GetByCompanyIdAsync(Guid companyId);
+
     Task<int> SaveChangesAsync();
 
 }

@@ -96,4 +96,13 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<JobApplication>> GetByCompanyIdAsync(Guid companyId)
+    {
+        return await _context.JobApplications
+            .Include(a => a.Job)
+            .Include(a => a.Candidate)
+            .Where(a => a.Job.CompanyId == companyId && !a.IsDeleted)
+            .ToListAsync();
+    }
 }
