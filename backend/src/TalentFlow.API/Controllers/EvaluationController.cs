@@ -21,8 +21,9 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // 1. POST: api/evaluation/create
+        // 1. POST: api/evaluation/create (legacy) and api/evaluations (frontend expected)
         [HttpPost("create")]
+        [HttpPost("evaluations")]
         public async Task<IActionResult> CreateEvaluation([FromBody] Evaluation evaluation)
         {
             if (evaluation == null)

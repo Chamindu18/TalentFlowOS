@@ -20,8 +20,9 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // 1. POST: api/feedback/submit
+        // 1. POST: api/feedback/submit (legacy) and api/feedback (frontend expected)
         [HttpPost("submit")]
+        [HttpPost]
         public async Task<IActionResult> SubmitFeedback([FromBody] InterviewFeedback feedback)
         {
             if (feedback == null)
