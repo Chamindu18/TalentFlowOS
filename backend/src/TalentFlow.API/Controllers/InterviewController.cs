@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TalentFlow.Domain.Entities;
 using TalentFlow.Infrastructure.Persistence.Contexts;
@@ -10,7 +12,7 @@ namespace TalentFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "HiringManager")] // Consuming the team authentication structure
+    [Authorize(Roles = "HiringManager")]
     public class InterviewController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +22,41 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // 1. POST: api/interview/schedule
+        // 1. GET: api/interview
+        [HttpGet]
+        public async Task<IActionResult> GetInterviews()
+        {
+            var interviews = await _context.Interviews
+                .Include(i => i.Application)
+                    .ThenInclude(a => a.Job)
+                .Include(i => i.Application)
+                    .ThenInclude(a => a.Candidate)
+                .Include(i => i.Schedules)
+                .Where(i => !i.IsDeleted)
+                .Select(i => new
+                {
+                    id = i.Id.ToString(),
+#pragma warning disable CS8602 // Dereference of a possibly null reference - expression tree translated to SQL handles nulls
+                    candidateName = i.Application != null && i.Application.Candidate != null
+                        ? $"{i.Application.Candidate.FirstName} {i.Application.Candidate.LastName}"
+                        : "Unknown",
+                    position = i.Application != null && i.Application.Job != null
+                        ? i.Application.Job.Title
+                        : "Unknown",
+#pragma warning restore CS8602
+                    interviewDate = i.Schedules != null && i.Schedules.Any()
+                        ? i.Schedules.OrderBy(s => s.ScheduledTime).First().ScheduledTime.ToString("yyyy-MM-dd")
+                        : string.Empty,
+                    interviewTime = i.Schedules != null && i.Schedules.Any()
+                        ? i.Schedules.OrderBy(s => s.ScheduledTime).First().ScheduledTime.ToString("HH:mm")
+                        : string.Empty
+                })
+                .ToListAsync();
+
+            return Ok(interviews);
+        }
+
+        // 2. POST: api/interview/schedule
         [HttpPost("schedule")]
         public async Task<IActionResult> ScheduleInterview([FromBody] Interview interview)
         {
@@ -36,7 +72,7 @@ namespace TalentFlow.API.Controllers
             return Ok(new { message = "Interview scheduled successfully", interviewId = interview.Id });
         }
 
-        // 2. GET: api/interview/{id}
+        // 3. GET: api/interview/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInterviewById(Guid id)
         {
