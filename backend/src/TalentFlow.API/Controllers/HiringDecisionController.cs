@@ -11,6 +11,7 @@ namespace TalentFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("api/hiring-decisions")]
     [Authorize(Roles = "HiringManager")] // Securely consumes the team authentication structure
     public class HiringDecisionController : ControllerBase
     {
@@ -21,8 +22,9 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // 1. POST: api/hiringdecision/make
+        // 1. POST: api/hiringdecision/make (legacy) and api/hiring-decisions (frontend expected)
         [HttpPost("make")]
+        [HttpPost]
         public async Task<IActionResult> MakeDecision([FromBody] HiringDecision decision)
         {
             if (decision == null)
