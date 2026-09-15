@@ -80,7 +80,7 @@ export const candidateApi = {
 
     // 3. Job Applications & Tracking Operations
     getApplicationHistory: () => api.get('/Candidate/applications'),
-    withdrawApplication: (id: string) => api.delete(`/Candidate/applications/${id}`),
+    withdrawApplication: (id: string) => api.delete(`/Candidate/applications/${id}/withdraw`),
     applyJob: (data: ApplyJobDto) => api.post('/Candidate/apply', data),
     getSavedJobs: () => api.get('/Candidate/saved-jobs'),
 };
