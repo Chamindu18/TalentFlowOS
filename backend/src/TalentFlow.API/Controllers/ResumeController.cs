@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Services;
 
 namespace TalentFlow.API.Controllers
@@ -15,10 +16,12 @@ namespace TalentFlow.API.Controllers
     public class ResumeController : ControllerBase
     {
         private readonly ICandidateService _candidateService;
+        private readonly ICandidateRepository _candidateRepository;
 
-        public ResumeController(ICandidateService candidateService)
+        public ResumeController(ICandidateService candidateService, ICandidateRepository candidateRepository)
         {
             _candidateService = candidateService;
+            _candidateRepository = candidateRepository;
         }
 
         [HttpPost("upload")]
@@ -31,17 +34,20 @@ namespace TalentFlow.API.Controllers
             if (extension != ".pdf" && extension != ".docx" && extension != ".doc")
                 return BadRequest("Only .pdf, .doc, and .docx files are allowed.");
 
-            var candidateId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null)
+                return NotFound("Candidate profile not found.");
 
-           
+            var candidateId = candidate.Id;
+
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
                 var fileBytes = memoryStream.ToArray();
 
-                
                 var fileUrl = await _candidateService.UploadResumeAsync(candidateId, file.FileName, fileBytes);
-                
+
                 return Ok(new { message = "Resume uploaded successfully!", resumeUrl = fileUrl });
             }
         }
