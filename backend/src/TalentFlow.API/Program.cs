@@ -149,6 +149,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("Frontend");
 app.UseAuthentication(); 

@@ -18,6 +18,12 @@ interface UploadResponse {
   resumeUrl: string;
 }
 
+// Derive the API origin (without /api suffix) for static file URLs
+const getApiOrigin = (): string => {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5007/api';
+  return apiUrl.replace(/\/api\/?$/, '');
+}
+
 const ResumeUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
 
@@ -378,7 +384,7 @@ const ResumeUpload: React.FC = () => {
                   </div>
 
                   <a
-                    href={`https://localhost:5001${resumeUrl}`}
+                    href={`${getApiOrigin()}${resumeUrl}`}
                     target="_blank"
                     rel="noreferrer"
                     className="
