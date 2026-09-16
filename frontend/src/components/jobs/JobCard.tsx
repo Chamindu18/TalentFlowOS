@@ -1,20 +1,30 @@
-import { MapPin, Briefcase, Clock3, Banknote, Building2 } from "lucide-react";
+import { MapPin, Briefcase, Clock3, Banknote, Building2, Bookmark, BookmarkCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Job } from "@/types/job";
 
 interface JobCardProps {
-  job: Job;
+  job: Job & { isSaved?: boolean };
   onApply?: (job: Job) => void;
+  onSaveToggle?: (job: Job) => void;
 }
 
 export default function JobCard({
   job,
   onApply,
+  onSaveToggle,
 }: JobCardProps) {
   const salary =
     job.salaryMin && job.salaryMax
       ? `Rs. ${job.salaryMin.toLocaleString()} - Rs. ${job.salaryMax.toLocaleString()}`
       : "Salary Negotiable";
+
+  const isSaved = job.isSaved ?? false;
+
+  const handleSaveToggle = async () => {
+    if (onSaveToggle) {
+      onSaveToggle(job);
+    }
+  };
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -115,12 +125,33 @@ export default function JobCard({
 
         </div>
 
-        <Button
-          onClick={() => onApply?.(job)}
-          className="rounded-xl bg-orange-500 px-6 hover:bg-orange-600"
-        >
-          Apply
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            variant={isSaved ? "default" : "outline"}
+            onClick={handleSaveToggle}
+            className="rounded-xl px-4"
+            aria-label={isSaved ? "Remove from saved jobs" : "Save job"}
+          >
+            {isSaved ? (
+              <>
+                <BookmarkCheck className="mr-2 h-4 w-4" />
+                Saved
+              </>
+            ) : (
+              <>
+                <Bookmark className="mr-2 h-4 w-4" />
+                Save
+              </>
+            )}
+          </Button>
+
+          <Button
+            onClick={() => onApply?.(job)}
+            className="rounded-xl bg-orange-500 px-6 hover:bg-orange-600"
+          >
+            Apply
+          </Button>
+        </div>
 
       </div>
 

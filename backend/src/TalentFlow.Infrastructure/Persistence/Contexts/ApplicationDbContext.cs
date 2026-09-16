@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Job> Jobs => Set<Job>();
     public DbSet<JobApplication> JobApplications => Set<JobApplication>(); 
     public DbSet<User> Users => Set<User>();
+    public DbSet<SavedJob> SavedJobs => Set<SavedJob>();
     
 public DbSet<Evaluation> Evaluations => Set<Evaluation>();
 public DbSet<InterviewFeedback> InterviewFeedbacks => Set<InterviewFeedback>();
@@ -51,5 +52,20 @@ public DbSet<Interview> Interviews => Set<Interview>();
                         .WithMany(j => j.JobApplications)
                         .HasForeignKey(ja => ja.JobId);
                 });
+
+        modelBuilder.Entity<SavedJob>(entity =>
+        {
+            entity.HasOne(sj => sj.Candidate)
+                .WithMany()
+                .HasForeignKey(sj => sj.CandidateId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(sj => sj.Job)
+                .WithMany()
+                .HasForeignKey(sj => sj.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(sj => new { sj.CandidateId, sj.JobId }).IsUnique();
+        });
             }
         }

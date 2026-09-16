@@ -10,6 +10,7 @@ import {
   FileBadge2,
   X,
   Brain,
+  Bookmark,
 } from "lucide-react";
 
 import { useAuthStore } from "@/store/auth.store";
@@ -34,6 +35,11 @@ const navigation = [
     label: "My Applications",
     icon: FileText,
     path: "/candidate/applications",
+  },
+  {
+    label: "Saved Jobs",
+    icon: Bookmark,
+    path: "/candidate/saved-jobs",
   },
   {
     label: "Resume",

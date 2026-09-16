@@ -15,13 +15,16 @@ namespace TalentFlow.Application.Services
     {
         private readonly IJobApplicationRepository _applicationRepository;
         private readonly IJobRepository _jobRepository;
+        private readonly ISavedJobRepository _savedJobRepository;
 
         public CandidateService(
             IJobApplicationRepository applicationRepository,
-            IJobRepository jobRepository)
+            IJobRepository jobRepository,
+            ISavedJobRepository savedJobRepository)
         {
             _applicationRepository = applicationRepository;
             _jobRepository = jobRepository;
+            _savedJobRepository = savedJobRepository;
         }
 
         public async Task<string> UploadResumeAsync(Guid candidateId, string fileName, byte[] fileBytes)
@@ -76,17 +79,58 @@ namespace TalentFlow.Application.Services
             return (int)Math.Round(percentage);
         }
 
-        public async Task<bool> SaveJobAsync(Guid candidateId, Guid jobId) => true;
+        public async Task<bool> SaveJobAsync(Guid candidateId, Guid jobId)
+        {
+            var exists = await _savedJobRepository.ExistsAsync(candidateId, jobId);
+            if (exists)
+            {
+                return false;
+            }
+
+            var job = await _jobRepository.GetByIdAsync(jobId);
+            if (job == null)
+            {
+                return false;
+            }
+
+            var savedJob = new SavedJob
+            {
+                CandidateId = candidateId,
+                JobId = jobId
+            };
+
+            await _savedJobRepository.AddAsync(savedJob);
+            await _savedJobRepository.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<IEnumerable<SavedJobDto>> GetSavedJobsAsync(Guid candidateId)
         {
-            return new List<SavedJobDto>
+            var savedJobs = await _savedJobRepository.GetByCandidateIdAsync(candidateId);
+            
+            return savedJobs.Select(sj => new SavedJobDto
             {
-                new SavedJobDto { SavedJobId = Guid.NewGuid(), JobId = Guid.NewGuid(), JobTitle = "Software Engineer Backend", CompanyName = "Sysco LABS (Sample)", Location = "Colombo", SavedAt = DateTime.UtcNow }
-            };
+                SavedJobId = sj.Id,
+                JobId = sj.JobId,
+                JobTitle = sj.Job?.Title ?? "Unknown Job",
+                CompanyName = sj.Job?.Company?.Name ?? "Unknown Company",
+                Location = sj.Job?.Location ?? "Unknown Location",
+                SavedAt = sj.SavedAt
+            }).ToList();
         }
 
-        public async Task<bool> UnsaveJobAsync(Guid savedJobId, Guid candidateId) => true;
+        public async Task<bool> UnsaveJobAsync(Guid savedJobId, Guid candidateId)
+        {
+            var savedJob = await _savedJobRepository.GetByIdAsync(savedJobId);
+            if (savedJob == null || savedJob.CandidateId != candidateId)
+            {
+                return false;
+            }
+
+            _savedJobRepository.Delete(savedJob);
+            await _savedJobRepository.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<bool> ApplyForJobAsync(Guid candidateId, ApplyJobDto applyJobDto)
         {

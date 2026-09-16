@@ -6,8 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { jobService } from "@/services/jobService";
+import { candidateApi } from "@/services/candidateApi";
 
-import type { Job } from "@/types/job";
+import type { Job, SavedJob } from "@/types/job";
 
 import JobHeader from "@/components/job-details/JobHeader";
 import JobDescription from "@/components/job-details/JobDescription";
@@ -19,12 +20,13 @@ export default function CandidateJobDetailsPage() {
   const navigate = useNavigate();
 
   const [job, setJob] = useState<Job | null>(null);
-
+  const [isSaved, setIsSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
       loadJob(id);
+      checkSavedStatus(id);
     }
   }, [id]);
 
@@ -39,6 +41,18 @@ export default function CandidateJobDetailsPage() {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkSavedStatus = async (jobId: string) => {
+    try {
+      const response = await candidateApi.getSavedJobs();
+      const savedJobs = (response.data ?? []) as SavedJob[];
+      const saved = savedJobs.some((sj) => sj.jobId === jobId);
+      setIsSaved(saved);
+    } catch (error) {
+      console.error(error);
+      setIsSaved(false);
     }
   };
 
@@ -81,7 +95,7 @@ export default function CandidateJobDetailsPage() {
 
       </Button>
 
-      <JobHeader job={job} />
+      <JobHeader job={{ ...job, isSaved }} />
 
       <div className="grid gap-8 lg:grid-cols-3">
 

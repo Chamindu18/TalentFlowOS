@@ -17,6 +17,7 @@ import CandidateAnalyticsPage from "@/pages/candidate/CandidateAnalyticsPage";
 import CandidateSettingsPage from "@/pages/candidate/CandidateSettingsPage";
 import CandidateApplicationsPage from "@/pages/candidate/CandidateApplicationsPage";
 import CandidateJobDetailsPage from "@/pages/candidate/CandidateJobDetailsPage";
+import CandidateSavedJobsPage from "@/pages/candidate/CandidateSavedJobsPage";
 
 // Recruiter Pages
 import RecruiterDashboardPage from "@/pages/recruiter/RecruiterDashboardPage";
@@ -109,6 +110,10 @@ export default function AppRoutes() {
           <Route
             path="/candidate/applications"
             element={<CandidateApplicationsPage />}
+          />
+          <Route
+            path="/candidate/saved-jobs"
+            element={<CandidateSavedJobsPage />}
           />
         </Route>
       </Route>

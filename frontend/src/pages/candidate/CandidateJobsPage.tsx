@@ -7,12 +7,14 @@ import JobFilter from "@/components/jobs/JobFilter";
 import JobEmptyState from "@/components/jobs/JobEmptyState";
 
 import { jobService } from "@/services/jobService";
-import type { Job } from "@/types/job";
+import { candidateApi } from "@/services/candidateApi";
+import type { Job, SavedJob } from "@/types/job";
 
 export default function CandidateJobsPage() {
   const navigate = useNavigate();
 
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [savedJobIds, setSavedJobIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
   const [searchParams] = useSearchParams();
@@ -22,6 +24,7 @@ export default function CandidateJobsPage() {
 
   useEffect(() => {
     loadJobs();
+    loadSavedJobs();
   }, []);
 
   const loadJobs = async () => {
@@ -36,6 +39,46 @@ export default function CandidateJobsPage() {
       setJobs([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadSavedJobs = async () => {
+    try {
+      const response = await candidateApi.getSavedJobs();
+      const savedJobs = (response.data ?? []) as SavedJob[];
+      const ids = new Set(savedJobs.map((sj) => sj.jobId));
+      setSavedJobIds(ids);
+    } catch (error) {
+      console.error(error);
+      setSavedJobIds(new Set());
+    }
+  };
+
+  const handleSaveToggle = async (job: Job) => {
+    try {
+      if (savedJobIds.has(job.id)) {
+        // Find the savedJobId for this job
+        const response = await candidateApi.getSavedJobs();
+        const savedJobs = (response.data ?? []) as SavedJob[];
+        const savedJob = savedJobs.find((sj) => sj.jobId === job.id);
+        if (savedJob) {
+          await candidateApi.unsaveJob(savedJob.savedJobId);
+          setSavedJobIds((prev) => {
+            const next = new Set(prev);
+            next.delete(job.id);
+            return next;
+          });
+        }
+      } else {
+        await candidateApi.saveJob(job.id);
+        setSavedJobIds((prev) => {
+          const next = new Set(prev);
+          next.add(job.id);
+          return next;
+        });
+      }
+    } catch (error) {
+      console.error("Failed to toggle save:", error);
     }
   };
 
@@ -133,7 +176,12 @@ export default function CandidateJobsPage() {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredJobs.map((job) => (
-            <JobCard key={job.id} job={job} onApply={handleApply} />
+            <JobCard
+              key={job.id}
+              job={{ ...job, isSaved: savedJobIds.has(job.id) }}
+              onApply={handleApply}
+              onSaveToggle={handleSaveToggle}
+            />
           ))}
         </div>
       )}

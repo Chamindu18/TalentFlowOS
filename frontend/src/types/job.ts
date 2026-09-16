@@ -88,6 +88,15 @@ export interface Application {
     updatedAt: string;
 }
 
+export interface SavedJob {
+    savedJobId: string;
+    jobId: string;
+    jobTitle: string;
+    companyName: string;
+    location: string;
+    savedAt: string;
+}
+
 export interface CreateApplicationRequest {
     jobId: string;
     coverLetter?: string;

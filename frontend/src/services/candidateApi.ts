@@ -83,4 +83,6 @@ export const candidateApi = {
     withdrawApplication: (id: string) => api.delete(`/Candidate/applications/${id}/withdraw`),
     applyJob: (data: ApplyJobDto) => api.post('/Candidate/apply', data),
     getSavedJobs: () => api.get('/Candidate/saved-jobs'),
+    saveJob: (jobId: string) => api.post(`/Candidate/jobs/${jobId}/save`),
+    unsaveJob: (savedJobId: string) => api.delete(`/Candidate/saved-jobs/${savedJobId}`),
 };
