@@ -91,6 +91,9 @@ public class JobApplicationService : IApplicationService
         if (!job.IsActive)
             throw new BusinessRuleException("This job is no longer accepting applications");
 
+        if (job.ApplicationDeadline.HasValue && job.ApplicationDeadline.Value < DateTime.UtcNow)
+            throw new BusinessRuleException("The application deadline for this job has passed");
+
         // Find Candidate using logged-in user
         var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
 
