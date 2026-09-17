@@ -120,7 +120,8 @@ public class JobApplicationService : IApplicationService
         await _applicationRepository.AddAsync(application);
         await _applicationRepository.SaveChangesAsync();
 
-        return _mapper.Map<ApplicationResponseDTO>(application);
+        var createdApplication = await _applicationRepository.GetByIdAsync(application.Id);
+        return _mapper.Map<ApplicationResponseDTO>(createdApplication!);
     }
 
     // ============================================================
