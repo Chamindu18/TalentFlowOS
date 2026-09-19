@@ -51,12 +51,10 @@ public class RegisterRequestDtoValidator
                 "Password must contain at least one number."
             );
 
+        // Role is ignored server-side (always Candidate), but accept if sent for backward compatibility
         RuleFor(x => x.Role)
-            .Must(role =>
-                role == UserRole.Candidate ||
-                role == UserRole.Recruiter)
-            .WithMessage(
-                "Only Candidate and Recruiter accounts can be registered."
-            );
+            .Must(role => role == UserRole.Candidate || role == UserRole.Recruiter)
+            .WithMessage("Invalid role.")
+            .When(x => x.Role != UserRole.Candidate && x.Role != UserRole.Recruiter && x.Role != default);
     }
 }

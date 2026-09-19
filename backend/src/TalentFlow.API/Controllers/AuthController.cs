@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Message =
+            message =
                 "If an account exists, a password reset email has been sent."
         });
     }
@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Message =
+            message =
                 "Password reset successfully."
         });
     }
@@ -84,7 +84,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Message =
+            message =
                 "Email verified successfully."
         });
     }
@@ -102,7 +102,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Message =
+            message =
                 "Verification email sent successfully."
         });
     }
@@ -115,9 +115,9 @@ public class AuthController : ControllerBase
     {
         return Ok(new
         {
-            UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-            Email = User.FindFirst(ClaimTypes.Email)?.Value,
-            Role = User.FindFirst(ClaimTypes.Role)?.Value
+            userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+            email = User.FindFirst(ClaimTypes.Email)?.Value,
+            role = User.FindFirst(ClaimTypes.Role)?.Value
         });
     }
 }

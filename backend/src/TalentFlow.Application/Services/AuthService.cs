@@ -71,7 +71,7 @@ public class AuthService : IAuthService
             LastName = request.LastName,
             Email = email,
             PasswordHash = _passwordHasher.HashPassword(request.Password),
-            Role = request.Role,
+            Role = UserRole.Candidate,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             IsEmailVerified = false,

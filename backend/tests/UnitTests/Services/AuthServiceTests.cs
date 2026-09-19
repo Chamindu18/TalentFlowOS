@@ -45,7 +45,7 @@ namespace UnitTests.Services
         }
 
         [Fact]
-        public async Task RegisterAsync_ShouldCreateUser_WhenEmailDoesNotExist()
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenEmailDoesNotExist()
         {
             // Arrange
             var request = new RegisterRequestDto
@@ -98,10 +98,222 @@ namespace UnitTests.Services
                 u.Email == request.Email &&
                 u.FirstName == request.FirstName &&
                 u.LastName == request.LastName &&
-                u.Role == request.Role &&
+                u.Role == UserRole.Candidate &&
                 u.IsEmailVerified == false &&
                 u.EmailVerificationToken != null &&
                 u.EmailVerificationTokenExpiresAt != null
+            )), Times.Once);
+        }
+
+        [Fact]
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenClientSendsRecruiterRole()
+        {
+            // Arrange
+            var request = new RegisterRequestDto
+            {
+                FirstName = "Recruiter",
+                LastName = "User",
+                Email = "recruiter@gmail.com",
+                Password = "Password123",
+                Role = UserRole.Recruiter
+            };
+
+            _userRepositoryMock
+                .Setup(x => x.ExistsAsync(request.Email))
+                .ReturnsAsync(false);
+
+            _passwordHasherMock
+                .Setup(x => x.HashPassword(request.Password))
+                .Returns("hashed-password");
+
+            _userRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<User>()))
+                .Returns(Task.CompletedTask);
+
+            _userRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Candidate>()))
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .ReturnsAsync(true);
+
+            _emailServiceMock
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _authService.RegisterAsync(request);
+
+            // Assert - Server should override role to Candidate
+            result.Should().NotBeNull();
+            result.Role.Should().Be(UserRole.Candidate.ToString());
+
+            _userRepositoryMock.Verify(x => x.AddAsync(It.Is<User>(u =>
+                u.Role == UserRole.Candidate
+            )), Times.Once);
+        }
+
+        [Fact]
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenClientSendsAdminRole()
+        {
+            // Arrange
+            var request = new RegisterRequestDto
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@gmail.com",
+                Password = "Password123",
+                Role = UserRole.Admin
+            };
+
+            _userRepositoryMock
+                .Setup(x => x.ExistsAsync(request.Email))
+                .ReturnsAsync(false);
+
+            _passwordHasherMock
+                .Setup(x => x.HashPassword(request.Password))
+                .Returns("hashed-password");
+
+            _userRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<User>()))
+                .Returns(Task.CompletedTask);
+
+            _userRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Candidate>()))
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .ReturnsAsync(true);
+
+            _emailServiceMock
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _authService.RegisterAsync(request);
+
+            // Assert - Server should override role to Candidate (privilege escalation prevented)
+            result.Should().NotBeNull();
+            result.Role.Should().Be(UserRole.Candidate.ToString());
+
+            _userRepositoryMock.Verify(x => x.AddAsync(It.Is<User>(u =>
+                u.Role == UserRole.Candidate
+            )), Times.Once);
+        }
+
+        [Fact]
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenClientSendsHiringManagerRole()
+        {
+            // Arrange
+            var request = new RegisterRequestDto
+            {
+                FirstName = "Hiring",
+                LastName = "Manager",
+                Email = "hiring@gmail.com",
+                Password = "Password123",
+                Role = UserRole.HiringManager
+            };
+
+            _userRepositoryMock
+                .Setup(x => x.ExistsAsync(request.Email))
+                .ReturnsAsync(false);
+
+            _passwordHasherMock
+                .Setup(x => x.HashPassword(request.Password))
+                .Returns("hashed-password");
+
+            _userRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<User>()))
+                .Returns(Task.CompletedTask);
+
+            _userRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Candidate>()))
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .ReturnsAsync(true);
+
+            _emailServiceMock
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _authService.RegisterAsync(request);
+
+            // Assert - Server should override role to Candidate
+            result.Should().NotBeNull();
+            result.Role.Should().Be(UserRole.Candidate.ToString());
+
+            _userRepositoryMock.Verify(x => x.AddAsync(It.Is<User>(u =>
+                u.Role == UserRole.Candidate
+            )), Times.Once);
+        }
+
+        [Fact]
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenRoleNotProvided()
+        {
+            // Arrange - Role defaults to Candidate (0) when not provided
+            var request = new RegisterRequestDto
+            {
+                FirstName = "Default",
+                LastName = "User",
+                Email = "default@gmail.com",
+                Password = "Password123"
+                // Role not set, defaults to 0 (Candidate)
+            };
+
+            _userRepositoryMock
+                .Setup(x => x.ExistsAsync(request.Email))
+                .ReturnsAsync(false);
+
+            _passwordHasherMock
+                .Setup(x => x.HashPassword(request.Password))
+                .Returns("hashed-password");
+
+            _userRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<User>()))
+                .Returns(Task.CompletedTask);
+
+            _userRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.AddAsync(It.IsAny<Candidate>()))
+                .Returns(Task.CompletedTask);
+
+            _candidateRepositoryMock
+                .Setup(x => x.SaveChangesAsync())
+                .ReturnsAsync(true);
+
+            _emailServiceMock
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _authService.RegisterAsync(request);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Role.Should().Be(UserRole.Candidate.ToString());
+
+            _userRepositoryMock.Verify(x => x.AddAsync(It.Is<User>(u =>
+                u.Role == UserRole.Candidate
             )), Times.Once);
         }
 
@@ -516,7 +728,7 @@ namespace UnitTests.Services
         }
 
         [Fact]
-        public async Task RegisterAsync_ShouldNotAllowAdminRole_WhenClientProvidesAdminRole()
+        public async Task RegisterAsync_ShouldCreateCandidateUser_WhenClientProvidesAdminRole()
         {
             // Arrange
             var request = new RegisterRequestDto
@@ -559,10 +771,13 @@ namespace UnitTests.Services
             // Act
             var result = await _authService.RegisterAsync(request);
 
-            // Assert - Role should be set to what client provided (current behavior)
-            // This test documents current behavior; if we want to restrict server-side,
-            // the service should override the role
-            result.Role.Should().Be(UserRole.Admin.ToString());
+            // Assert - Server should override role to Candidate (privilege escalation prevented)
+            result.Should().NotBeNull();
+            result.Role.Should().Be(UserRole.Candidate.ToString());
+
+            _userRepositoryMock.Verify(x => x.AddAsync(It.Is<User>(u =>
+                u.Role == UserRole.Candidate
+            )), Times.Once);
         }
     }
 }

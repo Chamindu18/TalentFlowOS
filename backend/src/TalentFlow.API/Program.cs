@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using TalentFlow.API.Middleware;
 using TalentFlow.Application.Common.Settings;
@@ -19,12 +20,14 @@ using TalentFlow.Infrastructure.Services;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using TalentFlow.Infrastructure.Seed;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuration Settings Load 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<FrontendSettings>(builder.Configuration.GetSection("FrontendSettings"));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
 
 builder.Services
     .AddControllers()
