@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TalentFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin")]
 public class NotificationController : ControllerBase
 {
     [HttpGet]
@@ -13,17 +15,17 @@ public class NotificationController : ControllerBase
         {
             new
             {
-                Id = 1,
-                Title = "Candidate Applied",
-                Message = "A new candidate application was submitted.",
-                CreatedAt = DateTime.UtcNow
+                id = 1,
+                title = "Candidate Applied",
+                message = "A new candidate application was submitted.",
+                createdAt = DateTime.UtcNow
             },
             new
             {
-                Id = 2,
-                Title = "Interview Scheduled",
-                Message = "An interview has been scheduled.",
-                CreatedAt = DateTime.UtcNow
+                id = 2,
+                title = "Interview Scheduled",
+                message = "An interview has been scheduled.",
+                createdAt = DateTime.UtcNow
             }
         };
 
