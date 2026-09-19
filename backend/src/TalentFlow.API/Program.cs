@@ -124,6 +124,7 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+builder.Services.AddScoped<IInterviewRepository, InterviewRepository>();
 
 // =====================================
 // Security

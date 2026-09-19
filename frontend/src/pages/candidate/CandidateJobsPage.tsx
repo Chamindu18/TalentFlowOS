@@ -31,7 +31,7 @@ export default function CandidateJobsPage() {
     try {
       setLoading(true);
 
-      const data = await jobService.getAllJobs();
+      const data = await jobService.getActive();
 
       setJobs(data ?? []);
     } catch (error) {

@@ -2,29 +2,43 @@ using TalentFlow.Application.DTOs.Admin;
 using TalentFlow.Application.DTOs.Users;
 using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Domain.Enums;
 
 namespace TalentFlow.Application.Services;
 
 public class AdminService : IAdminService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IJobRepository _jobRepository;
+    private readonly IInterviewRepository _interviewRepository;
 
-    public AdminService(IUserRepository userRepository)
+    public AdminService(
+        IUserRepository userRepository,
+        ICompanyRepository companyRepository,
+        IJobRepository jobRepository,
+        IInterviewRepository interviewRepository)
     {
         _userRepository = userRepository;
+        _companyRepository = companyRepository;
+        _jobRepository = jobRepository;
+        _interviewRepository = interviewRepository;
     }
 
     public async Task<DashboardStatsDto> GetDashboardStatsAsync()
     {
         var users = await _userRepository.GetAllAsync();
+        var companies = await _companyRepository.GetAllAsync();
+        var jobs = await _jobRepository.GetActiveJobsAsync();
+        var interviewsCount = await _interviewRepository.GetCountAsync();
 
         return new DashboardStatsDto
         {
             TotalUsers = users.Count(),
-            TotalCandidates = 12,
-            TotalCompanies = 21,
-            TotalJobs = 20,
-            TotalInterviews = 2
+            TotalCandidates = users.Count(u => u.Role == UserRole.Candidate),
+            TotalCompanies = companies.Count(),
+            TotalJobs = jobs.Count(),
+            TotalInterviews = interviewsCount
         };
     }
 
