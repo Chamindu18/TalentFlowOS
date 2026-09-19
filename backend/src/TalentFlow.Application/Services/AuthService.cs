@@ -133,13 +133,10 @@ public class AuthService : IAuthService
             throw new InvalidCredentialsException();
         }
 
-        
-        /*
         if (!user.IsEmailVerified)
         {
             throw new EmailNotVerifiedException();
         }
-        */
 
         var token = _jwtTokenGenerator.GenerateToken(user);
 
@@ -155,11 +152,54 @@ public class AuthService : IAuthService
         };
     }
 
-   
+    public async Task VerifyEmailAsync(string token)
+    {
+        var user = await _userRepository.GetByEmailVerificationTokenAsync(token);
+
+        if (user == null)
+        {
+            throw new EmailNotVerifiedException();
+        }
+
+        if (user.EmailVerificationTokenExpiresAt < DateTime.UtcNow)
+        {
+            throw new EmailNotVerifiedException();
+        }
+
+        user.IsEmailVerified = true;
+        user.EmailVerificationToken = null;
+        user.EmailVerificationTokenExpiresAt = null;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task ResendVerificationEmailAsync(string email)
+    {
+        var normalizedEmail = email.Trim().ToLower();
+        var user = await _userRepository.GetByEmailAsync(normalizedEmail);
+
+        if (user == null)
+        {
+            return;
+        }
+
+        if (user.IsEmailVerified)
+        {
+            return;
+        }
+
+        user.EmailVerificationToken = GenerateVerificationToken();
+        user.EmailVerificationTokenExpiresAt = DateTime.UtcNow.AddHours(24);
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user);
+
+        await SendVerificationEmailAsync(user);
+    }
+
     public async Task ForgotPasswordAsync(ForgotPasswordRequestDto request) { /* ... */ }
     public async Task ResetPasswordAsync(ResetPasswordRequestDto request) { /* ... */ }
-    public async Task VerifyEmailAsync(string token) { /* ... */ }
-    public async Task ResendVerificationEmailAsync(string email) { /* ... */ }
 
     private async Task SendVerificationEmailAsync(User user)
     {
