@@ -221,51 +221,26 @@ export default function UserManagementPage() {
                   </span>
                 </td>
 
-                <td className="p-4">
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setSelectedUser(user)}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      View
-                    </button>
+<td className="p-4">
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setSelectedUser(user)}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        View
+                      </button>
 
-                    <button
-                      onClick={() => {
-                        setEditingUser(user);
-                        setSelectedRole(user.role);
-                      }}
-                      className="text-green-600 hover:text-green-800"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={async () => {
-                        const confirmed = window.confirm(
-                          `Disable ${user.firstName}?`,
-                        );
-
-                        if (confirmed) {
-                          try {
-                            await adminService.disableUser(user.id);
-
-                            await fetchUsers();
-
-                            alert("User disabled successfully");
-                          } catch (error) {
-                            console.error(error);
-
-                            alert("Failed to disable user");
-                          }
-                        }
-                      }}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      Disable
-                    </button>
-                  </div>
-                </td>
+                      <button
+                        onClick={() => {
+                          setEditingUser(user);
+                          setSelectedRole(user.role);
+                        }}
+                        className="text-green-600 hover:text-green-800"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </td>
               </tr>
             ))}
           </tbody>
