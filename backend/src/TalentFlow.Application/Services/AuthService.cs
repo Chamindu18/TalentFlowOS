@@ -158,12 +158,12 @@ public class AuthService : IAuthService
 
         if (user == null)
         {
-            throw new EmailNotVerifiedException();
+            throw new InvalidVerificationTokenException();
         }
 
         if (user.EmailVerificationTokenExpiresAt < DateTime.UtcNow)
         {
-            throw new EmailNotVerifiedException();
+            throw new ExpiredVerificationTokenException();
         }
 
         user.IsEmailVerified = true;
@@ -198,19 +198,61 @@ public class AuthService : IAuthService
         await SendVerificationEmailAsync(user);
     }
 
-    public async Task ForgotPasswordAsync(ForgotPasswordRequestDto request) { /* ... */ }
-    public async Task ResetPasswordAsync(ResetPasswordRequestDto request) { /* ... */ }
+    public async Task ForgotPasswordAsync(ForgotPasswordRequestDto request)
+    {
+        var normalizedEmail = request.Email.Trim().ToLower();
+        var user = await _userRepository.GetByEmailAsync(normalizedEmail);
+
+        if (user == null)
+        {
+            return;
+        }
+
+        user.ResetPasswordToken = GenerateVerificationToken();
+        user.ResetPasswordTokenExpiresAt = DateTime.UtcNow.AddMinutes(15);
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user);
+
+        await SendResetPasswordEmailAsync(user);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordRequestDto request)
+    {
+        var user = await _userRepository.GetByResetTokenAsync(request.Token);
+
+        if (user == null)
+        {
+            throw new InvalidResetPasswordTokenException();
+        }
+
+        if (user.ResetPasswordTokenExpiresAt < DateTime.UtcNow)
+        {
+            throw new ExpiredResetPasswordTokenException();
+        }
+
+        user.PasswordHash = _passwordHasher.HashPassword(request.NewPassword);
+        user.ResetPasswordToken = null;
+        user.ResetPasswordTokenExpiresAt = null;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user);
+    }
 
     private async Task SendVerificationEmailAsync(User user)
     {
-        try
-        {
-            var verificationLink = $"{_frontendSettings.BaseUrl}/email-verification?token={user.EmailVerificationToken}";
-            var body = EmailTemplates.EmailVerification(user.FirstName, verificationLink);
+        var verificationLink = $"{_frontendSettings.BaseUrl}/email-verification?token={user.EmailVerificationToken}";
+        var body = EmailTemplates.EmailVerification(user.FirstName, verificationLink);
 
-            await _emailService.SendEmailAsync(user.Email, "Verify Your Email Address - TalentFlow ✅", body);
-        }
-        catch { }
+        await _emailService.SendEmailAsync(user.Email, "Verify Your Email Address - TalentFlow ✅", body);
+    }
+
+    private async Task SendResetPasswordEmailAsync(User user)
+    {
+        var resetLink = $"{_frontendSettings.BaseUrl}/reset-password?token={user.ResetPasswordToken}";
+        var body = EmailTemplates.ResetPassword(user.FirstName, resetLink);
+
+        await _emailService.SendEmailAsync(user.Email, "Reset Your Password - TalentFlow 🔒", body);
     }
 
     private async Task SendWelcomeEmailAsync(User user)
