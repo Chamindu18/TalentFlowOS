@@ -16,7 +16,26 @@ public class EmailService : IEmailService
         IOptions<EmailSettings> options
     )
     {
-        _settings = options.Value;
+        _settings = options.Value ?? throw new ArgumentNullException(nameof(options));
+        ValidateSettings();
+    }
+
+    private void ValidateSettings()
+    {
+        if (string.IsNullOrWhiteSpace(_settings.SmtpServer))
+            throw new InvalidOperationException("Email SMTP server is not configured.");
+
+        if (_settings.Port <= 0)
+            throw new InvalidOperationException("Email SMTP port is not configured.");
+
+        if (string.IsNullOrWhiteSpace(_settings.SenderEmail))
+            throw new InvalidOperationException("Email sender address is not configured.");
+
+        if (string.IsNullOrWhiteSpace(_settings.Username))
+            throw new InvalidOperationException("Email username is not configured.");
+
+        if (string.IsNullOrWhiteSpace(_settings.Password))
+            throw new InvalidOperationException("Email password/app password is not configured. Set via environment variable Email__Password or appsettings.Development.json.");
     }
 
     public async Task SendEmailAsync(
@@ -25,23 +44,23 @@ public class EmailService : IEmailService
         string htmlBody
     )
     {
+        if (string.IsNullOrWhiteSpace(to))
+            throw new ArgumentException("Recipient email address is required.", nameof(to));
+
         using var client = new SmtpClient(
             _settings.SmtpServer,
             _settings.Port
-        );
-
-        client.EnableSsl = true;
-
-        client.UseDefaultCredentials = false;
-
-        client.DeliveryMethod =
-            SmtpDeliveryMethod.Network;
-
-        client.Credentials =
-            new NetworkCredential(
+        )
+        {
+            EnableSsl = true,
+            UseDefaultCredentials = false,
+            DeliveryMethod = SmtpDeliveryMethod.Network,
+            Credentials = new NetworkCredential(
                 _settings.Username,
                 _settings.Password
-            );
+            ),
+            Timeout = 30000
+        };
 
         using var message = new MailMessage
         {
@@ -49,11 +68,8 @@ public class EmailService : IEmailService
                 _settings.SenderEmail,
                 _settings.SenderName
             ),
-
             Subject = subject,
-
             Body = htmlBody,
-
             IsBodyHtml = true
         };
 
