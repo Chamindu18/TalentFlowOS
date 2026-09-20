@@ -28,6 +28,12 @@ export const jobService = {
     return response.data.data;
   },
 
+  // Get jobs for authenticated user's company (Recruiter)
+  getMyCompanyJobs: async (): Promise<Job[]> => {
+    const response = await api.get("/Jobs/my-company");
+    return response.data.data;
+  },
+
   // Get active jobs
   getActive: async (): Promise<Job[]> => {
     const response = await api.get("/Jobs/active");

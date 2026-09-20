@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TalentFlow.Application.DTOs.Jobs;
 using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Infrastructure.Persistence.Contexts;
 
 namespace TalentFlow.API.Controllers;
 
@@ -10,10 +13,12 @@ namespace TalentFlow.API.Controllers;
 public class JobsController : ControllerBase
 {
     private readonly IJobService _jobService;
+    private readonly ApplicationDbContext _context;
 
-    public JobsController(IJobService jobService)
+    public JobsController(IJobService jobService, ApplicationDbContext context)
     {
         _jobService = jobService;
+        _context = context;
     }
 
     // Get all jobs (Public access)
@@ -54,6 +59,23 @@ public class JobsController : ControllerBase
     public async Task<IActionResult> GetByDepartment(Guid departmentId)
     {
         var jobs = await _jobService.GetJobsByDepartmentAsync(departmentId);
+        return Ok(new { success = true, data = jobs });
+    }
+
+    // Get jobs for authenticated user's company (Recruiter/Admin)
+    [HttpGet("my-company")]
+    [Authorize(Roles = "Recruiter,Admin")]
+    public async Task<IActionResult> GetByMyCompany()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        if (user == null || user.CompanyId == null)
+            return Forbid("User not associated with a company.");
+
+        var jobs = await _jobService.GetJobsByCompanyAsync(user.CompanyId.Value);
         return Ok(new { success = true, data = jobs });
     }
 

@@ -35,6 +35,27 @@ public class JobApplicationsController : ControllerBase
     }
 
     /// <summary>
+    /// Get applications for the authenticated user's company (Recruiter)
+    /// </summary>
+    [HttpGet("my-company")]
+    [Authorize(Roles = "Recruiter,Admin")]
+    public async Task<IActionResult> GetByMyCompany()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        // Get the user's company ID
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        if (user == null || user.CompanyId == null)
+            return Forbid("User not associated with a company.");
+
+        var applications = await _applicationService.GetApplicationsByCompanyIdAsync(user.CompanyId.Value);
+        return Ok(new { success = true, data = applications });
+    }
+
+    /// <summary>
     /// Get application by ID
     /// </summary>
     [HttpGet("{id}")]
@@ -78,33 +99,33 @@ public class JobApplicationsController : ControllerBase
     /// Submit a new application
     /// </summary>
     [HttpPost]
-[Authorize(Roles = "Candidate")]
-public async Task<IActionResult> Create(
-    [FromBody] CreateApplicationRequestDTO request)
-{
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-    if (string.IsNullOrWhiteSpace(userId))
+    [Authorize(Roles = "Candidate")]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateApplicationRequestDTO request)
     {
-        return Unauthorized();
-    }
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    var application =
-        await _applicationService.CreateAsync(
-            request,
-            userId
-        );
-
-    return CreatedAtAction(
-        nameof(GetById),
-        new { id = application.Id },
-        new
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            success = true,
-            message = "Application submitted successfully",
-            data = application
-        });
-}
+            return Unauthorized();
+        }
+
+        var application =
+            await _applicationService.CreateAsync(
+                request,
+                userId
+            );
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = application.Id },
+            new
+            {
+                success = true,
+                message = "Application submitted successfully",
+                data = application
+            });
+    }
 
     /// <summary>
     /// Update application status

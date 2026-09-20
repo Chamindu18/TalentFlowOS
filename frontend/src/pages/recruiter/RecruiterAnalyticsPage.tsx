@@ -39,13 +39,13 @@ export const RecruiterAnalyticsPage: React.FC = () => {
             let applications: any[] = [];
 
             try {
-                jobs = await jobService.getAllJobs();
+                jobs = await jobService.getMyCompanyJobs();
             } catch (err) {
                 console.error('Error loading jobs:', err);
             }
 
             try {
-                applications = await applicationService.getAll();
+                applications = await applicationService.getMyCompanyApplications();
             } catch (err) {
                 console.error('Error loading applications:', err);
             }

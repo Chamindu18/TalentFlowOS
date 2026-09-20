@@ -41,7 +41,7 @@ const RecruiterDashboardPage: React.FC = () => {
 
             let jobs: any[] = [];
             try {
-                jobs = await jobService.getAllJobs();
+                jobs = await jobService.getMyCompanyJobs();
                 console.log('Jobs loaded:', jobs.length);
             } catch (err) {
                 console.error('Error loading jobs:', err);
@@ -50,7 +50,7 @@ const RecruiterDashboardPage: React.FC = () => {
 
             let applications: any[] = [];
             try {
-                applications = await applicationService.getAll();
+                applications = await applicationService.getMyCompanyApplications();
                 console.log('Applications loaded:', applications.length);
             } catch (err) {
                 console.error('Error loading applications:', err);
