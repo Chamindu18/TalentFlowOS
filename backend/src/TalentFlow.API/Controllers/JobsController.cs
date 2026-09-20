@@ -95,7 +95,22 @@ public class JobsController : ControllerBase
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Create([FromBody] CreateJobRequestDTO request)
     {
-        var job = await _jobService.CreateAsync(request);
+        // Get the authenticated user's company ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        // Admin can create jobs for any company, Recruiter only for their own
+        Guid? userCompanyId = null;
+        if (user != null && !User.IsInRole("Admin"))
+        {
+            if (user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+            userCompanyId = user.CompanyId.Value;
+        }
+
+        var job = await _jobService.CreateAsync(request, userCompanyId);
         return CreatedAtAction(nameof(GetById), new { id = job.Id },
             new { success = true, message = "Job created successfully", data = job });
     }
@@ -105,7 +120,22 @@ public class JobsController : ControllerBase
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateJobRequestDTO request)
     {
-        var job = await _jobService.UpdateAsync(id, request);
+        // Get the authenticated user's company ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        // Admin can update jobs for any company, Recruiter only for their own
+        Guid? userCompanyId = null;
+        if (user != null && !User.IsInRole("Admin"))
+        {
+            if (user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+            userCompanyId = user.CompanyId.Value;
+        }
+
+        var job = await _jobService.UpdateAsync(id, request, userCompanyId);
         return Ok(new { success = true, message = "Job updated successfully", data = job });
     }
 

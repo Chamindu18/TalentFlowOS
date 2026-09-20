@@ -65,12 +65,21 @@ export const CreateJobPage: React.FC = () => {
     const loadCompanies = async () => {
         try {
             setCompaniesLoading(true);
-            const data = await companyService.getAll();
-            setCompanies(data);
-            
-            // Auto-select if only one company
-            if (data.length === 1) {
-                setValue('companyId', data[0].id);
+            // Get the current user's company (for recruiters) or all companies (for admins)
+            const myCompany = await companyService.getMyCompany();
+            if (myCompany) {
+                setCompanies([myCompany]);
+                // Auto-select the user's company
+                setValue('companyId', myCompany.id);
+            } else {
+                // Fallback to all companies (for admins or if no company associated)
+                const data = await companyService.getAll();
+                setCompanies(data);
+                
+                // Auto-select if only one company
+                if (data.length === 1) {
+                    setValue('companyId', data[0].id);
+                }
             }
         } catch (error) {
             console.error('Error loading companies:', error);

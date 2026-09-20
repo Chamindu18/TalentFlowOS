@@ -23,6 +23,18 @@ export const companyService = {
         const response = await api.get('/Companies');
         return response.data.data;
     },
+
+    getMyCompany: async (): Promise<Company | null> => {
+        try {
+            const response = await api.get('/Companies/my-company');
+            return response.data.data;
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                return null;
+            }
+            throw error;
+        }
+    },
     
     getDepartments: async (companyId: string): Promise<Department[]> => {
         const response = await api.get(`/Departments/company/${companyId}`);

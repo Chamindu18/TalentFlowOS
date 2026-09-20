@@ -84,7 +84,7 @@ public class JobService : IJobService
         return _mapper.Map<IEnumerable<JobResponseDTO>>(jobs);
     }
 
-    public async Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request)
+    public async Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request, Guid? userCompanyId = null)
     {
 
         // Log the request
@@ -97,6 +97,12 @@ public class JobService : IJobService
         if (company == null)
         {
             throw new NotFoundException($"Company '{request.CompanyName}' not found. Please create the company first.");
+        }
+
+        // Validate that the recruiter belongs to this company (if userCompanyId is provided)
+        if (userCompanyId.HasValue && company.Id != userCompanyId.Value)
+        {
+            throw new UnauthorizedException("You can only create jobs for your own company.");
         }
 
         // Find department by name within the company
@@ -126,21 +132,40 @@ public class JobService : IJobService
         return _mapper.Map<JobResponseDTO>(job);
     }
 
-    public async Task<JobResponseDTO> UpdateAsync(Guid id, UpdateJobRequestDTO request)
+    public async Task<JobResponseDTO> UpdateAsync(Guid id, UpdateJobRequestDTO request, Guid? userCompanyId = null)
     {
         var job = await _jobRepository.GetByIdAsync(id);
         if (job == null)
             throw new NotFoundException($"Job with ID {id} not found");
+
+        // Validate that the recruiter belongs to this company (if userCompanyId is provided)
+        if (userCompanyId.HasValue && job.CompanyId != userCompanyId.Value)
+        {
+            throw new UnauthorizedException("You can only update jobs for your own company.");
+        }
 
         // Validate Company exists
         var companyExists = await _companyRepository.ExistsAsync(request.CompanyId);
         if (!companyExists)
             throw new NotFoundException($"Company with ID {request.CompanyId} not found");
 
+        // Validate that the company matches the job's company (prevent changing company)
+        if (request.CompanyId != job.CompanyId)
+        {
+            throw new BusinessRuleException("Cannot change the company of an existing job.");
+        }
+
         // Validate Department exists
         var departmentExists = await _departmentRepository.ExistsAsync(request.DepartmentId);
         if (!departmentExists)
             throw new NotFoundException($"Department with ID {request.DepartmentId} not found");
+
+        // Validate that the department belongs to the same company
+        var department = await _departmentRepository.GetByIdAsync(request.DepartmentId);
+        if (department == null || department.CompanyId != job.CompanyId)
+        {
+            throw new BusinessRuleException("Department does not belong to the job's company.");
+        }
 
         // Validate Salary Range
         if (request.SalaryMin.HasValue && request.SalaryMax.HasValue)

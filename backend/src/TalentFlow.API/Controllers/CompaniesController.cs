@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TalentFlow.Application.DTOs.Companies;
 using TalentFlow.Application.Interfaces.Services;
+using TalentFlow.Infrastructure.Persistence.Contexts;
 
 namespace TalentFlow.API.Controllers;
 
@@ -11,10 +14,12 @@ namespace TalentFlow.API.Controllers;
 public class CompaniesController : ControllerBase
 {
     private readonly ICompanyService _companyService;
+    private readonly ApplicationDbContext _context;
 
-    public CompaniesController(ICompanyService companyService)
+    public CompaniesController(ICompanyService companyService, ApplicationDbContext context)
     {
         _companyService = companyService;
+        _context = context;
     }
 
     [HttpGet]
@@ -22,6 +27,21 @@ public class CompaniesController : ControllerBase
     {
         var companies = await _companyService.GetAllAsync();
         return Ok(new { success = true, data = companies });
+    }
+
+    [HttpGet("my-company")]
+    public async Task<IActionResult> GetMyCompany()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        if (user == null || user.CompanyId == null)
+            return NotFound("User not associated with a company.");
+
+        var company = await _companyService.GetByIdAsync(user.CompanyId.Value);
+        return Ok(new { success = true, data = company });
     }
 
     [HttpGet("{id}")]

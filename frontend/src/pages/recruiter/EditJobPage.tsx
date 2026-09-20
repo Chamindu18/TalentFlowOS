@@ -75,8 +75,15 @@ export const EditJobPage: React.FC = () => {
     const loadCompanies = async () => {
         try {
             setCompaniesLoading(true);
-            const data = await companyService.getAll();
-            setCompanies(data);
+            // Get the current user's company (for recruiters) or all companies (for admins)
+            const myCompany = await companyService.getMyCompany();
+            if (myCompany) {
+                setCompanies([myCompany]);
+            } else {
+                // Fallback to all companies (for admins or if no company associated)
+                const data = await companyService.getAll();
+                setCompanies(data);
+            }
         } catch (error) {
             console.error('Error loading companies:', error);
             toast.error('Failed to load companies');

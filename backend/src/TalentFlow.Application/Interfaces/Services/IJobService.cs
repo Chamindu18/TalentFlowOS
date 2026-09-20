@@ -17,7 +17,7 @@ public interface IJobService
     Task<IEnumerable<JobResponseDTO>> GetJobsByCompanyAsync(Guid companyId);
     Task<IEnumerable<JobResponseDTO>> GetJobsByDepartmentAsync(Guid departmentId);
     Task<IEnumerable<JobResponseDTO>> SearchJobsAsync(string? searchTerm, string? location, string? employmentType);
-    Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request);
-    Task<JobResponseDTO> UpdateAsync(Guid id, UpdateJobRequestDTO request);
+    Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request, Guid? userCompanyId = null);
+    Task<JobResponseDTO> UpdateAsync(Guid id, UpdateJobRequestDTO request, Guid? userCompanyId = null);
     Task DeleteAsync(Guid id);
 }
