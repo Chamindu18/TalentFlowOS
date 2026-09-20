@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Scale, FileText, Lock, Loader2, AlertTriangle, CheckCircle, ShieldAlert } from "lucide-react";
-import axiosInstance from "@/lib/axios"; // 📡 Using your configured axios instance
+import axiosInstance from "@/lib/axios";
+
+interface Application {
+  id: string;
+  candidateName: string;
+  jobTitle: string;
+  companyName: string;
+  status: string;
+  appliedAt: string;
+}
 
 interface DecisionInput {
   applicationId: string;
@@ -11,14 +20,32 @@ interface DecisionInput {
 
 const HiringDecisions: React.FC = () => {
   const [form, setForm] = useState<DecisionInput>({
-    applicationId: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", // Mock Application GUID
-    managerId: "cd7b8a12-3456-789a-bcde-f0123456789a",     // Mock Manager GUID
-    decision: "Hired", // 🎯 Updated default to match system workflow specification
+    applicationId: "",
+    managerId: "",
+    decision: "Hired",
     justification: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; isError: boolean } | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
+  const fetchApplications = async () => {
+    try {
+      setApplicationsLoading(true);
+      const response = await axiosInstance.get("/JobApplications/company");
+      setApplications(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+    } finally {
+      setApplicationsLoading(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -29,13 +56,7 @@ const HiringDecisions: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // 🎯 Persists final hiring decision sign-offs directly to the database controller
-      try {
-        await axiosInstance.post("/api/hiring-decisions", form);
-      } catch {
-      // 🚀 DEMO BYPASS: Intercepts network exceptions gracefully if teammate pipelines are offline
-      console.log("⚠️ [Demo Mode] Intercepted database lifecycle bounds. Simulating final resolution routing.");
-    }
+      await axiosInstance.post("/api/hiring-decisions", form);
       
       setStatusMessage({ 
         text: `Final resolution locked: Candidate status set to "${form.decision}".`, 
@@ -43,11 +64,13 @@ const HiringDecisions: React.FC = () => {
       });
       
       setForm({
-        applicationId: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-        managerId: "cd7b8a12-3456-789a-bcde-f0123456789a",
+        applicationId: "",
+        managerId: "",
         decision: "Hired",
         justification: "",
       });
+      
+      fetchApplications();
     } catch (error) {
       console.error("Error executing hiring decision authorization:", error);
       setStatusMessage({ text: "Failed to record compliance sign-off. Please review API endpoint routing.", isError: true });
@@ -63,7 +86,7 @@ const HiringDecisions: React.FC = () => {
       <div>
         <h1 className="text-2xl font-bold text-slate-800">Final Hiring Decisions</h1>
         <p className="text-sm text-slate-500">
-          Log formal recruitment resolutions, job offer authorizations, or rejection parameters[cite: 1].
+          Log formal recruitment resolutions, job offer authorizations, or rejection parameters.
         </p>
       </div>
 
@@ -75,6 +98,33 @@ const HiringDecisions: React.FC = () => {
           onSubmit={handleSubmit} 
           className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5"
         >
+          {/* Application Selector */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+              <FileText className="h-4 w-4 text-slate-400" /> Select Application
+            </label>
+            {applicationsLoading ? (
+              <div className="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50 text-slate-400">
+                Loading applications...
+              </div>
+            ) : (
+              <select 
+                name="applicationId" 
+                value={form.applicationId} 
+                onChange={handleInputChange} 
+                className="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-[#FF5B1F] focus:ring-2 focus:ring-[#FF5B1F]/10 transition-all text-slate-700 font-medium"
+                required
+              >
+                <option value="">Select an application</option>
+                {applications.map((app) => (
+                  <option key={app.id} value={app.id}>
+                    {app.candidateName} - {app.jobTitle} ({app.status})
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
           {/* Resolution Selector Dropdown */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
@@ -85,11 +135,10 @@ const HiringDecisions: React.FC = () => {
               value={form.decision} 
               onChange={handleInputChange} 
               className="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-[#FF5B1F] focus:ring-2 focus:ring-[#FF5B1F]/10 transition-all text-slate-700 font-medium"
+              required
             >
-              {/* 🎯 Dropdown items aligned precisely with the system blueprint parameters[cite: 1] */}
               <option value="Hired">🎉 Extend Official Job Offer (Hired)</option>
               <option value="Rejected">❌ Decline Candidate (Rejected)</option>
-              <option value="Pending">⏳ Place Application on Hold (Pending)</option>
             </select>
           </div>
 
@@ -116,12 +165,10 @@ const HiringDecisions: React.FC = () => {
           {/* Dynamic Contextual Sign-Off Submit Button */}
           <button 
             type="submit" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || !form.applicationId}
             className={`w-full py-3 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm disabled:bg-slate-200 ${
               form.decision === "Hired" 
                 ? "bg-emerald-600 hover:bg-emerald-700" 
-                : form.decision === "Pending"
-                ? "bg-amber-500 hover:bg-amber-600"
                 : "bg-rose-600 hover:bg-rose-700"
             }`}
           >
@@ -156,7 +203,7 @@ const HiringDecisions: React.FC = () => {
             <h2 className="text-md font-bold">Compliance Notice</h2>
           </div>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Logging a final resolution here updates the applicant tracking state across the entire core ecosystem[cite: 1]. 
+            Logging a final resolution here updates the applicant tracking state across the entire core ecosystem. 
           </p>
           <p className="text-xs text-slate-600 leading-relaxed">
             If an offer is authorized, automated system event triggers will instantly notify Human Resources to initialize standard corporate background checkpoints and provisioning pipelines.

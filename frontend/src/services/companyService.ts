@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Company } from '../types/job';
+import type { Company, Department } from '../types/job';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5007/api';
 
@@ -21,6 +21,11 @@ api.interceptors.request.use((config) => {
 export const companyService = {
     getAll: async (): Promise<Company[]> => {
         const response = await api.get('/Companies');
+        return response.data.data;
+    },
+    
+    getDepartments: async (companyId: string): Promise<Department[]> => {
+        const response = await api.get(`/Departments/company/${companyId}`);
         return response.data.data;
     },
 };

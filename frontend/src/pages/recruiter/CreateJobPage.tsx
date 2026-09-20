@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { jobService } from '../../services/jobService';
+import { companyService } from '../../services/companyService';
 import { toast } from 'sonner';
+import type { Company, Department } from '../../types/job';
 
 interface JobFormData {
+    companyId: string;
+    departmentId: string;
     title: string;
     description: string;
     responsibilities: string;
@@ -21,35 +25,106 @@ interface JobFormData {
 export const CreateJobPage: React.FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [companies, setCompanies] = useState<Company[]>([]);
+    const [departments, setDepartments] = useState<Department[]>([]);
+    const [companiesLoading, setCompaniesLoading] = useState(true);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<JobFormData>();
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<JobFormData>({
+        defaultValues: {
+            companyId: '',
+            departmentId: '',
+            title: '',
+            description: '',
+            responsibilities: '',
+            requirements: '',
+            employmentType: '',
+            experienceLevel: '',
+            salaryMin: 0,
+            salaryMax: 0,
+            location: '',
+            isRemote: false,
+            applicationDeadline: '',
+        }
+    });
+
+    const selectedCompanyId = watch('companyId');
+
+    useEffect(() => {
+        loadCompanies();
+    }, []);
+
+    useEffect(() => {
+        if (selectedCompanyId) {
+            loadDepartments(selectedCompanyId);
+            setValue('departmentId', '');
+        } else {
+            setDepartments([]);
+        }
+    }, [selectedCompanyId, setValue]);
+
+    const loadCompanies = async () => {
+        try {
+            setCompaniesLoading(true);
+            const data = await companyService.getAll();
+            setCompanies(data);
+            
+            // Auto-select if only one company
+            if (data.length === 1) {
+                setValue('companyId', data[0].id);
+            }
+        } catch (error) {
+            console.error('Error loading companies:', error);
+            toast.error('Failed to load companies');
+        } finally {
+            setCompaniesLoading(false);
+        }
+    };
+
+    const loadDepartments = async (companyId: string) => {
+        try {
+            const data = await companyService.getDepartments(companyId);
+            setDepartments(data);
+            
+            // Auto-select if only one department
+            if (data.length === 1) {
+                setValue('departmentId', data[0].id);
+            }
+        } catch (error) {
+            console.error('Error loading departments:', error);
+            toast.error('Failed to load departments');
+        }
+    };
 
     const onSubmit = async (data: JobFormData) => {
         try {
             setLoading(true);
 
-            // HARDCODE COMPANY AND DEPARTMENT
+            // Find company and department names from selected IDs
+            const selectedCompany = companies.find(c => c.id === data.companyId);
+            const selectedDepartment = departments.find(d => d.id === data.departmentId);
+            
+            if (!selectedCompany || !selectedDepartment) {
+                toast.error('Please select a valid company and department');
+                return;
+            }
+
             const payload = {
-            companyName: "Tech Corp",
-            departmentName: "Engineering",
-            title: data.title,
-            description: data.description,
-            responsibilities: data.responsibilities,
-            requirements: data.requirements,
-            employmentType: data.employmentType,
-            experienceLevel: data.experienceLevel,
-            salaryMin: data.salaryMin,
-            salaryMax: data.salaryMax,
-            location: data.location,
-            isRemote: data.isRemote,
-
-            applicationDeadline: data.applicationDeadline
-                ? new Date(data.applicationDeadline + "T00:00:00Z").toISOString()
-                : undefined,
-        };
-
-            console.log('PAYLOAD BEING SENT:', JSON.stringify(payload, null, 2));
-
+                companyName: selectedCompany.name,
+                departmentName: selectedDepartment.name,
+                title: data.title,
+                description: data.description,
+                responsibilities: data.responsibilities,
+                requirements: data.requirements,
+                employmentType: data.employmentType,
+                experienceLevel: data.experienceLevel,
+                salaryMin: data.salaryMin,
+                salaryMax: data.salaryMax,
+                location: data.location,
+                isRemote: data.isRemote,
+                applicationDeadline: data.applicationDeadline
+                    ? new Date(data.applicationDeadline + "T00:00:00Z").toISOString()
+                    : undefined,
+            };
 
             console.log('Sending payload:', payload);
 
@@ -73,6 +148,47 @@ export const CreateJobPage: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+
+                {/* Company Selection */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+                    {companiesLoading ? (
+                        <div className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                            Loading companies...
+                        </div>
+                    ) : (
+                        <select
+                            {...register('companyId', { required: 'Company is required' })}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                            <option value="">Select company</option>
+                            {companies.map((company) => (
+                                <option key={company.id} value={company.id}>
+                                    {company.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                    {errors.companyId && <p className="text-red-500 text-sm mt-1">{errors.companyId.message}</p>}
+                </div>
+
+                {/* Department Selection */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Department *</label>
+                    <select
+                        {...register('departmentId', { required: 'Department is required' })}
+                        disabled={departments.length === 0}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50"
+                    >
+                        <option value="">Select department</option>
+                        {departments.map((dept) => (
+                            <option key={dept.id} value={dept.id}>
+                                {dept.name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.departmentId && <p className="text-red-500 text-sm mt-1">{errors.departmentId.message}</p>}
+                </div>
 
                 {/* Title */}
                 <div>
