@@ -8,6 +8,7 @@ using TalentFlow.Application.Interfaces.Repositories;
 using TalentFlow.Application.Interfaces.Services;
 using TalentFlow.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace TalentFlow.Application.Services
 {
@@ -16,15 +17,33 @@ namespace TalentFlow.Application.Services
         private readonly IJobApplicationRepository _applicationRepository;
         private readonly IJobRepository _jobRepository;
         private readonly ISavedJobRepository _savedJobRepository;
+        private readonly ICandidateRepository _candidateRepository;
+        private readonly IEducationRepository _educationRepository;
+        private readonly IExperienceRepository _experienceRepository;
+        private readonly ISkillRepository _skillRepository;
+        private readonly ICertificateRepository _certificateRepository;
+        private readonly IMapper _mapper;
 
         public CandidateService(
             IJobApplicationRepository applicationRepository,
             IJobRepository jobRepository,
-            ISavedJobRepository savedJobRepository)
+            ISavedJobRepository savedJobRepository,
+            ICandidateRepository candidateRepository,
+            IEducationRepository educationRepository,
+            IExperienceRepository experienceRepository,
+            ISkillRepository skillRepository,
+            ICertificateRepository certificateRepository,
+            IMapper mapper)
         {
             _applicationRepository = applicationRepository;
             _jobRepository = jobRepository;
             _savedJobRepository = savedJobRepository;
+            _candidateRepository = candidateRepository;
+            _educationRepository = educationRepository;
+            _experienceRepository = experienceRepository;
+            _skillRepository = skillRepository;
+            _certificateRepository = certificateRepository;
+            _mapper = mapper;
         }
 
         public async Task<string> UploadResumeAsync(Guid candidateId, string fileName, byte[] fileBytes)
@@ -47,18 +66,71 @@ namespace TalentFlow.Application.Services
 
         public async Task<CandidateProfileDto?> GetProfileByUserIdAsync(string userId)
         {
-            return new CandidateProfileDto { FirstName = "Dummy Profile" };
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return null;
+
+            return _mapper.Map<CandidateProfileDto>(candidate);
         }
 
         public async Task<bool> UpdateProfileAsync(string userId, UpdateCandidateProfileDto dto)
         {
-            return true; 
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+
+            _mapper.Map(dto, candidate);
+            candidate.UpdatedAt = DateTime.UtcNow;
+
+            await _candidateRepository.UpdateAsync(candidate);
+            return await _candidateRepository.SaveChangesAsync();
         }
 
-        public async Task<bool> AddEducationAsync(string userId, EducationDto educationDto) => true;
-        public async Task<bool> AddExperienceAsync(string userId, ExperienceDto experienceDto) => true;
-        public async Task<bool> AddSkillAsync(string userId, SkillDto skillDto) => true;
-        public async Task<bool> AddCertificateAsync(string userId, CertificateDto certificateDto) => true;
+        public async Task<bool> AddEducationAsync(string userId, EducationDto educationDto)
+        {
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+
+            var education = _mapper.Map<Education>(educationDto);
+            education.CandidateId = candidate.Id;
+
+            await _educationRepository.AddAsync(education);
+            return await _educationRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> AddExperienceAsync(string userId, ExperienceDto experienceDto)
+        {
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+
+            var experience = _mapper.Map<Experience>(experienceDto);
+            experience.CandidateId = candidate.Id;
+
+            await _experienceRepository.AddAsync(experience);
+            return await _experienceRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> AddSkillAsync(string userId, SkillDto skillDto)
+        {
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+
+            var skill = _mapper.Map<Skill>(skillDto);
+            skill.CandidateId = candidate.Id;
+
+            await _skillRepository.AddAsync(skill);
+            return await _skillRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> AddCertificateAsync(string userId, CertificateDto certificateDto)
+        {
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+
+            var certificate = _mapper.Map<Certificate>(certificateDto);
+            certificate.CandidateId = candidate.Id;
+
+            await _certificateRepository.AddAsync(certificate);
+            return await _certificateRepository.SaveChangesAsync();
+        }
 
         public async Task<int> GetProfileCompletionPercentageAsync(string userId)
         {
@@ -157,10 +229,8 @@ namespace TalentFlow.Application.Services
 
         public async Task<IEnumerable<CandidateApplicationHistoryDto>> GetApplicationHistoryAsync(Guid candidateId)
         {
-            
             var applications = await _applicationRepository.GetApplicationsByCandidateIdAsync(candidateId);
 
-           
             return applications.Select(app => new CandidateApplicationHistoryDto
             {
                 ApplicationId = app.Id,
@@ -185,7 +255,17 @@ namespace TalentFlow.Application.Services
             return true; 
         }
         
-        public async Task<bool> UpdateNotificationPreferencesAsync(string userId, bool receiveNotifications) => true;
-        public async Task<bool> ChangePasswordAsync(string userId, string oldPassword, string newPassword) => true;
+        public async Task<bool> UpdateNotificationPreferencesAsync(string userId, bool receiveNotifications)
+        {
+            var candidate = await _candidateRepository.GetCandidateByUserIdAsync(userId);
+            if (candidate == null) return false;
+            
+            return await _candidateRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
+        {
+            return false;
+        }
     }
 }

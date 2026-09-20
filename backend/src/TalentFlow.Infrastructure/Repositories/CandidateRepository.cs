@@ -24,9 +24,25 @@ public class CandidateRepository : ICandidateRepository
             .FirstOrDefaultAsync(c => c.UserId == userId);
     }
 
+    public async Task<Candidate?> GetByIdAsync(Guid id)
+    {
+        return await _context.Candidates
+            .Include(c => c.Educations)
+            .Include(c => c.Experiences)
+            .Include(c => c.Skills)
+            .Include(c => c.Certificates)
+            .FirstOrDefaultAsync(c => c.Id == id);
+    }
+
     public async Task AddAsync(Candidate candidate)
     {
         await _context.Candidates.AddAsync(candidate);
+    }
+
+    public async Task UpdateAsync(Candidate candidate)
+    {
+        _context.Candidates.Update(candidate);
+        await Task.CompletedTask;
     }
 
     public async Task<bool> SaveChangesAsync()

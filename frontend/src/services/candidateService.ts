@@ -32,6 +32,19 @@ export interface CandidateDashboardData {
   recentApplications: RecentApplication[];
 }
 
+export interface CandidateAnalyticsData {
+  profileCompletion: number;
+  totalApplications: number;
+  totalSavedJobs: number;
+  applicationsByStatus: Record<string, number>;
+  recentApplications: Array<{
+    jobTitle: string;
+    companyName: string;
+    status: string;
+    appliedAt: string;
+  }>;
+}
+
 /* ============================
    Candidate Service
 ============================ */
@@ -41,6 +54,16 @@ const candidateService = {
   getDashboard: async (): Promise<CandidateDashboardData> => {
     const response = await axios.get(
       `${API_BASE_URL}/Candidate/dashboard`,
+      getAuthHeaders()
+    );
+
+    return response.data;
+  },
+
+  // Analytics
+  getAnalytics: async (): Promise<CandidateAnalyticsData> => {
+    const response = await axios.get(
+      `${API_BASE_URL}/Candidate/analytics`,
       getAuthHeaders()
     );
 

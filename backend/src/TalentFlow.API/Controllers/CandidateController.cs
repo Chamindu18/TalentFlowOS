@@ -71,6 +71,48 @@ namespace TalentFlow.API.Controllers
             }
         }
 
+        [HttpGet("analytics")]
+        public async Task<IActionResult> GetAnalytics()
+        {
+            try
+            {
+                var candidateId = await GetCandidateIdAsync();
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+                
+                var completion = await _candidateService.GetProfileCompletionPercentageAsync(userId);
+                var applications = await _candidateService.GetApplicationHistoryAsync(candidateId);
+                
+                var appList = applications?.ToList() ?? new List<CandidateApplicationHistoryDto>();
+                var savedJobs = await _candidateService.GetSavedJobsAsync(candidateId);
+                var savedJobsList = savedJobs?.ToList() ?? new List<SavedJobDto>();
+                
+                // Count applications by status
+                var statusCounts = appList.GroupBy(a => a.Status)
+                    .ToDictionary(g => g.Key, g => g.Count());
+
+                return Ok(new {
+                    profileCompletion = completion,
+                    totalApplications = appList.Count,
+                    totalSavedJobs = savedJobsList.Count,
+                    applicationsByStatus = statusCounts,
+                    recentApplications = appList.Take(5).Select(app => new {
+                        jobTitle = app.JobTitle,
+                        companyName = app.CompanyName,
+                        status = app.Status,
+                        appliedAt = app.AppliedAt
+                    })
+                });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [HttpPost("apply")]
         public async Task<IActionResult> ApplyJob([FromForm] ApplyJobDto dto)
         {

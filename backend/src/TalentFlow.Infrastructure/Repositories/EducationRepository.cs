@@ -16,4 +16,23 @@ public class EducationRepository : IEducationRepository
     {
         return await _context.Educations.Where(e => e.CandidateId == candidateId).ToListAsync();
     }
+
+    public async Task<Education?> GetByIdAsync(Guid id)
+    {
+        return await _context.Educations.FindAsync(id);
+    }
+
+    public async Task UpdateAsync(Education education)
+    {
+        _context.Educations.Update(education);
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(Education education)
+    {
+        _context.Educations.Remove(education);
+        await Task.CompletedTask;
+    }
+
+    public async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
 }

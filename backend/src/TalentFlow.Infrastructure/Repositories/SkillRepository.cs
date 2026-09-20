@@ -16,4 +16,23 @@ public class SkillRepository : ISkillRepository
     {
         return await _context.Skills.Where(s => s.CandidateId == candidateId).ToListAsync();
     }
+
+    public async Task<Skill?> GetByIdAsync(Guid id)
+    {
+        return await _context.Skills.FindAsync(id);
+    }
+
+    public async Task UpdateAsync(Skill skill)
+    {
+        _context.Skills.Update(skill);
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(Skill skill)
+    {
+        _context.Skills.Remove(skill);
+        await Task.CompletedTask;
+    }
+
+    public async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
 }
