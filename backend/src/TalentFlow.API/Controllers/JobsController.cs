@@ -144,7 +144,21 @@ public class JobsController : ControllerBase
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _jobService.DeleteAsync(id);
+        // Get the authenticated user's company ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        Guid? userCompanyId = null;
+        if (user != null && !User.IsInRole("Admin"))
+        {
+            if (user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+            userCompanyId = user.CompanyId.Value;
+        }
+
+        await _jobService.DeleteAsync(id, userCompanyId);
         return Ok(new { success = true, message = "Job deleted successfully" });
     }
 
@@ -153,7 +167,21 @@ public class JobsController : ControllerBase
     [Authorize(Roles = "Recruiter,Admin")]
     public async Task<IActionResult> Close(Guid id)
     {
-        await _jobService.CloseJobAsync(id);
+        // Get the authenticated user's company ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+        Guid? userCompanyId = null;
+        if (user != null && !User.IsInRole("Admin"))
+        {
+            if (user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+            userCompanyId = user.CompanyId.Value;
+        }
+
+        await _jobService.CloseJobAsync(id, userCompanyId);
         return Ok(new { success = true, message = "Job closed successfully" });
     }
 }

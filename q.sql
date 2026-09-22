@@ -1,0 +1,1 @@
+﻿UPDATE "Users" SET "Role" = 2, "CompanyId" = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', "IsEmailVerified" = true, "EmailVerificationToken" = NULL, "EmailVerificationTokenExpiresAt" = NULL, "PasswordHash" = '$2a$11$kL3iNbhVi8z/ND/EC1eODepTY1.07dlI7Id6.6zq4JevcTg749AMO' WHERE "Email" = 'recruiterd@test.com';

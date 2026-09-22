@@ -10,7 +10,7 @@ public interface IJobService
 {
     Task<JobResponseDTO> GetByIdAsync(Guid id);
 
-    Task CloseJobAsync(Guid id);
+    Task CloseJobAsync(Guid id, Guid? userCompanyId = null);
 
     Task<IEnumerable<JobResponseDTO>> GetAllAsync();
     Task<IEnumerable<JobResponseDTO>> GetActiveJobsAsync();
@@ -19,5 +19,5 @@ public interface IJobService
     Task<IEnumerable<JobResponseDTO>> SearchJobsAsync(string? searchTerm, string? location, string? employmentType);
     Task<JobResponseDTO> CreateAsync(CreateJobRequestDTO request, Guid? userCompanyId = null);
     Task<JobResponseDTO> UpdateAsync(Guid id, UpdateJobRequestDTO request, Guid? userCompanyId = null);
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(Guid id, Guid? userCompanyId = null);
 }

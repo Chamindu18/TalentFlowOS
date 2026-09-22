@@ -184,21 +184,31 @@ public class JobService : IJobService
         return _mapper.Map<JobResponseDTO>(job);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id, Guid? userCompanyId = null)
     {
         var job = await _jobRepository.GetByIdAsync(id);
         if (job == null)
             throw new NotFoundException($"Job with ID {id} not found");
+
+        if (userCompanyId.HasValue && job.CompanyId != userCompanyId.Value)
+        {
+            throw new UnauthorizedException("You can only delete jobs for your own company.");
+        }
 
         _jobRepository.Delete(job);
         await _jobRepository.SaveChangesAsync();
     }
 
-    public async Task CloseJobAsync(Guid id)
+    public async Task CloseJobAsync(Guid id, Guid? userCompanyId = null)
     {
         var job = await _jobRepository.GetByIdAsync(id);
         if (job == null)
             throw new NotFoundException($"Job with ID {id} not found");
+
+        if (userCompanyId.HasValue && job.CompanyId != userCompanyId.Value)
+        {
+            throw new UnauthorizedException("You can only close jobs for your own company.");
+        }
 
         job.Status = JobStatus.Closed.ToString();
         job.IsActive = false;
