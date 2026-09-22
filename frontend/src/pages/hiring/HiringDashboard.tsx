@@ -14,7 +14,8 @@ import {
   Play, 
   Loader2,
   BarChart3,
-  MessageSquare // 🎯 Added this icon for the feedback route link
+  MessageSquare, // 🎯 Added this icon for the feedback route link
+  ArrowRight
 } from "lucide-react";
 
 interface DashboardSummary {
@@ -34,9 +35,19 @@ interface TodayInterview {
   status: "Scheduled" | "In Progress" | "Completed";
 }
 
+interface ShortlistedApplication {
+  id: string;
+  candidateName: string;
+  jobTitle: string;
+  companyName: string;
+  appliedAt: string;
+  status: string;
+}
+
 const HiringDashboard: React.FC = () => {
   const [todayInterviews, setTodayInterviews] = useState<TodayInterview[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [shortlistedApps, setShortlistedApps] = useState<ShortlistedApplication[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate(); // 🚀 Hook mapping browser routing paths
 
@@ -50,6 +61,11 @@ const HiringDashboard: React.FC = () => {
         // 📅 Fetches today's live interview items from your scheduling controller
         const interviewsResponse = await api.get<TodayInterview[]>("/interview/today");
         setTodayInterviews(interviewsResponse.data);
+
+        // 📋 Fetches shortlisted applications needing action
+        const appsResponse = await api.get<{ data: ShortlistedApplication[] }>("/JobApplications/company");
+        const shortlisted = (appsResponse.data.data || []).filter(app => app.status === "Shortlisted");
+        setShortlistedApps(shortlisted);
       } catch (error) {
         console.error("Error fetching hiring data from database:", error);
       } finally {
@@ -223,7 +239,40 @@ const HiringDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Section B: Dynamic Graphic Analytics Vector Chart */}
+          {/* Section B: Shortlisted Candidates Requiring Action */}
+          {shortlistedApps.length > 0 && (
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-emerald-500" />
+                  <h2 className="text-sm font-bold text-slate-800">Shortlisted Candidates Awaiting Action</h2>
+                </div>
+                <span className="text-xs text-slate-400">{shortlistedApps.length} candidate(s)</span>
+              </div>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {shortlistedApps.map((app) => (
+                  <button
+                    key={app.id}
+                    onClick={() => navigate("/hiring/interviews")}
+                    className="w-full p-3 rounded-xl border border-slate-100 hover:bg-slate-50 hover:border-slate-200 transition-all text-left flex items-center justify-between gap-2"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-slate-700 truncate">{app.candidateName}</h4>
+                        <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold rounded-md border bg-green-100 text-green-800 border-green-200 whitespace-nowrap shrink-0">
+                          Shortlisted
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium truncate">{app.jobTitle} at {app.companyName}</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Section C: Dynamic Graphic Analytics Vector Chart */}
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
               <div className="space-y-0.5">

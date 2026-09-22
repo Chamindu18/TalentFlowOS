@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TalentFlow.Domain.Entities;
 using TalentFlow.Infrastructure.Persistence.Contexts;
@@ -22,12 +23,10 @@ namespace TalentFlow.API.Controllers
             _context = context;
         }
 
-        // 1. GET: api/interview/today - Returns today's interviews for the HiringManager's company
         [HttpGet("today")]
         public async Task<IActionResult> GetTodaysInterviews()
         {
-            // Get the authenticated user's company ID
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return Unauthorized();
 
@@ -66,28 +65,36 @@ namespace TalentFlow.API.Controllers
             return Ok(interviews);
         }
 
-        // 2. GET: api/interview
         [HttpGet]
         public async Task<IActionResult> GetInterviews()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            if (user == null || user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+
             var interviews = await _context.Interviews
                 .Include(i => i.Application)
                     .ThenInclude(a => a.Job)
                 .Include(i => i.Application)
                     .ThenInclude(a => a.Candidate)
                 .Include(i => i.Schedules)
-                .Where(i => !i.IsDeleted)
+                .Where(i => !i.IsDeleted
+                    && i.Application != null
+                    && i.Application.Job != null
+                    && i.Application.Job.CompanyId == user.CompanyId.Value)
                 .Select(i => new
                 {
                     id = i.Id.ToString(),
-#pragma warning disable CS8602 // Dereference of a possibly null reference - expression tree translated to SQL handles nulls
                     candidateName = i.Application != null && i.Application.Candidate != null
                         ? $"{i.Application.Candidate.FirstName} {i.Application.Candidate.LastName}"
                         : "Unknown",
                     position = i.Application != null && i.Application.Job != null
                         ? i.Application.Job.Title
                         : "Unknown",
-#pragma warning restore CS8602
                     interviewDate = i.Schedules != null && i.Schedules.Any()
                         ? i.Schedules.OrderBy(s => s.ScheduledTime).First().ScheduledTime.ToString("yyyy-MM-dd")
                         : string.Empty,
@@ -100,27 +107,95 @@ namespace TalentFlow.API.Controllers
             return Ok(interviews);
         }
 
-        // 3. POST: api/interview/schedule
         [HttpPost("schedule")]
-        public async Task<IActionResult> ScheduleInterview([FromBody] Interview interview)
+        public async Task<IActionResult> ScheduleInterview([FromBody] ScheduleInterviewRequest request)
         {
-            if (interview == null)
+            if (request == null)
             {
                 return BadRequest("Interview data is required.");
             }
 
-            interview.Id = Guid.NewGuid();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            if (user == null || user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+
+            var application = await _context.JobApplications
+                .Include(a => a.Job)
+                .FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
+            if (application == null)
+            {
+                return NotFound($"Application with ID {request.ApplicationId} not found.");
+            }
+
+            if (application.Job == null || application.Job.CompanyId != user.CompanyId.Value)
+            {
+                return Forbid("You are not authorized to schedule interviews for this application.");
+            }
+
+            if (application.Status != "Shortlisted")
+            {
+                return BadRequest($"Can only schedule interviews for shortlisted applications. Current status: {application.Status}");
+            }
+
+            var interview = new Interview
+            {
+                Id = Guid.NewGuid(),
+                ApplicationId = request.ApplicationId,
+                RoundNumber = request.RoundNumber,
+                InterviewType = request.InterviewType,
+                Status = 1,
+                Notes = request.Notes,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false
+            };
+
+            if (request.ScheduledTime.HasValue)
+            {
+                interview.Schedules = new List<InterviewSchedule>
+                {
+                    new InterviewSchedule
+                    {
+                        Id = Guid.NewGuid(),
+                        InterviewId = interview.Id,
+                        ScheduledTime = request.ScheduledTime.Value,
+                        DurationMinutes = request.DurationMinutes,
+                        LocationOrLink = request.LocationOrLink,
+                        InterviewerId = user.Id,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    }
+                };
+            }
+
+            application.Status = "Interview";
+            application.UpdatedAt = DateTime.UtcNow;
+            _context.JobApplications.Update(application);
+
             _context.Interviews.Add(interview);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Interview scheduled successfully", interviewId = interview.Id });
         }
 
-        // 4. GET: api/interview/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInterviewById(Guid id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            if (user == null || user.CompanyId == null)
+                return Forbid("User not associated with a company.");
+
             var interview = await _context.Interviews
+                .Include(i => i.Application)
+                    .ThenInclude(a => a.Job)
                 .Include(i => i.Schedules)
                 .Include(i => i.Feedbacks)
                 .FirstOrDefaultAsync(i => i.Id == id);
@@ -130,7 +205,23 @@ namespace TalentFlow.API.Controllers
                 return NotFound($"Interview with ID {id} not found.");
             }
 
+            if (interview.Application == null || interview.Application.Job == null || interview.Application.Job.CompanyId != user.CompanyId.Value)
+            {
+                return Forbid("You are not authorized to view this interview.");
+            }
+
             return Ok(interview);
         }
+    }
+
+    public class ScheduleInterviewRequest
+    {
+        public Guid ApplicationId { get; set; }
+        public int RoundNumber { get; set; } = 1;
+        public string InterviewType { get; set; } = string.Empty;
+        public string? Notes { get; set; }
+        public DateTime? ScheduledTime { get; set; }
+        public int DurationMinutes { get; set; } = 45;
+        public string? LocationOrLink { get; set; }
     }
 }

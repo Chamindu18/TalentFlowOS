@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { User, MessageSquare, ShieldAlert, Send, Loader2, Info, CheckCircle, AlertCircle } from "lucide-react";
-import axiosInstance from "@/lib/axios"; // 📡 Using your configured axios instance
+import axiosInstance from "@/lib/axios";
+
+interface InterviewItem {
+  id: string;
+  candidateName: string;
+  position: string;
+  interviewDate: string;
+  interviewTime: string;
+  interviewType?: string;
+  status?: number;
+}
 
 interface FeedbackInput {
   interviewId: string;
@@ -11,40 +21,67 @@ interface FeedbackInput {
 
 const InterviewFeedback: React.FC = () => {
   const [form, setForm] = useState<FeedbackInput>({
-    interviewId: "b3a8d11c-5678-4cd4-823b-12d45f6a7b8c", // Mock active interview GUID
+    interviewId: "",
     interviewerName: "",
     comments: "",
     recommendation: "Move Forward",
   });
 
+  const [interviews, setInterviews] = useState<InterviewItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
+  const fetchInterviews = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axiosInstance.get("/interviews");
+      setInterviews(response.data);
+    } catch (error) {
+      console.error("Error fetching interviews:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInterviews();
+  }, []);
+
+  const completedInterviews = useMemo(() => 
+    interviews.filter(i => i.status === 2),
+    [interviews]
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
+  const handleInterviewSelect = (interview: InterviewItem) => {
+    setForm({
+      ...form,
+      interviewId: interview.id,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.interviewId) {
+      setStatusMessage({ text: "Please select an interview first.", isError: true });
+      setTimeout(() => setStatusMessage(null), 4000);
+      return;
+    }
     setIsSubmitting(true);
     try {
-      // 🎯 Submits centralized post-interview commentary directly to your backend API
-      try {
-        await axiosInstance.post("/api/feedback", form);
-      // Change from catch (dbError) to just catch
-    } catch {
-      // 🚀 DEMO BYPASS: If parent tables don't exist yet, intercept the database constraints 
-      // silently in the background so your UI success alerts flash perfectly!
-      console.log("⚠️ [Demo Mode] Intercepted table constraints. Simulating feedback submission.");
-    }
+      await axiosInstance.post("/api/feedback", form);
       
       setStatusMessage({ 
         text: `Feedback logged successfully! Recommendation mapped: ${form.recommendation}.`, 
         isError: false 
       });
       
-      setForm({ interviewId: "b3a8d11c-5678-4cd4-823b-12d45f6a7b8c", interviewerName: "", comments: "", recommendation: "Move Forward" });
+      setForm({ interviewId: "", interviewerName: "", comments: "", recommendation: "Move Forward" });
     } catch (error) {
       console.error("Error submitting interview feedback loop:", error);
       setStatusMessage({ text: "Failed to submit assessment feedback. Please check API endpoints.", isError: true });
@@ -62,6 +99,48 @@ const InterviewFeedback: React.FC = () => {
         <p className="text-sm text-slate-500">
           Submit centralized commentary, observations, and pipeline path recommendations post-interview assessment.
         </p>
+      </div>
+
+      {/* Interview Selection Helper */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
+          <MessageSquare className="h-4 w-4 text-[#FF5B1F]" /> Select Completed Interview
+        </h3>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-4 text-slate-400 gap-2 text-sm">
+            <Loader2 className="h-4 w-4 animate-spin text-[#FF5B1F]" /> Loading interviews...
+          </div>
+        ) : completedInterviews.length === 0 ? (
+          <div className="text-center py-4 text-xs font-semibold text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+            No completed interviews available for feedback
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {completedInterviews.map((interview) => (
+              <button
+                key={interview.id}
+                type="button"
+                onClick={() => handleInterviewSelect(interview)}
+                className={`p-3 rounded-xl border transition-all text-left ${
+                  form.interviewId === interview.id
+                    ? "border-[#FF5B1F] bg-[#FFF3EC]/50 shadow-sm"
+                    : "border-slate-100 hover:bg-slate-50 hover:border-slate-200"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-slate-700 truncate">{interview.candidateName}</h4>
+                    <p className="text-xs text-slate-500 font-medium truncate">{interview.position}</p>
+                  </div>
+                  <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold rounded-md border bg-emerald-100 text-emerald-800 border-emerald-200 whitespace-nowrap shrink-0">
+                    Completed
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1 truncate">{interview.interviewDate} at {interview.interviewTime}</p>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Grid Workspace */}
@@ -128,7 +207,7 @@ const InterviewFeedback: React.FC = () => {
           {/* Action Execution Button */}
           <button 
             type="submit" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || !form.interviewId}
             className="w-full py-3 bg-[#FF5B1F] hover:bg-[#e04f1a] disabled:bg-slate-200 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             {isSubmitting ? (

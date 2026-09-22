@@ -41,6 +41,12 @@ export const applicationService = {
         return response.data.data;
     },
 
+    // Get applications for authenticated user's company (Hiring Manager)
+    getCompanyApplications: async (): Promise<Application[]> => {
+        const response = await api.get('/JobApplications/company');
+        return response.data.data;
+    },
+
     // Get application by ID
     getById: async (id: string): Promise<Application> => {
         const response = await api.get(`/JobApplications/${id}`);

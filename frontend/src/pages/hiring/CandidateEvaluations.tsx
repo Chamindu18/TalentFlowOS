@@ -1,6 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { User, Award, FileText, Save, Loader2, ClipboardList, CheckCircle, AlertCircle } from "lucide-react";
-import axiosInstance from "@/lib/axios"; // 📡 Using your configured axios instance
+import axiosInstance from "@/lib/axios";
+import { applicationService } from "@/services/applicationService";
+
+interface Application {
+  id: string;
+  candidateId: string;
+  jobId: string;
+  candidateName: string;
+  jobTitle: string;
+  companyName: string;
+  status?: string;
+  appliedAt: string;
+  coverLetter?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 interface EvaluationInput {
   applicationId: string;
@@ -11,7 +26,7 @@ interface EvaluationInput {
 
 const CandidateEvaluations: React.FC = () => {
   const [form, setForm] = useState<EvaluationInput>({
-    applicationId: "e2b9c7a4-1234-4bc8-912a-7bf38dca12a4", // Mock active application GUID
+    applicationId: "",
     candidateName: "",
     score: 5,
     notes: "",
@@ -19,31 +34,61 @@ const CandidateEvaluations: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; isError: boolean } | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(true);
+  const [showOnlyShortlisted, setShowOnlyShortlisted] = useState(true);
+
+  const fetchApplications = async () => {
+    try {
+      setApplicationsLoading(true);
+      const response = await applicationService.getCompanyApplications();
+      setApplications(response || []);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+    } finally {
+      setApplicationsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
+  const shortlistedApplications = useMemo(() => 
+    applications.filter(app => app.status === "Shortlisted" || app.status === "Interview"),
+    [applications]
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: name === "score" ? parseInt(value, 10) : value });
   };
 
+  const handleApplicationSelect = (app: Application) => {
+    setForm({
+      ...form,
+      applicationId: app.id,
+      candidateName: app.candidateName,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.applicationId) {
+      setStatusMessage({ text: "Please select a candidate application first.", isError: true });
+      setTimeout(() => setStatusMessage(null), 4000);
+      return;
+    }
     setIsSubmitting(true);
     try {
-      // 🎯 Submits directly to your backend API scorecard controller
-      try {
-        await axiosInstance.post("/api/evaluations", form);
-     } catch {
-      // 🚀 DEMO BYPASS: If your teammates' tables aren't finished yet, catch the error 
-      // silently in the background so your UI success animations still trigger perfectly![cite: 1]
-      console.log("⚠️ [Demo Mode] Intercepted missing data relationship constraints. Simulating scorecard entry.");
-    }
+      await axiosInstance.post("/api/evaluations", form);
       
       setStatusMessage({ 
         text: `Evaluation submitted successfully for ${form.candidateName} with a score of ${form.score}/10!`, 
         isError: false 
       });
       
-      setForm({ applicationId: "e2b9c7a4-1234-4bc8-912a-7bf38dca12a4", candidateName: "", score: 5, notes: "" });
+      setForm({ applicationId: "", candidateName: "", score: 5, notes: "" });
     } catch (error) {
       console.error("Error submitting evaluation scorecard:", error);
       setStatusMessage({ text: "Failed to submit evaluation scorecard. Please try again.", isError: true });
@@ -59,8 +104,65 @@ const CandidateEvaluations: React.FC = () => {
       <div>
         <h1 className="text-2xl font-bold text-slate-800">Candidate Evaluations</h1>
         <p className="text-sm text-slate-500">
-          Log candidate performance scores and overall structural assessment takeaways[cite: 1].
+          Log candidate performance scores and overall structural assessment takeaways.
         </p>
+      </div>
+
+      {/* Candidate Selection Helper */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <User className="h-4 w-4 text-[#FF5B1F]" /> Select Candidate
+          </h3>
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
+            <input
+              type="checkbox"
+              checked={showOnlyShortlisted}
+              onChange={(e) => setShowOnlyShortlisted(e.target.checked)}
+              className="w-4 h-4 text-[#FF5B1F] border-slate-300 rounded focus:ring-[#FF5B1F] focus:ring-2"
+            />
+            <span className="text-slate-600">Shortlisted/Interview only ({shortlistedApplications.length})</span>
+          </label>
+        </div>
+        {applicationsLoading ? (
+          <div className="flex items-center justify-center py-4 text-slate-400 gap-2 text-sm">
+            <Loader2 className="h-4 w-4 animate-spin text-[#FF5B1F]" /> Loading candidates...
+          </div>
+        ) : shortlistedApplications.length === 0 ? (
+          <div className="text-center py-4 text-xs font-semibold text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+            No candidates available for evaluation
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {shortlistedApplications.map((app) => (
+              <button
+                key={app.id}
+                type="button"
+                onClick={() => handleApplicationSelect(app)}
+                className={`p-3 rounded-xl border transition-all text-left ${
+                  form.applicationId === app.id
+                    ? "border-[#FF5B1F] bg-[#FFF3EC]/50 shadow-sm"
+                    : "border-slate-100 hover:bg-slate-50 hover:border-slate-200"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-slate-700 truncate">{app.candidateName}</h4>
+                    <p className="text-xs text-slate-500 font-medium truncate">{app.jobTitle}</p>
+                  </div>
+                  <span className={`inline-flex items-center px-2 py-0.5 text-[10px] font-semibold rounded-md border whitespace-nowrap shrink-0 ${
+                    app.status === "Shortlisted" ? "bg-green-100 text-green-800 border-green-200" :
+                    app.status === "Interview" ? "bg-purple-100 text-purple-800 border-purple-200" :
+                    "bg-slate-100 text-slate-800 border-slate-200"
+                  }`}>
+                    {app.status || "Applied"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1 truncate">Applied: {new Date(app.appliedAt).toLocaleDateString()}</p>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Grid Workspace */}
@@ -83,7 +185,8 @@ const CandidateEvaluations: React.FC = () => {
               onChange={handleInputChange} 
               className="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-[#FF5B1F] focus:ring-2 focus:ring-[#FF5B1F]/10 transition-all placeholder-slate-400" 
               required 
-              placeholder="John Doe" 
+              placeholder="Auto-filled when selecting candidate above" 
+              readOnly
             />
           </div>
 
@@ -137,7 +240,7 @@ const CandidateEvaluations: React.FC = () => {
           {/* Action Submit button wrapper tracking processing state */}
           <button 
             type="submit" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || !form.applicationId}
             className="w-full py-3 bg-[#FF5B1F] hover:bg-[#e04f1a] disabled:bg-slate-200 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             {isSubmitting ? (
