@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using TalentFlow.Application.Interfaces.Services;
@@ -6,6 +7,7 @@ namespace TalentFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin")]
 public class EmailController : ControllerBase
 {
     private readonly IEmailService _emailService;
@@ -33,6 +35,7 @@ public class EmailController : ControllerBase
             <p>
                 Next step: Welcome emails and forgot password.
             </p>
+
             """
         );
 

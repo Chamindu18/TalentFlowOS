@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TalentFlow.Application.DTOs.Candidate;
 using TalentFlow.Application.Interfaces.Repositories;
+using TalentFlow.Application.Interfaces.Security;
 using TalentFlow.Application.Interfaces.Services;
 using TalentFlow.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,12 @@ namespace TalentFlow.Application.Services
         private readonly IJobRepository _jobRepository;
         private readonly ISavedJobRepository _savedJobRepository;
         private readonly ICandidateRepository _candidateRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IExperienceRepository _experienceRepository;
         private readonly ISkillRepository _skillRepository;
         private readonly ICertificateRepository _certificateRepository;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly IMapper _mapper;
 
         public CandidateService(
@@ -29,20 +32,24 @@ namespace TalentFlow.Application.Services
             IJobRepository jobRepository,
             ISavedJobRepository savedJobRepository,
             ICandidateRepository candidateRepository,
+            IUserRepository userRepository,
             IEducationRepository educationRepository,
             IExperienceRepository experienceRepository,
             ISkillRepository skillRepository,
             ICertificateRepository certificateRepository,
+            IPasswordHasher passwordHasher,
             IMapper mapper)
         {
             _applicationRepository = applicationRepository;
             _jobRepository = jobRepository;
             _savedJobRepository = savedJobRepository;
             _candidateRepository = candidateRepository;
+            _userRepository = userRepository;
             _educationRepository = educationRepository;
             _experienceRepository = experienceRepository;
             _skillRepository = skillRepository;
             _certificateRepository = certificateRepository;
+            _passwordHasher = passwordHasher;
             _mapper = mapper;
         }
 
@@ -265,7 +272,21 @@ namespace TalentFlow.Application.Services
 
         public async Task<bool> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
         {
-            return false;
+            var user = await _userRepository.GetByIdAsync(Guid.Parse(userId));
+            if (user == null)
+                return false;
+
+            var isValid = _passwordHasher.VerifyPassword(oldPassword, user.PasswordHash);
+            if (!isValid)
+                return false;
+
+            user.PasswordHash = _passwordHasher.HashPassword(newPassword);
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _userRepository.UpdateAsync(user);
+            await _userRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }
