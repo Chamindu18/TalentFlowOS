@@ -1,0 +1,42 @@
+# .NET
+**/bin/
+**/obj/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDE
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Docker
+docker-data/
+
+# Test results
+TestResults/
+coverage/
+
+# Temporary
+tmp/
+temp/
+*.cache
+
+# Misc
+*.md
+!Dockerfile
