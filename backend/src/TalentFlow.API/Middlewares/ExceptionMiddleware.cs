@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using TalentFlow.Application.Exceptions.Auth;
 
 namespace TalentFlow.API.Middleware;
@@ -10,13 +11,16 @@ public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IWebHostEnvironment _env;
+    private readonly ILogger<ExceptionMiddleware> _logger;
 
     public ExceptionMiddleware(
         RequestDelegate next,
-        IWebHostEnvironment env)
+        IWebHostEnvironment env,
+        ILogger<ExceptionMiddleware> logger)
     {
         _next = next;
         _env = env;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(
@@ -39,6 +43,13 @@ public class ExceptionMiddleware
         HttpContext context,
         Exception exception)
     {
+        _logger.LogError(
+            exception,
+            "Unhandled exception while processing {Method} {Path}",
+            context.Request.Method,
+            context.Request.Path
+        );
+
         context.Response.ContentType =
             "application/json";
 
