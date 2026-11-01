@@ -1,342 +1,121 @@
 # TalentFlow OS
 
-<p align="center">
-  <b>AI-Powered Recruitment & Talent Management Platform</b><br>
-  A full-stack web application developed using Clean Architecture to streamline recruitment, candidate management, interview scheduling, and AI-assisted hiring.
-</p>
+**A recruitment and talent management platform built with ASP.NET Core (Clean Architecture) and React.**
+Candidates, recruiters, hiring managers and administrators manage the whole hiring process in one secure web app.
+
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![EF Core](https://img.shields.io/badge/EF_Core-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![xUnit](https://img.shields.io/badge/xUnit-tested-5E5E5E?style=flat-square)
+
+> Team project (5 members, Group 30) · 2026 · Built for the SE205.3 Software Architecture module, NSBM Green University
 
 ---
 
-# Overview
+## What it does
 
-TalentFlow OS is a centralized recruitment and talent management platform designed to simplify the hiring process for organizations. The system enables Candidates, Recruiters, Hiring Managers, and Administrators to manage recruitment activities within a single secure web application.
+| Role | Can do |
+|---|---|
+| **Candidate** | Manage profile, resume, education, experience, skills and certificates; browse jobs; apply and track applications |
+| **Recruiter** | Manage companies, departments and job vacancies; review applications; shortlist candidates |
+| **Hiring Manager** | Schedule interviews, record feedback, evaluate candidates, make hiring decisions |
+| **Administrator** | Manage users, roles and organizations |
 
-The platform provides secure authentication, role-based authorization, candidate management, recruitment workflows, interview management, administration features, and AI-powered resume analysis and job recommendations.
+**Authentication and security:** registration, email verification, login, forgot/reset password, JWT authentication, role-based access control and protected routes.
 
----
-
-# Features
-
-## Authentication & Authorization
-
-- User Registration
-- Secure Login
-- JWT Authentication
-- Email Verification
-- Forgot Password
-- Reset Password
-- Role-Based Access Control (RBAC)
-- Protected Routes
-
-## Candidate Module
-
-- Candidate Dashboard
-- Profile Management
-- Resume Management
-- Education Management
-- Experience Management
-- Skills Management
-- Certificate Management
-- Browse Jobs
-- Job Applications
-- Application Tracking
-
-## Recruiter Module
-
-- Recruiter Dashboard
-- Company Management
-- Department Management
-- Job Management
-- Create Job Vacancies
-- Review Applications
-- Candidate Shortlisting
-
-## Hiring Manager Module
-
-- Hiring Manager Dashboard
-- Interview Scheduling
-- Interview Feedback
-- Candidate Evaluation
-- Hiring Decisions
-
-## Administration Module
-
-- Administrator Dashboard
-- User Management
-- Role Management
-- Organization Management
-
-## AI Module
-
-- AI Resume Matching
-- AI Job Recommendation
-- Candidate Ranking
-- Resume Screening
+**AI-assisted features:** resume matching, job recommendations, candidate ranking and resume screening.
+<!-- VERIFY: are all four AI features actually implemented? If some are not, list only the working ones here (the old README also listed "Advanced AI Candidate Ranking" as a future item, which contradicts it). -->
 
 ---
 
-# Technology Stack
+## Tech stack
 
-## Frontend
+| Layer | Technology |
+|---|---|
+| Frontend | React, TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, TanStack Query, Redux Toolkit, Axios, React Hook Form, Zod |
+| Backend | ASP.NET Core Web API (C#), Entity Framework Core, AutoMapper, FluentValidation, JWT |
+| Database | SQL Server |
+| Testing | xUnit (unit and integration tests) |
+| DevOps | Docker, GitHub Actions |
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- shadcn/ui
-- React Router
-- TanStack React Query
-- Redux Toolkit
-- Axios
-- React Hook Form
-- Zod
-
-## Backend
-
-- ASP.NET Core Web API
-- C#
-- Entity Framework Core
-- Clean Architecture
-- SQL Server
-- AutoMapper
-- FluentValidation
-- JWT Authentication
-
-## Testing
-
-- xUnit
-- Unit Testing
-- Integration Testing
-
-## DevOps
-
-- Docker
-- GitHub Actions
-- CI/CD
+<!-- VERIFY (important): is the database SQL Server or PostgreSQL? Check the connection string in appsettings.json and the EF provider package (Microsoft.EntityFrameworkCore.SqlServer vs Npgsql.EntityFrameworkCore.PostgreSQL). Your CV currently says PostgreSQL. Make the README and CV match the code. -->
 
 ---
 
-# System Architecture
+## Architecture
 
-TalentFlow OS follows **Clean Architecture**, separating responsibilities into independent layers.
+The backend follows **Clean Architecture**. Dependencies point inward, so business rules do not depend on the database or the web framework.
 
 ```
-Presentation Layer
-        │
-        ▼
-Application Layer
-        │
-        ▼
-Domain Layer
-        ▲
-        │
-Infrastructure Layer
+API  ──►  Application  ──►  Domain
+              ▲
+Infrastructure ┘
 ```
 
-### Backend Projects
+| Project | Responsibility |
+|---|---|
+| `TalentFlow.API` | Controllers, middleware, authentication, dependency injection |
+| `TalentFlow.Application` | Business logic, DTOs, validation, service interfaces |
+| `TalentFlow.Domain` | Entities, enums, domain interfaces |
+| `TalentFlow.Infrastructure` | EF Core, repositories, identity, email service |
 
-```
-backend
-└── src
-    ├── TalentFlow.API
-    ├── TalentFlow.Application
-    ├── TalentFlow.Domain
-    └── TalentFlow.Infrastructure
-```
+**Patterns used:** Repository, Unit of Work, Dependency Injection.
 
-### Layer Responsibilities
-
-### API
-
-- Controllers
-- Middleware
-- Authentication
-- Dependency Injection
-- API Endpoints
-
-### Application
-
-- Business Logic
-- CQRS
-- Validation
-- DTOs
-- Interfaces
-- Services
-
-### Domain
-
-- Entities
-- Domain Models
-- Enumerations
-- Domain Interfaces
-
-### Infrastructure
-
-- Entity Framework Core
-- Database
-- Repositories
-- Identity
-- External Services
-- Email Services
-
----
-
-# Design Patterns
-
-TalentFlow OS implements several software engineering design patterns:
-
-- Repository Pattern
-- Unit of Work Pattern
-- Dependency Injection
-
----
-
-# Software Engineering Principles
-
-- Clean Architecture
-- SOLID Principles
-- Separation of Concerns
-- Dependency Inversion
-- Modular Design
-- RESTful API Design
-- Secure Coding Practices
-
----
-
-# Project Structure
+### Project structure
 
 ```
 TalentFlowOS
-│
-├── frontend
-│
+├── frontend/                  React + TypeScript app
 ├── backend
 │   ├── src
 │   │   ├── TalentFlow.API
 │   │   ├── TalentFlow.Application
 │   │   ├── TalentFlow.Domain
 │   │   └── TalentFlow.Infrastructure
-│   │
-│   └── tests
-│       ├── UnitTests
-│       ├── IntegrationTests
-│       └── TestUtilities
-│
-├── docs
-├── docker
-├── deploy
-└── .github
+│   └── tests                  Unit and integration tests
+├── docs/
+├── docker/
+├── deploy/
+└── .github/                   CI workflows
 ```
+
+### Authentication flow
+
+```
+Register → Verify email → Login → JWT issued → Role check → Protected resource
+```
+
+<!-- VERIFY: the old README listed CQRS under the Application layer but not under patterns. If you really use CQRS/MediatR, add it to "Patterns used". If not, do not claim it. -->
 
 ---
 
-# Authentication Flow
+## Getting started
 
-```
-User Registration
-        │
-        ▼
-Email Verification
-        │
-        ▼
-User Login
-        │
-        ▼
-JWT Token Generation
-        │
-        ▼
-Role-Based Authorization
-        │
-        ▼
-Protected Resources
-```
+### Prerequisites
+- .NET SDK (version used by the project)
+- Node.js 18+ and npm
+- SQL Server instance
+- <!-- VERIFY: SMTP settings for the email verification service, if required -->
 
----
-
-# Branching Strategy
-
-```
-main
-│
-develop
-│
-├── feature/authentication
-├── feature/candidates
-├── feature/recruiter
-├── feature/hiring
-└── feature/admin
-```
-
----
-
-# Git Workflow
-
-### 1. Checkout develop
-
-```bash
-git checkout develop
-git pull origin develop
-```
-
-### 2. Create Feature Branch
-
-```bash
-git checkout -b feature/<module-name>
-```
-
-### 3. Commit Changes
-
-```bash
-git add .
-git commit -m "feat(module): description"
-```
-
-### 4. Push
-
-```bash
-git push origin feature/<module-name>
-```
-
-### 5. Create Pull Request
-
-Merge into `develop`.
-
----
-
-# Team Members
-
-| Student ID | Name | GitHub | Responsibility |
-|------------|------|---------|---------------|
-| 37014 | **RACH Ranasinghe** | Chamindu18 | Authentication, System Integration, Infrastructure |
-| 37058 | **RPS Tharuka** | SahanRathnaweera | Candidate Management Module |
-| 37101 | **MCI Fernando** | Chami-Ishu | Recruiter Management Module |
-| 36877 | **KN Wickramathilaka** | kavinadee2 | Hiring Manager Module |
-| 37171 | **HHNV Induwara** | hhnethsara | Administration & Artificial Intelligence Module |
-
----
-
-# Local Setup
-
-## Clone Repository
+### Backend
 
 ```bash
 git clone https://github.com/Chamindu18/TalentFlowOS.git
-```
-
----
-
-## Backend
-
-```bash
-cd backend
+cd TalentFlowOS/backend
 dotnet restore
 dotnet build
-dotnet run
+dotnet run --project src/TalentFlow.API
 ```
 
----
+Configure the database connection string and JWT settings in `appsettings.Development.json` (or user secrets) before running.
+Swagger UI is available at `https://localhost:<port>/swagger`.
 
-## Frontend
+<!-- VERIFY: exact run command/project path, whether migrations run automatically or need "dotnet ef database update", and the names of the config keys (connection string, JWT secret, email). Also confirm whether docker/ contains a compose file and, if so, add "docker compose up" here. -->
+
+### Frontend
 
 ```bash
 cd frontend
@@ -344,11 +123,7 @@ npm install
 npm run dev
 ```
 
----
-
-# Testing
-
-Run Unit Tests
+### Tests
 
 ```bash
 dotnet test
@@ -356,37 +131,27 @@ dotnet test
 
 ---
 
-# API Documentation
+## Team
 
-Swagger UI is available when running the backend.
+| Name | GitHub | Module |
+|---|---|---|
+| Chamindu Hansana (RACH Ranasinghe) | [@Chamindu18](https://github.com/Chamindu18) | Authentication, system integration, infrastructure |
+| RPS Tharuka | [@SahanRathnaweera](https://github.com/SahanRathnaweera) | Candidate management |
+| MCI Fernando | [@Chami-Ishu](https://github.com/Chami-Ishu) | Recruiter management |
+| KN Wickramathilaka | [@kavinadee2](https://github.com/kavinadee2) | Hiring manager |
+| HHNV Induwara | [@hhnethsara](https://github.com/hhnethsara) | Administration and AI |
 
-```
-https://localhost:<port>/swagger
-```
-
----
-
-# Future Enhancements
-
-- Advanced AI Candidate Ranking
-- Interview Analytics
-- Recruitment Dashboard Analytics
-- Email Notifications
-- Mobile Application
-- Cloud Deployment
-- Real-time Notifications
+We worked with feature branches (`feature/authentication`, `feature/candidates`, …) merged into `develop` through pull requests, then into `main`.
 
 ---
 
-# License
+## Roadmap
 
-This project was developed for educational purposes as part of the **SE205.3 – Software Architecture** module at **NSBM Green University**.
+- Interview and recruitment analytics dashboards
+- Email notifications and real-time notifications
+- Mobile application
+- Cloud deployment
 
 ---
 
-# Contributors
-
-Developed by **Group 30**  
-BSc (Hons) Computer Science  
-Batch 25.1  
-NSBM Green University
+*Academic project developed by Group 30, BSc (Hons) Computer Science, Batch 25.1, NSBM Green University.*
