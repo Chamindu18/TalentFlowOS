@@ -1,33 +1,45 @@
 # TalentFlow OS
 
-**A recruitment and talent management platform built with ASP.NET Core (Clean Architecture) and React.**
-Candidates, recruiters, hiring managers and administrators manage the whole hiring process in one secure web app.
+**A recruitment and talent management platform built with ASP.NET Core using Clean Architecture and React.**
+
+TalentFlow OS supports candidates, recruiters, hiring managers, and administrators across the recruitment lifecycle through a role-based web application.
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![EF Core](https://img.shields.io/badge/EF_Core-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![xUnit](https://img.shields.io/badge/xUnit-tested-5E5E5E?style=flat-square)
 
-> Team project (5 members, Group 30) · 2026 · Built for the SE205.3 Software Architecture module, NSBM Green University
+> Team project (5 members, Group 30) · 2026 · Developed for the SE205.3 Software Architecture module at NSBM Green University
 
 ---
 
 ## What it does
 
-| Role | Can do |
+| Role | Main capabilities |
 |---|---|
 | **Candidate** | Manage profile, resume, education, experience, skills and certificates; browse jobs; apply and track applications |
-| **Recruiter** | Manage companies, departments and job vacancies; review applications; shortlist candidates |
-| **Hiring Manager** | Schedule interviews, record feedback, evaluate candidates, make hiring decisions |
-| **Administrator** | Manage users, roles and organizations |
+| **Recruiter** | Manage companies, departments and job vacancies; review applications and update application status |
+| **Hiring Manager** | Schedule interviews, record feedback, evaluate candidates and make hiring decisions |
+| **Administrator** | Manage users, roles, organizations and administrative operations |
 
-**Authentication and security:** registration, email verification, login, forgot/reset password, JWT authentication, role-based access control and protected routes.
+### Authentication and security
 
-**AI-assisted features:** resume matching, job recommendations, candidate ranking and resume screening.
-<!-- VERIFY: are all four AI features actually implemented? If some are not, list only the working ones here (the old README also listed "Advanced AI Candidate Ranking" as a future item, which contradicts it). -->
+The platform includes:
+
+- User registration
+- Email verification
+- Login
+- Forgot/reset password workflow
+- JWT-based authentication
+- Role-based backend authorization
+- Protected frontend routes
+- Request validation
+- BCrypt password hashing
+
+Authorization is enforced by the backend using ASP.NET Core authorization policies and role checks rather than relying only on client-side route protection.
 
 ---
 
@@ -35,87 +47,164 @@ Candidates, recruiters, hiring managers and administrators manage the whole hiri
 
 | Layer | Technology |
 |---|---|
-| Frontend | React, TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, TanStack Query, Redux Toolkit, Axios, React Hook Form, Zod |
-| Backend | ASP.NET Core Web API (C#), Entity Framework Core, AutoMapper, FluentValidation, JWT |
-| Database | SQL Server |
-| Testing | xUnit (unit and integration tests) |
-| DevOps | Docker, GitHub Actions |
-
-<!-- VERIFY (important): is the database SQL Server or PostgreSQL? Check the connection string in appsettings.json and the EF provider package (Microsoft.EntityFrameworkCore.SqlServer vs Npgsql.EntityFrameworkCore.PostgreSQL). Your CV currently says PostgreSQL. Make the README and CV match the code. -->
+| Frontend | React, TypeScript, Vite, Tailwind CSS, React Router, Axios, React Hook Form, Zod, shadcn/ui |
+| Backend | ASP.NET Core Web API (.NET 8 / C#), Entity Framework Core, AutoMapper, FluentValidation |
+| Authentication | JWT, ASP.NET Core Authentication, BCrypt |
+| Database | PostgreSQL with Npgsql |
+| Testing | xUnit, Moq, FluentAssertions |
+| Tooling / Deployment | Docker, Swagger / OpenAPI, Git |
 
 ---
 
 ## Architecture
 
-The backend follows **Clean Architecture**. Dependencies point inward, so business rules do not depend on the database or the web framework.
+The backend follows **Clean Architecture**, separating business rules from infrastructure and delivery concerns.
 
+```text
+API  ─────────────► Application ─────────────► Domain
+                         ▲
+                         │
+                  Infrastructure
 ```
-API  ──►  Application  ──►  Domain
-              ▲
-Infrastructure ┘
-```
+
+### Layers
 
 | Project | Responsibility |
 |---|---|
-| `TalentFlow.API` | Controllers, middleware, authentication, dependency injection |
-| `TalentFlow.Application` | Business logic, DTOs, validation, service interfaces |
-| `TalentFlow.Domain` | Entities, enums, domain interfaces |
-| `TalentFlow.Infrastructure` | EF Core, repositories, identity, email service |
+| `TalentFlow.API` | Controllers, middleware, authentication, API configuration and dependency injection |
+| `TalentFlow.Application` | Application services, DTOs, validation and service contracts |
+| `TalentFlow.Domain` | Domain entities, enums and repository contracts |
+| `TalentFlow.Infrastructure` | Entity Framework Core, PostgreSQL persistence, repositories, authentication and email infrastructure |
 
-**Patterns used:** Repository, Unit of Work, Dependency Injection.
+### Design patterns and practices
 
-### Project structure
+- Repository pattern
+- Unit of Work
+- Dependency Injection
+- Service abstraction
+- DTO-based API boundaries
+- FluentValidation
+- Role-based authorization
 
+---
+
+## Project structure
+
+```text
+TalentFlowOS/
+├── backend/
+│   ├── src/
+│   │   ├── TalentFlow.API/
+│   │   ├── TalentFlow.Application/
+│   │   ├── TalentFlow.Domain/
+│   │   └── TalentFlow.Infrastructure/
+│   └── tests/
+│       ├── UnitTests/
+│       ├── IntegrationTests/
+│       └── TestUtilities/
+│
+├── frontend/
+│   ├── public/
+│   └── src/
+│
+├── Dockerfile
+├── Dockerfile.vercel
+└── README.md
 ```
-TalentFlowOS
-├── frontend/                  React + TypeScript app
-├── backend
-│   ├── src
-│   │   ├── TalentFlow.API
-│   │   ├── TalentFlow.Application
-│   │   ├── TalentFlow.Domain
-│   │   └── TalentFlow.Infrastructure
-│   └── tests                  Unit and integration tests
-├── docs/
-├── docker/
-├── deploy/
-└── .github/                   CI workflows
+
+---
+
+## Authentication flow
+
+```text
+Registration
+     │
+     ▼
+Email Verification
+     │
+     ▼
+Login
+     │
+     ▼
+JWT Issued
+     │
+     ▼
+Authenticated Request
+     │
+     ▼
+Backend Role Authorization
+     │
+     ▼
+Protected Resource
 ```
 
-### Authentication flow
+Both frontend route guards and backend role authorization are used. Backend authorization remains the security boundary.
 
-```
-Register → Verify email → Login → JWT issued → Role check → Protected resource
-```
+---
 
-<!-- VERIFY: the old README listed CQRS under the Application layer but not under patterns. If you really use CQRS/MediatR, add it to "Patterns used". If not, do not claim it. -->
+## Testing
+
+The backend includes xUnit unit tests for application services, including authentication workflows.
+
+Authentication tests cover scenarios such as:
+
+- Registration
+- Email verification
+- Verification-token handling
+- Forgot-password workflow
+- Password-reset token handling
+
+The project also contains an integration-test project structure for future end-to-end backend integration testing.
+
+Run the backend test projects with:
+
+```bash
+cd backend
+dotnet test
+```
 
 ---
 
 ## Getting started
 
 ### Prerequisites
-- .NET SDK (version used by the project)
-- Node.js 18+ and npm
-- SQL Server instance
-- <!-- VERIFY: SMTP settings for the email verification service, if required -->
 
-### Backend
+- .NET 8 SDK
+- Node.js and npm
+- PostgreSQL
+- SMTP configuration for email-based authentication workflows
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Chamindu18/TalentFlowOS.git
-cd TalentFlowOS/backend
+cd TalentFlowOS
+```
+
+### 2. Configure the backend
+
+Configure the required development settings, including:
+
+- PostgreSQL connection string
+- JWT secret
+- JWT issuer and audience
+- SMTP/email credentials
+- Frontend URL and allowed origin
+
+Do not commit real database credentials, JWT secrets, SMTP passwords, or other production secrets to Git.
+
+### 3. Run the backend
+
+```bash
+cd backend
 dotnet restore
 dotnet build
 dotnet run --project src/TalentFlow.API
 ```
 
-Configure the database connection string and JWT settings in `appsettings.Development.json` (or user secrets) before running.
-Swagger UI is available at `https://localhost:<port>/swagger`.
+Swagger/OpenAPI is available from the API's configured development URL when Swagger is enabled.
 
-<!-- VERIFY: exact run command/project path, whether migrations run automatically or need "dotnet ef database update", and the names of the config keys (connection string, JWT secret, email). Also confirm whether docker/ contains a compose file and, if so, add "docker compose up" here. -->
-
-### Frontend
+### 4. Run the frontend
 
 ```bash
 cd frontend
@@ -123,34 +212,60 @@ npm install
 npm run dev
 ```
 
-### Tests
+---
 
-```bash
-dotnet test
-```
+## Docker
+
+A multi-stage Docker configuration is included for the ASP.NET Core backend.
+
+The Docker build:
+
+1. Restores the .NET dependencies.
+2. Builds and publishes the API using the .NET 8 SDK image.
+3. Runs the published application using the ASP.NET Core 8 runtime image.
+
+---
+
+## My contribution
+
+**Chamindu Hansana — Authentication, system integration and infrastructure**
+
+My main contributions included:
+
+- Registration and login workflows
+- Email verification
+- Forgot-password and password-reset workflows
+- JWT authentication
+- Role-based authorization
+- Authentication-related frontend integration
+- Authentication unit testing
+- System integration work
 
 ---
 
 ## Team
 
-| Name | GitHub | Module |
+| Member | GitHub | Primary area |
 |---|---|---|
-| Chamindu Hansana (RACH Ranasinghe) | [@Chamindu18](https://github.com/Chamindu18) | Authentication, system integration, infrastructure |
+| Chamindu Hansana | [@Chamindu18](https://github.com/Chamindu18) | Authentication, system integration and infrastructure |
 | RPS Tharuka | [@SahanRathnaweera](https://github.com/SahanRathnaweera) | Candidate management |
 | MCI Fernando | [@Chami-Ishu](https://github.com/Chami-Ishu) | Recruiter management |
 | KN Wickramathilaka | [@kavinadee2](https://github.com/kavinadee2) | Hiring manager |
-| HHNV Induwara | [@hhnethsara](https://github.com/hhnethsara) | Administration and AI |
+| HHNV Induwara | [@hhnethsara](https://github.com/hhnethsara) | Administration |
 
-We worked with feature branches (`feature/authentication`, `feature/candidates`, …) merged into `develop` through pull requests, then into `main`.
+The team used feature branches for individual workstreams and integrated changes through the shared repository.
 
 ---
 
-## Roadmap
+## Future improvements
 
-- Interview and recruitment analytics dashboards
-- Email notifications and real-time notifications
-- Mobile application
-- Cloud deployment
+Potential future improvements include:
+
+- Expanded automated integration testing
+- Recruitment analytics improvements
+- Real-time notifications
+- Additional deployment automation
+- Mobile application support
 
 ---
 
